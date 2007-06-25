@@ -1,379 +1,260 @@
-<VisualStudioProject>
-    <CSHARP
-        ProjectType = "Local"
-        ProductVersion = "7.10.3077"
-        SchemaVersion = "2.0"
-        ProjectGuid = "{F4FDECD9-41DC-430C-A1E8-45ED8AB78C0A}"
-    >
-        <Build>
-            <Settings
-                ApplicationIcon = "App.ico"
-                AssemblyKeyContainerName = ""
-                AssemblyName = "csflex"
-                AssemblyOriginatorKeyFile = ""
-                DefaultClientScript = "JScript"
-                DefaultHTMLPageLayout = "Grid"
-                DefaultTargetSchema = "IE50"
-                DelaySign = "false"
-                OutputType = "Exe"
-                PreBuildEvent = ""
-                PostBuildEvent = ""
-                RootNamespace = "csflex"
-                RunPostBuildEvent = "OnBuildSuccess"
-                StartupObject = "CSFlex.MainClass"
-            >
-                <Config
-                    Name = "Debug"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
-                    DocumentationFile = ""
-                    DebugSymbols = "true"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "false"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "false"
-                    OutputPath = "bin\Debug\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-                <Config
-                    Name = "Release"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = "TRACE"
-                    DocumentationFile = ""
-                    DebugSymbols = "false"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "false"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "true"
-                    OutputPath = "bin\Release\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-            </Settings>
-            <References>
-                <Reference
-                    Name = "System"
-                    AssemblyName = "System"
-                    HintPath = "..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
-                />
-                <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
-                    Name = "System.XML"
-                    AssemblyName = "System.Xml"
-                    HintPath = "..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
-                />
-                <Reference
-                    Name = "System.Windows.Forms"
-                    AssemblyName = "System.Windows.Forms"
-                    HintPath = "..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
-                />
-                <Reference
-                    Name = "runtime"
-                    AssemblyName = "runtime"
-                    HintPath = "runtime.dll"
-                />
-                <Reference
-                    Name = "System.Drawing"
-                    AssemblyName = "System.Drawing"
-                    HintPath = "..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
-                />
-            </References>
-        </Build>
-        <Files>
-            <Include>
-                <File
-                    RelPath = "Action.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "App.ico"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CharClasses.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CharClassException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CharClassInterval.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CharSet.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CharSetEnumerator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CountEmitter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DFA.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Emitter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "EOFActions.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ErrorMessages.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "GeneratorException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "HiLowEmitter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IntCharSet.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Interval.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IntPair.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LexicalStates.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LexParse.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LexParse.cup"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "LexScan.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LexScan.flex"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "MacroException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Macros.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Main.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Messages.xml"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "NFA.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Options.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Out.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "PackEmitter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RegExp.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RegExp1.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RegExp2.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RegExps.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ScannerException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SemCheck.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SilentExit.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Skeleton.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "skeleton.default"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "skeleton.nested"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "StatePairList.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "StateSet.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "StateSetEnumerator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "StdOutWriter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "support_classes.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sym.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Timer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "gui\GeneratorThread.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "gui\GridPanel.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "gui\GridPanel.resx"
-                    DependentUpon = "GridPanel.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "gui\GridPanelConstraint.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "gui\Handles.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "gui\MainFrame.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "gui\MainFrame.resx"
-                    DependentUpon = "MainFrame.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "gui\OptionsDialog.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-            </Include>
-        </Files>
-    </CSHARP>
-</VisualStudioProject>
-
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F4FDECD9-41DC-430C-A1E8-45ED8AB78C0A}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>App.ico</ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>csflex</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>csflex</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>CSFlex.MainClass</StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="runtime">
+      <Name>runtime</Name>
+      <HintPath>runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Action.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CharClasses.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CharClassException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CharClassInterval.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CharSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CharSetEnumerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CountEmitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DFA.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Emitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EOFActions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ErrorMessages.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GeneratorException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="gui\GeneratorThread.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="gui\GridPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="gui\GridPanelConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="gui\Handles.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="gui\MainFrame.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\OptionsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HiLowEmitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IntCharSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interval.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IntPair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LexicalStates.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LexParse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LexScan.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MacroException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Macros.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Main.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NFA.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Options.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Out.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PackEmitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RegExp.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RegExp1.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RegExp2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RegExps.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ScannerException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SemCheck.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SilentExit.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Skeleton.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StatePairList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StateSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StateSetEnumerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StdOutWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="support_classes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sym.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Timer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Content Include="App.ico" />
+    <None Include="LexParse.cup" />
+    <None Include="LexScan.flex" />
+    <EmbeddedResource Include="gui\GridPanel.resx">
+      <DependentUpon>GridPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\MainFrame.resx">
+      <DependentUpon>MainFrame.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Messages.xml" />
+    <EmbeddedResource Include="skeleton.default" />
+    <EmbeddedResource Include="skeleton.nested" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
