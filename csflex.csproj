@@ -4,14 +4,14 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net48</TargetFramework>
     <LangVersion>9</LangVersion>
-    <PackageVersion>1.4.1</PackageVersion>
+    <PackageVersion>1.4.0.1</PackageVersion>
     <Copyright>2021</Copyright>
     <PackageLicenseUrl>https://github.com/chklauser/csflex/blob/main/COPYRIGHT</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/chklauser/csflex</RepositoryUrl>
     <NeutralLanguage>en</NeutralLanguage>
     <StartupObject>CSFlex.MainClass</StartupObject>
     <Nullable>warnings</Nullable>
-    <AssemblyVersion>1.4.1</AssemblyVersion>
+    <AssemblyVersion>$(PackageVersion)</AssemblyVersion>
     <FileVersion>$(AssemblyVersion)</FileVersion>
   </PropertyGroup>
 
