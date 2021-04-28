@@ -1,8 +1,11 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * C# Flex 1.4                                                             *
- * Copyright (C) 2004-2005  Jonathan Gilbert <logic@deltaq.org>            *
+ * C# Flex                                                                 *
+ * Copyright © 2021 Christian Klauser <christianklauser@outlook.com>       *
  * Derived from:                                                           *
  *                                                                         *
+ *   C# Flex 1.4                                                           *
+ *   Copyright (C) 2004-2005  Jonathan Gilbert <logic@deltaq.org>          *
+ *                                                                         * 
  *   JFlex 1.4                                                             *
  *   Copyright (C) 1998-2004  Gerwin Klein <lsf@jflex.de>                  *
  *   All rights reserved.                                                  *
@@ -45,7 +48,7 @@ namespace CSFlex
 public class MainClass {
   
   /** C# Flex version */
-  public const String version = "1.4"; //$NON-NLS-1$
+  public static readonly String version = typeof(MainClass).Assembly.GetName().Version.ToString(); //$NON-NLS-1$
 
   /**
    * Generates a scanner for the specified input file.
@@ -347,6 +350,7 @@ public class MainClass {
    *
    * @param argv the commandline.
    */
+  [STAThread]
   public static void Main(String[] argv) {
     try {
       generate(argv);

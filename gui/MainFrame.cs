@@ -27,6 +27,7 @@ using CSFlex;
 using System;
 using System.Drawing;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CSFlex.gui
@@ -293,14 +294,21 @@ namespace CSFlex.gui
 
     public void generationFinished(bool success) 
     {
-      setEnabledAll(false);
-
-      messages.Focus();
-    
-      if (success) 
-        messages.AppendText(Out.NL+"Generation finished successfully."+Out.NL);
+      if (InvokeRequired)
+      {
+        Invoke(new MethodInvoker(() => generationFinished(success)));
+      }
       else
-        messages.AppendText(Out.NL+"Generation aborted."+Out.NL);
+      {
+        setEnabledAll(false);
+
+        messages.Focus();
+
+        if (success)
+          messages.AppendText(Out.NL + "Generation finished successfully." + Out.NL);
+        else
+          messages.AppendText(Out.NL + "Generation aborted." + Out.NL);
+      }
     }
 
     private void do_stop() 
