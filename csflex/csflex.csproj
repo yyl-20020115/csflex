@@ -33,9 +33,5 @@
     <EmbeddedResource Include="skeleton.default" />
     <EmbeddedResource Include="skeleton.nested" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\JavaCup\JavaCup.csproj" />
-  </ItemGroup>
 
 </Project>

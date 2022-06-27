@@ -1,4 +1,4 @@
-﻿namespace JavaCup
+﻿namespace CSFlex
 {
     public class JCStack<T>
     {

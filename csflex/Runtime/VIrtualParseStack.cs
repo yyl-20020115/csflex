@@ -1,6 +1,6 @@
-﻿namespace JavaCup.Runtime
+﻿namespace CSFlex.Runtime
 {
-    using JavaCup;
+    using CSFlex;
     using System;
 
     public class VIrtualParseStack

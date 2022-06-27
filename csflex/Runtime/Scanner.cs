@@ -1,4 +1,4 @@
-﻿namespace JavaCup.Runtime
+﻿namespace CSFlex.Runtime
 {
     public interface Scanner
     {

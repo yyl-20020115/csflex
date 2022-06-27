@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using JavaCup.Runtime;
+using CSFlex.Runtime;
 
 namespace CSFlex
 {
@@ -45,7 +45,7 @@ namespace CSFlex
      * @version CSFlex 1.4, $Revision: 2.6 $, $Date: 2004/04/12 10:07:47 $
      */
 
-    public sealed class LexScan : Symbols, JavaCup.Runtime.Scanner
+    public sealed class LexScan : Symbols, CSFlex.Runtime.Scanner
     {
 
         /** This character denotes the end of file */
@@ -3421,7 +3421,7 @@ namespace CSFlex
          */
         public Symbol debug_next_token()
         {
-            JavaCup.Runtime.Symbol s = NextToken();
+            CSFlex.Runtime.Symbol s = NextToken();
             Console.WriteLine("line:{0} col:{1} --{2}--{3}--",
 
         yyline + 1, yycolumn + 1, yytext(), getTokenName(s.sym));
