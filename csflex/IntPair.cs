@@ -21,9 +21,6 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-using System;
-
 namespace CSFlex
 {
     /**
@@ -42,7 +39,6 @@ namespace CSFlex
         private int end;
         public int Start => start;
         public int End => end;
-
         public IntPair(int start, int end)
         {
             this.start = start;
@@ -50,9 +46,7 @@ namespace CSFlex
         }
 
         public override int GetHashCode() => end + (start << 8);
-
         public override bool Equals(object? o) => o is IntPair p && start == p.start && end == p.end;
-
         public override string ToString() => $"({start},{end})";
     }
 }

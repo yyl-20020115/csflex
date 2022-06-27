@@ -21,14 +21,8 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 namespace CSFlex
 {
-
     /**
      * A simple table to store EOF actions for each lexical state.
      *
@@ -87,11 +81,11 @@ namespace CSFlex
             }
         }
 
-        public bool IsEOFAction(object a)
+        public bool IsEOFAction(Action a)
         {
             if (a == defaultAction) return true;
 
-            return actions.ContainsValue(a as Action);
+            return actions.ContainsValue(a);
             /*
                 IEnumerator e = actions.GetEnumerator();
                 while ( e.MoveNext() ) 
@@ -102,7 +96,7 @@ namespace CSFlex
 
         public Action GetAction(int state) => actions[state];
 
-        public Action Default => defaultAction;
+        public Action? Default => defaultAction;
 
         public int NumActions => actions.Count;
     }

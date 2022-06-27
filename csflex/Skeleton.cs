@@ -21,9 +21,6 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-using System;
-using System.Collections;
-using System.IO;
 using System.Reflection;
 using System.Text;
 
@@ -78,7 +75,6 @@ namespace CSFlex
          */
         private TextWriter writer;
 
-
         /**
          * Creates a new skeleton (iterator) instance. 
          *
@@ -88,7 +84,6 @@ namespace CSFlex
         {
             this.writer = writer;
         }
-
 
         /**
          * Emits the next part of the skeleton
@@ -120,7 +115,6 @@ namespace CSFlex
             }
         }
 
-
         /**
          * Make the skeleton private.
          *
@@ -133,7 +127,6 @@ namespace CSFlex
                 line[i] = Replace(" public ", " private ", line[i]);   //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
-
 
         /**
          * Reads an external skeleton file for later use with this class.
@@ -192,7 +185,7 @@ namespace CSFlex
             var lines = new PrettyArrayList<string>();
             var section = new StringBuilder();
 
-            string ln;
+            string? ln;
             while ((ln = reader.ReadLine()) != null)
             {
                 if (ln.StartsWith("---"))
@@ -234,10 +227,7 @@ namespace CSFlex
          * @param c  the string in which to replace a by b
          * @return a string object with a replaced by b in c 
          */
-        public static string Replace(string a, string b, string c)
-        {
-            return c.Replace(a, b);
-        }
+        public static string Replace(string a, string b, string c) => c.Replace(a, b);
 
 
         /**
@@ -247,8 +237,8 @@ namespace CSFlex
         {
             try
             {
-                Assembly assembly = typeof(Skeleton).Assembly;
-                Stream stream = assembly.GetManifestResourceStream("csflex.skeleton.default");
+                var assembly = typeof(Skeleton).Assembly;
+                var stream = assembly.GetManifestResourceStream("csflex.skeleton.default");
                 ReadSkel(new StreamReader(stream));
             }
             catch

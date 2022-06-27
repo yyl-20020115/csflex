@@ -22,9 +22,7 @@
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 
 namespace CSFlex
@@ -39,14 +37,12 @@ namespace CSFlex
      */
     public sealed class Interval
     {
-
         /* start and end of the intervall */
         private char start;
         private char end;
 
         public char Start { get => this.start; set => this.start = value; }
         public char End { get => this.end; set => this.end = value; }
-
 
         /**
          * Constuct a new intervall from <code>start</code> to <code>end</code>.
@@ -145,7 +141,6 @@ namespace CSFlex
             result.Append("]");
             return result.ToString();
         }
-
 
         /**
          * Make a copy of this interval.

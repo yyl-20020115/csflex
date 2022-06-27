@@ -21,11 +21,9 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-using System;
-using System.Text;
-
 namespace CSFlex
 {
+    using System.Text;
 
     /**
      * A set of NFA states (= integers). 
@@ -42,23 +40,21 @@ namespace CSFlex
 
         private readonly bool DEBUG = false;
 
-        public static readonly StateSet EMPTY = new ();
+        public static readonly StateSet EMPTY = new();
 
 
         public const int BITS = 6;
         public const int MASK = (1 << BITS) - 1;
 
-        private long[] bits;
+        private long[] bits = Array.Empty<long>();
 
         public long[] Bits => bits;
 
-        public StateSet() : this(256)
-        {
-        }
+        public StateSet() : this(256) { }
 
         public StateSet(int size)
         {
-            bits = new long[SizeToNBits(size)];
+            this.bits = new long[SizeToNBits(size)];
         }
 
         public StateSet(int size, int state) : this(size)
@@ -68,7 +64,7 @@ namespace CSFlex
 
         public StateSet(StateSet set)
         {
-            bits = new long[set.bits.Length];
+            this.bits = new long[set.bits.Length];
             Array.Copy(set.bits, 0, bits, 0, set.bits.Length);
         }
 
@@ -83,7 +79,7 @@ namespace CSFlex
 
             int index = state >> BITS;
             if (index >= bits.Length) Resize(state);
-            bits[index] |= (1L << (state & MASK));
+            this.bits[index] |= (1L << (state & MASK));
 
             if (DEBUG)
             {
@@ -92,22 +88,16 @@ namespace CSFlex
             }
         }
 
-
         private int SizeToNBits(int size) => ((size >> BITS) + 1);
-
 
         private void Resize(int size)
         {
             int needed = SizeToNBits(size);
-
             // if (needed < bits.length) return;
-
             long[] newbits = new long[Math.Max(bits.Length * 4, needed)];
             Array.Copy(bits, 0, newbits, 0, bits.Length);
-
-            bits = newbits;
+            this.bits = newbits;
         }
-
 
         public void Clear()
         {
@@ -156,7 +146,7 @@ namespace CSFlex
          * Returns the set of elements that contained are in the specified set
          * but are not contained in this set.
          */
-        public StateSet Complement(StateSet set)
+        public StateSet? Complement(StateSet set)
         {
             if (set == null) return null;
 
@@ -183,7 +173,6 @@ namespace CSFlex
 
         public void Add(StateSet set)
         {
-
             if (DEBUG) OutputWriter.Dump("StateSet.add(" + set + ") start"); //$NON-NLS-1$ //$NON-NLS-2$
 
             if (set == null) return;
@@ -215,8 +204,6 @@ namespace CSFlex
                 OutputWriter.Dump("Set is : " + this); //$NON-NLS-1$
             }
         }
-
-
 
         public bool ContainsSet(StateSet set)
         {
@@ -345,7 +332,6 @@ namespace CSFlex
             }
         }
 
-
         public override string ToString()
         {
             var e = States;
@@ -360,7 +346,7 @@ namespace CSFlex
                 result.Append(", ").Append(i); //$NON-NLS-1$
             }
 
-            result.Append("}"); //$NON-NLS-1$
+            result.Append('}'); //$NON-NLS-1$
 
             return result.ToString();
         }

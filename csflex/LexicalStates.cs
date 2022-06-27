@@ -21,12 +21,9 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-using System;
-using System.Collections;
-
 namespace CSFlex
 {
+    using System.Collections;
 
     /**
      * Simple symbol table, mapping lexical state names to integers. 
@@ -38,21 +35,16 @@ namespace CSFlex
      */
     public class LexicalStates
     {
-
         /** maps state name to state number */
         protected readonly PrettyHashtable<string,int> states = new();
-
         /** codes of inclusive states (subset of states) */
         protected readonly PrettyArrayList<int> inclusive = new();
-
         /** number of declared states */
-        protected int numStates;
+        protected int numStates = 0;
         /**
          * constructs a new lexical state symbol table
          */
-        public LexicalStates()
-        {
-        }
+        public LexicalStates() { }
         /**
          * insert a new state declaration
          */
@@ -67,19 +59,16 @@ namespace CSFlex
                 inclusive.Add(code);
         }
 
-
         /**
          * returns the number (code) of a declared state, 
          * <code>null</code> if no such state has been declared.
          */
         public int GetNumber(string name) => states[name];
 
-
         /**
          * returns the number of declared states
          */
         public int CountOfDeclaredStates => numStates;
-
 
         /**
          * returns the names of all states

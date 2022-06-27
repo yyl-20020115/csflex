@@ -86,7 +86,7 @@ namespace CSFlex
         /**
          * all actions that are used in this DFA
          */
-        private PrettyHashtable<Action,Action> usedActions = new ();
+        private readonly PrettyHashtable<Action,Action> usedActions = new ();
         public int[][] Table => table;
         public bool[] IsFinal => isFinal;
         public bool[] IsPushback => isPushback;

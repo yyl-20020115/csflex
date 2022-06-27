@@ -1463,7 +1463,7 @@ namespace CSFlex
                 Println("          zzForNext: { switch (zzState) {");
 
             for (int state = 0; state < dfa.NumStates; state++)
-                if (isTransition[state]) emitState(state);
+                if (isTransition[state]) EmitState(state);
 
             Println("            default:");
             Println("              // if this is ever reached, there is a serious bug in JFlex/C# Flex");
@@ -1630,9 +1630,9 @@ namespace CSFlex
             }
         }
 
-        private void emitEOFVal()
+        private void EmitEOFVal()
         {
-            EOFActions eofActions = parser.EOFActions;
+            var eofActions = parser.EOFActions;
 
             if (scanner.eofCode != null)
                 Println("            zzDoEOF();");
@@ -1734,44 +1734,38 @@ namespace CSFlex
                 Println("            }");
         }
 
-        private void emitState(int state)
+        private void EmitState(int state)
         {
 
             Println("            case " + state + ":");
             Println("              switch (zzInput) {");
 
-            int defaultTransition = getDefaultTransition(state);
+            int defaultTransition = GetDefaultTransition(state);
 
             for (int next = 0; next < dfa.NumStates; next++)
             {
 
                 if (next != defaultTransition && table[state][next] != null)
                 {
-                    emitTransition(state, next);
+                    EmitTransition(state, next);
                 }
             }
 
             if (defaultTransition != DFA.NO_TARGET && noTarget[state] != null)
             {
-                emitTransition(state, DFA.NO_TARGET);
+                EmitTransition(state, DFA.NO_TARGET);
             }
 
-            emitDefaultTransition(state, defaultTransition);
+            EmitDefaultTransition(state, defaultTransition);
 
             Println("              }");
             Println("");
         }
 
-        private void emitTransition(int state, int nextState)
+        private void EmitTransition(int state, int nextState)
         {
 
-            CharSetEnumerator chars;
-
-            if (nextState != DFA.NO_TARGET)
-                chars = table[state][nextState].GetCharacters();
-            else
-                chars = noTarget[state].GetCharacters();
-
+            var chars = nextState != DFA.NO_TARGET ? table[state][nextState].GetCharacters() : noTarget[state].GetCharacters();
             Print("                case ");
             Print((int)chars.NextElement());
             Print(": ");
@@ -1812,7 +1806,7 @@ namespace CSFlex
             }
         }
 
-        private void emitDefaultTransition(int state, int nextState)
+        private void EmitDefaultTransition(int state, int nextState)
         {
             Print("                default: ");
 
@@ -1844,13 +1838,13 @@ namespace CSFlex
             }
         }
 
-        private void emitPushback()
+        private void EmitPushback()
         {
             Println("      if (zzWasPushback)");
             Println("        zzMarkedPos = zzPushbackPosL;");
         }
 
-        private int getDefaultTransition(int state)
+        private int GetDefaultTransition(int state)
         {
             int max = 0;
 
@@ -1875,7 +1869,6 @@ namespace CSFlex
         // for switch statement:
         private void TransformTransitionTable()
         {
-
             int numInput = parser.CharClasses.NumClasses + 1;
 
             int i;
@@ -1889,7 +1882,6 @@ namespace CSFlex
             for (i = 0; i < dfa.NumStates; i++)
                 for (j = (char)0; j < dfa.NumInput; j++)
                 {
-
                     int nextState = dfa.Table[i][j];
 
                     if (nextState == DFA.NO_TARGET)
@@ -1909,7 +1901,7 @@ namespace CSFlex
                 }
         }
 
-        private void findActionStates()
+        private void FindActionStates()
         {
             isTransition = new bool[dfa.NumStates];
 
@@ -1922,7 +1914,7 @@ namespace CSFlex
         }
 
 
-        private void reduceColumns()
+        private void ReduceColumns()
         {
             colMap = new int[dfa.NumInput];
             colKilled = new bool[dfa.NumInput];
@@ -1959,7 +1951,7 @@ namespace CSFlex
             } // for i
         }
 
-        private void reduceRows()
+        private void ReduceRows()
         {
             rowMap = new int[dfa.NumStates];
             rowKilled = new bool[dfa.NumStates];
@@ -2003,7 +1995,7 @@ namespace CSFlex
         /**
          * Set up EOF code sectioin according to scanner.eofcode 
          */
-        private void setupEOFCode()
+        private void SetupEOFCode()
         {
             if (scanner.eofclose)
             {
@@ -2016,16 +2008,15 @@ namespace CSFlex
         /**
          * Main Emitter method.  
          */
-        public void emit()
+        public void Emit()
         {
-
-            setupEOFCode();
+            SetupEOFCode();
 
             if (scanner.functionName == null)
                 scanner.functionName = "yylex";
 
-            reduceColumns();
-            findActionStates();
+            ReduceColumns();
+            FindActionStates();
 
             EmitHeader();
             EmitUserCode();
@@ -2079,7 +2070,7 @@ namespace CSFlex
 
             if (scanner.useRowMap)
             {
-                reduceRows();
+                ReduceRows();
 
                 EmitRowMapArray();
 
@@ -2124,7 +2115,7 @@ namespace CSFlex
                 EmitTransitionTable();
 
             if (scanner.lookAheadUsed)
-                emitPushback();
+                EmitPushback();
 
             skel.EmitNext();
 
@@ -2132,7 +2123,7 @@ namespace CSFlex
 
             skel.EmitNext();
 
-            emitEOFVal();
+            EmitEOFVal();
 
             skel.EmitNext();
 
@@ -2148,6 +2139,5 @@ namespace CSFlex
 
             output.Close();
         }
-
     }
 }

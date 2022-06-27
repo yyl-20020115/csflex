@@ -59,5 +59,4 @@ namespace CSFlex
         public const int IDENT = 29;
         public const int STRING = 41;
     }
-
 }

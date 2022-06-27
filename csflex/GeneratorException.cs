@@ -21,11 +21,8 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 namespace CSFlex
 {
-
-
     /**
      * Thrown when code generation has to be aborted.
      *
@@ -36,10 +33,6 @@ namespace CSFlex
      */
     public class GeneratorException : RuntimeException
     {
-
-        public GeneratorException() : base("Generation aborted")
-        {
-        }
-
+        public GeneratorException() : base("Generation aborted") { }
     }
 }

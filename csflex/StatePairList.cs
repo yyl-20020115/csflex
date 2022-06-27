@@ -21,9 +21,6 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-using System;
-
 namespace CSFlex
 {
 
@@ -43,9 +40,7 @@ namespace CSFlex
 
         private int[] p;
         private int[] q;
-
         private int num;
-
         public StatePairList()
         {
             p = new int[8];

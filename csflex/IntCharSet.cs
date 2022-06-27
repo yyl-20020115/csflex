@@ -21,14 +21,9 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-
 namespace CSFlex
 {
+    using System.Text;
 
     /** 
      * CharSet implemented with intervalls
@@ -46,35 +41,25 @@ namespace CSFlex
         private static readonly bool DEBUG = false;
 
         /* invariant: all intervals are disjoint, ordered */
-        private List<Interval> intervalls;
-        private int pos;
+        private List<Interval> intervals = new();
+        private int pos = 0;
 
-        public IntCharSet()
-        {
-            this.intervalls = new PrettyArrayList<Interval>();
-        }
-
-        public IntCharSet(char c) : this(new Interval(c, c))
-        {
-        }
-
+        public IntCharSet() { }
+        public IntCharSet(char c) : this(new Interval(c, c)) { }
         public IntCharSet(Interval intervall) : this()
         {
-            intervalls.Add(intervall);
+            intervals.Add(intervall);
         }
 
-        public IntCharSet(List<Interval> /* Interval */ chars)
+        public IntCharSet(List<Interval> chars)
         {
             int size = chars.Count;
 
-            this.intervalls = new PrettyArrayList<Interval>(size);
+            this.intervals = new PrettyArrayList<Interval>(size);
 
             for (int i = 0; i < size; i++)
-                add((Interval)chars[i]);
+                Add((Interval)chars[i]);
         }
-
-
-
 
         /**
          * returns the index of the intervall that contains
@@ -87,15 +72,15 @@ namespace CSFlex
          * @param c  the character
          * @return the index of the enclosing interval, -1 if no such interval  
          */
-        private int indexOf(char c)
+        private int IndexOf(char c)
         {
             int start = 0;
-            int end = intervalls.Count - 1;
+            int end = intervals.Count - 1;
 
             while (start <= end)
             {
                 int check = (start + end) / 2;
-                Interval i = (Interval)intervalls[check];
+                var i = intervals[check];
 
                 if (start == end)
                     return i.Contains(c) ? start : -1;
@@ -118,64 +103,63 @@ namespace CSFlex
             return -1;
         }
 
-        public IntCharSet add(IntCharSet set)
+        public IntCharSet Add(IntCharSet set)
         {
-            for (int i = 0; i < set.intervalls.Count; i++)
-                add((Interval)set.intervalls[i]);
+            for (int i = 0; i < set.intervals.Count; i++)
+                Add(set.intervals[i]);
             return this;
         }
 
-        public void add(Interval intervall)
+        public void Add(Interval interval)
         {
-
-            int size = intervalls.Count;
+            int size = intervals.Count;
 
             for (int i = 0; i < size; i++)
             {
-                Interval elem = (Interval)intervalls[i];
+                var elem = intervals[i];
 
-                if (elem.End + 1 < intervall.Start) continue;
+                if (elem.End + 1 < interval.Start) continue;
 
-                if (elem.Contains(intervall)) return;
+                if (elem.Contains(interval)) return;
 
-                if (elem.Start > intervall.End + 1)
+                if (elem.Start > interval.End + 1)
                 {
-                    intervalls.Insert(i, new Interval(intervall));
+                    intervals.Insert(i, new (interval));
                     return;
                 }
 
-                if (intervall.Start < elem.Start)
-                    elem.Start = intervall.Start;
+                if (interval.Start < elem.Start)
+                    elem.Start = interval.Start;
 
-                if (intervall.End <= elem.End)
+                if (interval.End <= elem.End)
                     return;
 
-                elem.End = intervall.End;
+                elem.End = interval.End;
 
                 i++;
                 // delete all x with x.contains( intervall.end )
                 while (i < size)
                 {
-                    Interval x = (Interval)intervalls[i];
+                    var x = intervals[i];
                     if (x.Start > elem.End + 1) return;
 
                     elem.End = x.End;
-                    intervalls.RemoveAt(i);
+                    intervals.RemoveAt(i);
                     size--;
                 }
                 return;
             }
 
-            intervalls.Add(new Interval(intervall));
+            intervals.Add(new (interval));
         }
 
-        public void add(char c)
+        public void Add(char c)
         {
-            int size = intervalls.Count;
+            int size = intervals.Count;
 
             for (int i = 0; i < size; i++)
             {
-                Interval elem = (Interval)intervalls[i];
+                var elem = intervals[i];
                 if (elem.End + 1 < c) continue;
 
                 if (elem.Contains(c)) return; // already there, nothing to do
@@ -184,7 +168,7 @@ namespace CSFlex
 
                 if (elem.Start > c + 1)
                 {
-                    intervalls.Insert(i, new Interval(c, c));
+                    intervals.Insert(i, new Interval(c, c));
                     return;
                 }
 
@@ -201,36 +185,32 @@ namespace CSFlex
 
                 // merge with next interval if it contains c
                 if (i >= size) return;
-                var x = intervalls[i + 1];
+                var x = intervals[i + 1];
                 if (x.Start <= c + 1)
                 {
                     elem.End = x.End;
-                    intervalls.RemoveAt(i + 1);
+                    intervals.RemoveAt(i + 1);
                 }
                 return;
             }
 
             // end reached but nothing found -> append at end
-            intervalls.Add(new Interval(c, c));
+            intervals.Add(new (c, c));
         }
 
-
-        public bool contains(char singleChar)
-        {
-            return indexOf(singleChar) >= 0;
-        }
+        public bool Contains(char singleChar) => IndexOf(singleChar) >= 0;
 
         /**
          * prec: intervall != null
          */
-        public bool contains(Interval intervall)
+        public bool Contains(Interval intervall)
         {
-            int index = indexOf(intervall.Start);
+            int index = IndexOf(intervall.Start);
             if (index < 0) return false;
-            return ((Interval)intervalls[index]).Contains(intervall);
+            return intervals[index].Contains(intervall);
         }
 
-        public bool contains(IntCharSet set)
+        public bool Contains(IntCharSet set)
         {
             /*
                 IntCharSet test = set.copy();
@@ -242,10 +222,10 @@ namespace CSFlex
             int i = 0;
             int j = 0;
 
-            while (j < set.intervalls.Count)
+            while (j < set.intervals.Count)
             {
-                Interval x = (Interval)intervalls[i];
-                Interval y = (Interval)set.intervalls[j];
+                Interval x = intervals[i];
+                Interval y = set.intervals[j];
 
                 if (x.Contains(y)) j++;
 
@@ -263,11 +243,11 @@ namespace CSFlex
         public override bool Equals(object? o)
         {
             //IntCharSet set = (IntCharSet)o;
-            if (!(o is IntCharSet set)|| intervalls.Count != set.intervalls.Count) return false;
+            if (o is not IntCharSet set|| intervals.Count != set.intervals.Count) return false;
 
-            for (int i = 0; i < intervalls.Count; i++)
+            for (int i = 0; i < intervals.Count; i++)
             {
-                if (!intervalls[i].Equals(set.intervalls[i]))
+                if (!intervals[i].Equals(set.intervals[i]))
                     return false;
             }
 
@@ -277,9 +257,9 @@ namespace CSFlex
         public override int GetHashCode()
         {
             int hash = 0;
-            for (int i = 0; i < intervalls.Count; i++)
+            for (int i = 0; i < intervals.Count; i++)
             {
-                Interval elem = (Interval)intervalls[i];
+                var elem = intervals[i];
 
                 ushort start = (ushort)elem.Start;
                 ushort end = (ushort)elem.End;
@@ -291,18 +271,12 @@ namespace CSFlex
         }
 
 
-        private char min(char a, char b)
-        {
-            return a <= b ? a : b;
-        }
+        private static char Min(char a, char b) => a <= b ? a : b;
 
-        private char max(char a, char b)
-        {
-            return a >= b ? a : b;
-        }
+        private static char Max(char a, char b) => a >= b ? a : b;
 
         /* intersection */
-        public IntCharSet and(IntCharSet set)
+        public IntCharSet And(IntCharSet set)
         {
             if (DEBUG)
             {
@@ -311,18 +285,18 @@ namespace CSFlex
                 OutputWriter.Dump("other : " + set);
             }
 
-            IntCharSet result = new IntCharSet();
+            var result = new IntCharSet();
 
             int i = 0;  // index in this.intervalls
             int j = 0;  // index in set.intervalls
 
-            int size = intervalls.Count;
-            int setSize = set.intervalls.Count;
+            int size = intervals.Count;
+            int setSize = set.intervals.Count;
 
             while (i < size && j < setSize)
             {
-                Interval x = (Interval)this.intervalls[i];
-                Interval y = (Interval)set.intervalls[j];
+                var x = this.intervals[i];
+                var y = set.intervals[j];
 
                 if (x.End < y.Start)
                 {
@@ -336,10 +310,10 @@ namespace CSFlex
                     continue;
                 }
 
-                result.intervalls.Add(
-                  new Interval(
-                    max(x.Start, y.Start),
-                    min(x.End, y.End)
+                result.intervals.Add(
+                  new (
+                    Max(x.Start, y.Start),
+                    Min(x.End, y.End)
                     )
                   );
 
@@ -357,7 +331,7 @@ namespace CSFlex
 
         /* complement */
         /* prec: this.contains(set), set != null */
-        public void sub(IntCharSet set)
+        public void Sub(IntCharSet set)
         {
             if (DEBUG)
             {
@@ -369,12 +343,12 @@ namespace CSFlex
             int i = 0;  // index in this.intervalls
             int j = 0;  // index in set.intervalls
 
-            int setSize = set.intervalls.Count;
+            int setSize = set.intervals.Count;
 
-            while (i < intervalls.Count && j < setSize)
+            while (i < intervals.Count && j < setSize)
             {
-                Interval x = (Interval)this.intervalls[i];
-                Interval y = (Interval)set.intervalls[j];
+                var x = this.intervals[i];
+                var y = set.intervals[j];
 
                 if (DEBUG)
                 {
@@ -400,7 +374,7 @@ namespace CSFlex
 
                 if (x.Start == y.Start && x.End == y.End)
                 {
-                    intervalls.RemoveAt(i);
+                    intervals.RemoveAt(i);
                     j++;
                     continue;
                 }
@@ -424,7 +398,7 @@ namespace CSFlex
                     continue;
                 }
 
-                intervalls.Insert(i, new Interval(x.Start, (char)(y.Start - 1)));
+                intervals.Insert(i, new Interval(x.Start, (char)(y.Start - 1)));
                 x.Start = (char)(y.End + 1);
 
                 i++;
@@ -437,21 +411,15 @@ namespace CSFlex
             }
         }
 
-        public bool ContainsElements()
-        {
-            return intervalls.Count > 0;
-        }
+        public bool ContainsElements() => intervals.Count > 0;
 
-        public int numIntervalls()
-        {
-            return intervalls.Count;
-        }
+        public int NumIntervalls() => intervals.Count;
 
         // beware: depends on caller protocol, single user only 
-        public Interval getNext()
+        public Interval GetNext()
         {
-            if (pos == intervalls.Count) pos = 0;
-            return (Interval)intervalls[pos++];
+            if (pos == intervals.Count) pos = 0;
+            return intervals[pos++];
         }
 
         /**
@@ -465,16 +433,16 @@ namespace CSFlex
          */
         public IntCharSet GetCaseless()
         {
-            var n = copy();
+            var n = Copy();
 
-            int size = intervalls.Count;
+            int size = intervals.Count;
             for (int i = 0; i < size; i++)
             {
-                var elem = intervalls[i];
+                var elem = intervals[i];
                 for (char c = elem.Start; c <= elem.End; c++)
                 {
-                    n.add(char.ToLower(c));
-                    n.add(char.ToUpper(c));
+                    n.Add(char.ToLower(c));
+                    n.Add(char.ToUpper(c));
                     //n.add(char.toTitleCase(c)); 
                 }
             }
@@ -490,10 +458,10 @@ namespace CSFlex
          */
         public override string ToString()
         {
-            StringBuilder result = new StringBuilder("{ ");
+            var result = new StringBuilder("{ ");
 
-            for (int i = 0; i < intervalls.Count; i++)
-                result.Append(intervalls[i]);
+            for (int i = 0; i < intervals.Count; i++)
+                result.Append(intervals[i]);
 
             result.Append(" }");
 
@@ -506,14 +474,14 @@ namespace CSFlex
          * 
          * @return the copy
          */
-        public IntCharSet copy()
+        public IntCharSet Copy()
         {
             var result = new IntCharSet();
-            int size = intervalls.Count;
+            int size = intervals.Count;
             for (int i = 0; i < size; i++)
             {
-                result.intervalls.Add(
-                    intervalls[i].Copy()
+                result.intervals.Add(
+                    intervals[i].Copy()
                     );
             }
             return result;

@@ -120,24 +120,24 @@ namespace CSFlex
 
                     if (x.Equals(set)) return;
 
-                    var and = x.and(set);
+                    var and = x.And(set);
 
                     if (and.ContainsElements())
                     {
                         if (x.Equals(and))
                         {
-                            set.sub(and);
+                            set.Sub(and);
                             continue;
                         }
                         else if (set.Equals(and))
                         {
-                            x.sub(and);
+                            x.Sub(and);
                             classes.Add(and);
                             return;
                         }
 
-                        set.sub(and);
-                        x.sub(and);
+                        set.Sub(and);
+                        x.Sub(and);
                         classes.Add(and);
                     }
                 }
@@ -160,7 +160,7 @@ namespace CSFlex
             while (true)
             {
                 var x = classes[++i];
-                if (x.contains(letter)) return i;
+                if (x.Contains(letter)) return i;
             }
         }
         /**
@@ -265,7 +265,7 @@ namespace CSFlex
                 var x = classes[i];
                 if (negate)
                 {
-                    if (!set.and(x).ContainsElements())
+                    if (!set.And(x).ContainsElements())
                     {
                         temp[length++] = i;
                         if (DEBUG) OutputWriter.Dump("code " + i);
@@ -273,7 +273,7 @@ namespace CSFlex
                 }
                 else
                 {
-                    if (set.and(x).ContainsElements())
+                    if (set.And(x).ContainsElements())
                     {
                         temp[length++] = i;
                         if (DEBUG) OutputWriter.Dump("code " + i);
@@ -318,7 +318,7 @@ namespace CSFlex
                 {
                     var x = classes[i];
                     var y = classes[j];
-                    if (x.and(y).ContainsElements())
+                    if (x.And(y).ContainsElements())
                     {
                         Console.WriteLine("Error: non disjoint char classes {0} and {1}", i, j);
                         Console.WriteLine("class {0}: {1}", i, x);
@@ -353,7 +353,7 @@ namespace CSFlex
 
             int i;
             for (i = 0; i < size; i++)
-                numIntervalls += classes[i].numIntervalls();
+                numIntervalls += classes[i].NumIntervalls();
 
             var result = new CharClassInterval[numIntervalls];
 
@@ -363,7 +363,7 @@ namespace CSFlex
             {
                 int code = GetClassCode((char)c);
                 var set = classes[code];
-                var iv = set.getNext();
+                var iv = set.GetNext();
 
                 result[i++] = new (iv.Start, iv.End, code);
                 c = iv.End + 1;

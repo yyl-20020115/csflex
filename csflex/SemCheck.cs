@@ -21,11 +21,6 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-
 namespace CSFlex
 {
 
@@ -43,8 +38,8 @@ namespace CSFlex
     {
 
         // stored globally since they are used as constants in all checks
-        private static Macros macros;
-        private static char maxChar;
+        private static Macros macros = new();
+        private static char maxChar = '\0';
 
 
         /**
@@ -93,7 +88,7 @@ namespace CSFlex
          *
          * @return true iff C# Flex can generate code for the lookahead expression
          */
-        private static bool CheckLookAhead(RegExp r1, RegExp r2) => r2 == null || Length(r1) > 0 || !(Last(r1).and(First(r2)).ContainsElements());
+        private static bool CheckLookAhead(RegExp r1, RegExp r2) => r2 == null || Length(r1) > 0 || !(Last(r1).And(First(r2)).ContainsElements());
 
 
         /**
@@ -211,12 +206,12 @@ namespace CSFlex
 
                 case Symbols.BAR:
                     r = (RegExp2)re;
-                    return First(r.r1).add(First(r.r2));
+                    return First(r.r1).Add(First(r.r2));
 
                 case Symbols.CONCAT:
                     r = (RegExp2)re;
                     if (ContainsEpsilon(r.r1))
-                        return First(r.r1).add(First(r.r2));
+                        return First(r.r1).Add(First(r.r2));
                     else
                         return First(r.r1);
 
@@ -231,7 +226,7 @@ namespace CSFlex
                 case Symbols.CCLASSNOT:
                     IntCharSet all = new IntCharSet(new Interval((char)0, maxChar));
                     IntCharSet set = new IntCharSet((List<Interval>)((RegExp1)re).content);
-                    all.sub(set);
+                    all.Sub(set);
                     return all;
 
                 case Symbols.CHAR:
@@ -267,12 +262,12 @@ namespace CSFlex
 
                 case Symbols.BAR:
                     r = (RegExp2)re;
-                    return Last(r.r1).add(Last(r.r2));
+                    return Last(r.r1).Add(Last(r.r2));
 
                 case Symbols.CONCAT:
                     r = (RegExp2)re;
                     if (ContainsEpsilon(r.r2))
-                        return Last(r.r1).add(Last(r.r2));
+                        return Last(r.r1).Add(Last(r.r2));
                     else
                         return Last(r.r2);
 
@@ -287,7 +282,7 @@ namespace CSFlex
                 case Symbols.CCLASSNOT:
                     var all = new IntCharSet(new Interval((char)0, maxChar));
                     var set = new IntCharSet((List<Interval>)((RegExp1)re).content);
-                    all.sub(set);
+                    all.Sub(set);
                     return all;
 
                 case Symbols.CHAR:

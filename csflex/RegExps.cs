@@ -21,13 +21,8 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 namespace CSFlex
 {
-
     /**
      * Stores all rules of the specification for later access in RegExp -> NFA
      *
@@ -40,22 +35,22 @@ namespace CSFlex
     {
 
         /** the spec line in which a regexp is used */
-        private readonly PrettyArrayList<int> /* of Integer */ lines = new();
+        private readonly PrettyArrayList<int> lines = new();
 
         /** the lexical states in wich the regexp is used */
-        private readonly PrettyArrayList<List<int>> /* of ArrayList of Integer */ states = new();
+        private readonly PrettyArrayList<List<int>> states = new();
 
         /** the regexp */
-        private readonly PrettyArrayList<RegExp> /* of RegExp */ regExps = new();
+        private readonly PrettyArrayList<RegExp?> regExps = new();
 
         /** the action of a regexp */
-        private readonly PrettyArrayList<Action> /* of Action */ actions = new();
+        private readonly PrettyArrayList<Action> actions = new();
 
         /** flag if it is a BOL regexp */
-        private readonly PrettyArrayList<bool> /* of Boolean */ BOL = new();
+        private readonly PrettyArrayList<bool> BOL = new();
 
         /** the lookahead expression */
-        private readonly PrettyArrayList<RegExp> /* of RegExp */ look = new();
+        private readonly PrettyArrayList<RegExp?>  look = new();
 
         public RegExps()
         {
@@ -111,13 +106,13 @@ namespace CSFlex
 
         public bool IsBOL(int num) => BOL[num];
 
-        public RegExp GetLookAhead(int num) => look[num];
+        public RegExp? GetLookAhead(int num) => look[num];
 
         public bool IsEOF(int num) => num == 0;// && num < BOL.Count;// BOL[num] == null;
 
         public List<int> GetStates(int num) => states[num];
 
-        public RegExp GetRegExp(int num) => regExps[num];
+        public RegExp? GetRegExp(int num) => regExps[num];
 
         public int GetLine(int num) => lines[num];
 

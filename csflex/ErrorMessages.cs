@@ -24,12 +24,10 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-#nullable enable
-
-using System.Resources;
-
 namespace CSFlex
 {
+    using System.Resources;
+
     /**
      * <summary>
      * Central class for all kinds of C# Flex messages.

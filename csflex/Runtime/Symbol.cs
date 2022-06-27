@@ -2,26 +2,26 @@
 {
     public class Symbol
     {
-        public int sym = 0;
-        public int parse_state = 0;
-        internal bool used_by_parser = false;
-        public int left = 0;
-        public int right = 0;
-        public object? value = null;
+        public int Sym = 0;
+        public int ParseState = 0;
+        public bool UsedByParser = false;
+        public int Left = 0;
+        public int Right = 0;
+        public object? Value = null;
 
         public Symbol(int sym_num) 
             : this(sym_num, -1)
         {
-            this.left = -1;
-            this.right = -1;
-            this.value = null;
+            this.Left = -1;
+            this.Right = -1;
+            this.Value = null;
         }
 
         internal Symbol(int sym_num, int state)
         {
-            this.used_by_parser = false;
-            this.sym = sym_num;
-            this.parse_state = state;
+            this.UsedByParser = false;
+            this.Sym = sym_num;
+            this.ParseState = state;
         }
 
         public Symbol(int id, object o) : this(id, -1, -1, o)
@@ -34,12 +34,12 @@
 
         public Symbol(int id, int l, int r, object o) : this(id)
         {
-            this.left = l;
-            this.right = r;
-            this.value = o;
+            this.Left = l;
+            this.Right = r;
+            this.Value = o;
         }
 
-        public override string ToString() =>  "#" + this.sym;
+        public override string ToString() =>  "#" + this.Sym;
     }
 }
 

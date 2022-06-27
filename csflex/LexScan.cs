@@ -3425,7 +3425,7 @@ namespace CSFlex
             CSFlex.Runtime.Symbol s = NextToken();
             Console.WriteLine("line:{0} col:{1} --{2}--{3}--",
 
-        yyline + 1, yycolumn + 1, yytext(), getTokenName(s.sym));
+        yyline + 1, yycolumn + 1, yytext(), getTokenName(s.Sym));
             return s;
         }
 

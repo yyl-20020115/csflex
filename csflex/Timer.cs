@@ -39,7 +39,6 @@ namespace CSFlex
      */
     public class Timer
     {
-
         /* the timer stores start and stop time from currentTimeMillis() */
         private long startTime;
         private long stopTime;

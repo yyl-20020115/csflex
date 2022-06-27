@@ -32,7 +32,7 @@ namespace CSFlex
     public class CountEmitter : PackEmitter
     {
         /** number of entries in expanded array */
-        private int numEntries;
+        private int numEntries = 0;
         /** translate all values by this amount */
         private int translate = 0;
         /**

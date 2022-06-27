@@ -21,13 +21,8 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-using System;
-
 namespace CSFlex
 {
-
-
     /**
      * Stores a regular expression of rules section in a C# Flex specification.
      *
@@ -60,8 +55,6 @@ namespace CSFlex
             this.type = type;
         }
 
-
-
         /**
          * Returns a string-representation of this regular expression
          * with the specified indentation.
@@ -72,12 +65,10 @@ namespace CSFlex
          */
         public virtual string Print(string tab) => tab + ToString();
 
-
         /**
          * Returns a string-representation of this regular expression
          */
         public override string ToString() => "type = " + type;
-
 
         /**
          * Find out if this regexp is a char class or equivalent to one.
@@ -87,9 +78,6 @@ namespace CSFlex
          */
         public bool IsCharClass(Macros macros)
         {
-            RegExp1 unary;
-            RegExp2 binary;
-
             switch (type)
             {
                 case Symbols.CHAR:
@@ -99,12 +87,13 @@ namespace CSFlex
                     return true;
 
                 case Symbols.BAR:
-                    binary = (RegExp2)this;
-                    return binary.r1.IsCharClass(macros) && binary.r2.IsCharClass(macros);
+                    return (this is RegExp2 _binary)
+                        && _binary.r1.IsCharClass(macros)
+                        && _binary.r2.IsCharClass(macros);
 
                 case Symbols.MACROUSE:
-                    unary = (RegExp1)this;
-                    return macros.GetDefinition((string)unary.content).IsCharClass(macros);
+                    return (this is RegExp1 _unary) 
+                        && macros.GetDefinition((string)_unary.content).IsCharClass(macros);
 
                 default: return false;
             }
@@ -118,24 +107,18 @@ namespace CSFlex
          */
         public int Size(Macros macros)
         {
-            RegExp1 unary;
-            RegExp2 binary;
             RegExp content;
 
             switch (type)
             {
                 case Symbols.BAR:
-                    binary = (RegExp2)this;
-                    return binary.r1.Size(macros) + binary.r2.Size(macros) + 2;
+                    return (this is RegExp2 binary1) ? binary1.r1.Size(macros) + binary1.r2.Size(macros) + 2 :0;
 
                 case Symbols.CONCAT:
-                    binary = (RegExp2)this;
-                    return binary.r1.Size(macros) + binary.r2.Size(macros);
+                    return (this is RegExp2 binary2) ? binary2.r1.Size(macros) + binary2.r2.Size(macros) : 0;
 
                 case Symbols.STAR:
-                    unary = (RegExp1)this;
-                    content = (RegExp)unary.content;
-                    return content.Size(macros) + 2;
+                    return (this is RegExp1 unary && unary.content is RegExp r)  ? r.Size(macros) + 2:0;
 
                 case Symbols.PLUS:
                     unary = (RegExp1)this;

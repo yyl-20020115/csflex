@@ -21,12 +21,8 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-using System;
-
 namespace CSFlex
 {
-
     /**
      * HiLowEmitter
      * 
@@ -37,7 +33,6 @@ namespace CSFlex
      */
     public class HiLowEmitter : PackEmitter
     {
-
         /** number of entries in expanded array */
         private int numEntries;
 
@@ -46,9 +41,7 @@ namespace CSFlex
          * 
          * @param name   the name of the generated array
          */
-        public HiLowEmitter(string name) : base(name)
-        {
-        }
+        public HiLowEmitter(string name) : base(name) { }
 
         /**
          * Emits hi/low pair unpacking code for the generated array. 
@@ -57,7 +50,6 @@ namespace CSFlex
          */
         public override void EmitUnpack()
         {
-
             if (Options.EmitCSharp)
                 Println(" 0 };"); // close array
             else

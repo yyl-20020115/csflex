@@ -24,15 +24,8 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-using System;
-using System.IO;
-
-using System.Collections.Generic;
-
 namespace CSFlex
 {
-
     /**
      * This is the main class of C# Flex controlling the scanner generation process. 
      * It is responsible for parsing the commandline, getting input files,
@@ -45,7 +38,6 @@ namespace CSFlex
      */
     public class MainClass
     {
-
         /** C# Flex version */
         public static readonly string version = typeof(MainClass).Assembly.GetName().Version.ToString(); //$NON-NLS-1$
 
@@ -57,7 +49,6 @@ namespace CSFlex
          */
         public static void Generate(File inputFile)
         {
-
             OutputWriter.ResetCounters();
 
             var totalTime = new Timer();
@@ -85,7 +76,7 @@ namespace CSFlex
 
             try
             {
-                NFA nfa = (NFA)parser.Parse().value;
+                NFA nfa = (NFA)parser.Parse().Value;
 
                 OutputWriter.CheckErrors();
 
@@ -128,7 +119,7 @@ namespace CSFlex
                 time.Start();
 
                 var emitter = new Emitter(inputFile, parser, dfa);
-                emitter.emit();
+                emitter.Emit();
 
                 time.Stop();
 

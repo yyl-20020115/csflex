@@ -37,12 +37,12 @@ namespace CSFlex
 
         private readonly bool DEBUG = false;
 
-        private int index;
-        private int offset;
-        private long mask;
+        private int index = 0;
+        private int offset = 0;
+        private long mask = 0;
 
         //private int current;
-        private long[] bits;
+        private long[] bits = Array.Empty<long>();
 
         /**
          * creates a new StateSetEnumerator that is not yet associated
@@ -80,7 +80,6 @@ namespace CSFlex
 
         private void Advance()
         {
-
             if (DEBUG) OutputWriter.Dump("Advancing, at start, index = " + index + ", offset = " + offset); //$NON-NLS-1$ //$NON-NLS-2$
 
             // cache fields in local variable for faster access
@@ -145,6 +144,5 @@ namespace CSFlex
             Advance();
             return x;
         }
-
     }
 }

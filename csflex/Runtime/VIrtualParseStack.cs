@@ -23,7 +23,7 @@
             {
                 var symbol = this.stack.GetAt((this.stack.Size - 1) - this.next);
                 this.next++;
-                this.vstack.Push(symbol.parse_state);
+                this.vstack.Push(symbol.ParseState);
             }
         }
 

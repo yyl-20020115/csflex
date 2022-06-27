@@ -36,8 +36,8 @@ namespace CSFlex
     {
         public const int BITS = 6;           // the number of bits to shift (2^6 = 64)
         public const int MOD = (1 << BITS) - 1;  // modulus
+        private int numElements = 0;
         private long[] bits;
-        private int numElements;
         public long[] Bits => bits;
         public int NumElements => numElements;
 
