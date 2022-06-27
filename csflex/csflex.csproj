@@ -16,6 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="csflex-gui\**" />
+    <EmbeddedResource Remove="csflex-gui\**" />
+    <None Remove="csflex-gui\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="LexParse.cup" />
     <None Remove="LexScan.flex" />
   </ItemGroup>

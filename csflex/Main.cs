@@ -28,8 +28,6 @@
 using System;
 using System.IO;
 
-using CSFlex.GUI;
-using System.Windows.Forms;
 using System.Collections.Generic;
 
 namespace CSFlex
@@ -355,9 +353,6 @@ namespace CSFlex
             OutputWriter.Println("Have a nice day!");
         }
 
-        [System.Runtime.InteropServices.DllImport("kernel32")]
-        private static extern bool FreeConsole();
-
         public static void Generate(string[] argv)
         {
             var files = ParseOptions(argv);
@@ -366,15 +361,6 @@ namespace CSFlex
             {
                 foreach(var file in files)
                     Generate(file);
-            }
-            else
-            {
-                FreeConsole();
-                try
-                {
-                    Application.Run(new MainFrame());
-                }
-                catch { }
             }
         }
 
