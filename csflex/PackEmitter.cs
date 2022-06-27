@@ -102,7 +102,7 @@ namespace CSFlex
          */
         public void EmitInit()
         {
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
             {
                 builder.Append("  private static readonly int [] ");
                 builder.Append(ConstName);
@@ -150,7 +150,7 @@ namespace CSFlex
             if (_UTF8Length >= maxSize)
             {
                 // close current chunk
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     builder.Append("0 };");
                 else
                     builder.Append("\";");
@@ -163,7 +163,7 @@ namespace CSFlex
                 if (linepos >= maxEntries)
                 {
                     // line break
-                    if (Options.EmitCsharp)
+                    if (Options.EmitCSharp)
                     {
                         EmitNewLine();
                         builder.Append(csharp_indent);
@@ -190,7 +190,7 @@ namespace CSFlex
          */
         private void NextChunk()
         {
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
             {
                 EmitNewLine();
                 builder.Append("  private static readonly ushort[] ");
@@ -235,36 +235,36 @@ namespace CSFlex
          */
         private void PrintUnicodeChar(char c)
         {
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 builder.Append(" ");
 
             if (c > 255)
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                 {
                     builder.Append("0x");
                     if (c < 0x1000) builder.Append("0");
-                    builder.Append(Integer.ToHexString(c));
+                    builder.Append(IntUtil.ToHexString(c));
                 }
                 else
                 {
                     builder.Append("\\u");
                     if (c < 0x1000) builder.Append("0");
-                    builder.Append(Integer.ToHexString(c));
+                    builder.Append(IntUtil.ToHexString(c));
                 }
             }
             else
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     builder.Append(((int)c).ToString());
                 else
                 {
                     builder.Append("\\");
-                    builder.Append(Integer.ToOctalString(c));
+                    builder.Append(IntUtil.ToOctalString(c));
                 }
             }
 
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 builder.Append(",");
         }
 

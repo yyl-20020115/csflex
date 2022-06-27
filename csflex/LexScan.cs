@@ -1607,12 +1607,12 @@ namespace CSFlex
         internal bool isIntWrap;
         internal bool isYYEOF;
         internal bool notUnix;
-        internal bool isPublic;
-        internal bool isFinal;
-        internal bool isAbstract;
+        internal bool IsPublic;
+        internal bool IsFinal;
+        internal bool IsAbstract;
         internal bool lookAheadUsed;
         internal bool bolUsed;
-        internal bool standalone;
+        internal bool IsStandalone;
         internal bool debugOption;
         internal bool useRowMap = Options.GenMethod == Options.PACK || Options.GenMethod == Options.TABLE;
         internal bool packed = Options.GenMethod == Options.PACK;
@@ -1620,9 +1620,9 @@ namespace CSFlex
         internal bool inclusive_states;
         internal bool eofclose;
 
-        internal string isImplementing;
-        internal string isExtending;
-        internal string className = "Yylex";
+        internal string IsImplementing;
+        internal string IsExtending;
+        internal string ClassName = "Yylex";
         internal string functionName;
         internal string tokenType;
         internal string visibility = "public";
@@ -2431,7 +2431,7 @@ namespace CSFlex
                     case 135:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            bufferSize = Integer.ParseInt(yytext().Substring(8).Trim());
+                            bufferSize = IntUtil.ParseInt(yytext().Substring(8).Trim());
                         }
                         break;
                     case 79:
@@ -2625,7 +2625,7 @@ namespace CSFlex
                     case 68:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CHAR, (char)Integer.ParseInt(yytext().Substring(1, yytext().Length - 1), 8));
+                            return symbol(CHAR, (char)IntUtil.ParseInt(yytext().Substring(1, yytext().Length - 1), 8));
                         }
                         break;
                     case 29:
@@ -2673,13 +2673,14 @@ namespace CSFlex
                     case 101:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CHAR, (char)Integer.ParseInt(yytext().Substring(2, yytext().Length - 2), 16));
+                            return symbol(CHAR, (char)IntUtil.ParseInt(yytext().Substring(2, yytext().Length - 2), 16));
                         }
                         break;
                     case 146:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            standalone = true; isInteger = true;
+                            IsStandalone = true; 
+                            isInteger = true;
                         }
                         break;
                     case 69:
@@ -2703,7 +2704,7 @@ namespace CSFlex
                     case 125:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            className = yytext().Substring(7).Trim();
+                            ClassName = yytext().Substring(7).Trim();
                         }
                         break;
                     case 103:
@@ -2757,7 +2758,7 @@ namespace CSFlex
                     case 93:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CHAR, (char)Integer.ParseInt(yytext().Substring(2, yytext().Length - 2), 16));
+                            return symbol(CHAR, (char)IntUtil.ParseInt(yytext().Substring(2, yytext().Length - 2), 16));
                         }
                         break;
                     case 56:
@@ -2769,7 +2770,7 @@ namespace CSFlex
                     case 80:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append((char)Integer.ParseInt(yytext().Substring(1, yytext().Length - 1), 8));
+                            @string.Append((char)IntUtil.ParseInt(yytext().Substring(1, yytext().Length - 1), 8));
                         }
                         break;
                     case 91:
@@ -2793,7 +2794,7 @@ namespace CSFlex
                     case 102:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append((char)Integer.ParseInt(yytext().Substring(2, yytext().Length - 2), 16));
+                            @string.Append((char)IntUtil.ParseInt(yytext().Substring(2, yytext().Length - 2), 16));
                         }
                         break;
                     case 58:
@@ -2816,7 +2817,7 @@ namespace CSFlex
                     case 139:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            isExtending = yytext().Substring(9).Trim();
+                            IsExtending = yytext().Substring(9).Trim();
                         }
                         break;
                     case 19:
@@ -3007,7 +3008,7 @@ namespace CSFlex
                     case 109:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            isFinal = true;
+                            IsFinal = true;
                         }
                         break;
                     case 13:
@@ -3025,7 +3026,7 @@ namespace CSFlex
                     case 151:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            isImplementing = concExc(isImplementing, yytext().Substring(12).Trim());
+                            IsImplementing = concExc(IsImplementing, yytext().Substring(12).Trim());
                         }
                         break;
                     case 53:
@@ -3100,7 +3101,7 @@ namespace CSFlex
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
                             cupCompatible = true;
-                            isImplementing = concExc(isImplementing, "java_cup.runtime.Scanner");
+                            IsImplementing = concExc(IsImplementing, "java_cup.runtime.Scanner");
                             if (functionName == null)
                                 functionName = "next_token";
                             if (tokenType == null)
@@ -3114,7 +3115,7 @@ namespace CSFlex
                     case 131:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            isAbstract = true;
+                            IsAbstract = true;
                         }
                         break;
                     case 158:
@@ -3198,7 +3199,7 @@ namespace CSFlex
                     case 95:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append((char)Integer.ParseInt(yytext().Substring(2, yytext().Length - 2), 16));
+                            @string.Append((char)IntUtil.ParseInt(yytext().Substring(2, yytext().Length - 2), 16));
                         }
                         break;
                     case 23:
@@ -3216,7 +3217,7 @@ namespace CSFlex
                     case 118:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            isPublic = true;
+                            IsPublic = true;
                         }
                         break;
                     case 77:

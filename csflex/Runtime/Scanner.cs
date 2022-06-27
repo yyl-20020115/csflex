@@ -5,4 +5,3 @@
         Symbol NextToken();
     }
 }
-

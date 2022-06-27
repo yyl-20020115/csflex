@@ -105,7 +105,7 @@ namespace CSFlex
          * @param a   the object to compare this Action with
          * @return    true if the action strings are equal
          */
-        public bool IsEquiv(Action a) => this == a || ((Options.EmitCsharp == false) && this.contentTrimmed.Equals(a.contentTrimmed));
+        public bool IsEquiv(Action a) => this == a || ((Options.EmitCSharp == false) && this.contentTrimmed.Equals(a.contentTrimmed));
         /**
          * Calculate hash value.
          * 

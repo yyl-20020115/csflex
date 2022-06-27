@@ -22,14 +22,10 @@
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 
 namespace CSFlex
 {
-
     /**
      *
      * @author Gerwin Klein
@@ -39,20 +35,15 @@ namespace CSFlex
      */
     public class CharClasses
     {
-
         /** debug flag (for char classes only) */
         private static readonly bool DEBUG = false;
-
         /** the largest character that can be used in char classes */
         public const char MaxChar = '\uFFFF';
         public const char MinChar = '\0';
-
         /** the char classes */
         private readonly List<IntCharSet> classes = new();
-
         /** the largest character actually used in a specification */
         private char maxCharUsed = '\0';
-
         /**
          * Returns the greatest Unicode value of the current input character set.
          */
@@ -61,10 +52,7 @@ namespace CSFlex
          * Returns the current number of character classes.
          */
         public int NumClasses => this.classes.Count;
-
         public List<IntCharSet> Classes => classes;
-
-
         /**
          * Constructs a new CharClass object that provides space for 
          * classes of characters from 0 to maxCharCode.
@@ -79,7 +67,7 @@ namespace CSFlex
         public CharClasses(int maxCharCode)
         {
             if (maxCharCode < 0 || maxCharCode > 0xFFFF)
-                throw new ArgumentException();
+                throw new ArgumentException(nameof(maxCharCode));
 
             this.maxCharUsed = (char)maxCharCode;
 
@@ -98,7 +86,7 @@ namespace CSFlex
         public void SetMaxCharCode(int charCode)
         {
             if (charCode < 0 || charCode > 0xFFFF)
-                throw new ArgumentException();
+                throw new ArgumentException(nameof(charCode));
 
             this.maxCharUsed = (char)charCode;
         }
@@ -163,8 +151,6 @@ namespace CSFlex
                 }
             }
         }
-
-
         /**
          * Returns the code of the character class the specified character belongs to.
          */
@@ -177,21 +163,16 @@ namespace CSFlex
                 if (x.contains(letter)) return i;
             }
         }
-
         /**
          * Dump charclasses to the dump output stream
          */
         public void Dump() => OutputWriter.Dump(ToString());
-
-
         /**
          * Return a string representation of one char class
          *
          * @param theClass  the index of the class to
          */
         public string ToString(int theClass) => classes[theClass].ToString();
-
-
         /**
          * Return a string representation of the char classes
          * stored in this class. 
@@ -209,16 +190,12 @@ namespace CSFlex
 
             return result.ToString();
         }
-
-
         /**
          * Creates a new character class for the single character <code>singleChar</code>.
          *    
          * @param caseless  if true upper/lower/title case are considered equivalent  
          */
         public void MakeClass(char singleChar, bool caseless) => MakeClass(new IntCharSet(singleChar), caseless);
-
-
         /**
          * Creates a new character class for each character of the specified string.
          *    
@@ -228,8 +205,6 @@ namespace CSFlex
         {
             for (int i = 0; i < str.Length; i++) MakeClass(str[i], caseless);
         }
-
-
         /**
          * Updates the current partition, so that the specified set of characters
          * gets a new character class.
@@ -247,8 +222,6 @@ namespace CSFlex
         {
             MakeClass(new IntCharSet(v), caseless);
         }
-
-
         /**
          * Updates the current partition, so that the set of all characters not contained in the specified 
          * set of characters gets a new character class.
@@ -268,8 +241,6 @@ namespace CSFlex
         {
             MakeClass(new IntCharSet(v), caseless);
         }
-
-
         /**
          * Returns an array that contains the character class codes of all characters
          * in the specified set of input characters.
@@ -312,11 +283,8 @@ namespace CSFlex
 
             var result = new int[length];
             Array.Copy(temp, 0, result, 0, length);
-
             return result;
         }
-
-
         /**
          * Returns an array that contains the character class codes of all characters
          * in the specified set of input characters.
@@ -327,8 +295,6 @@ namespace CSFlex
          * @return an array with the class codes for intervallVec
          */
         public int[] GetClassCodes(List<Interval> intervallVec) => GetClassCodes(new IntCharSet(intervallVec), false);
-
-
         /**
          * Returns an array that contains the character class codes of all characters
          * that are <strong>not</strong> in the specified set of input characters.
@@ -339,8 +305,6 @@ namespace CSFlex
          * @return an array with the class codes for the complement of intervallVec
          */
         public int[] GetNotClassCodes(List<Interval> intervallVec) => GetClassCodes(new IntCharSet(intervallVec), true);
-
-
         /**
          * Check consistency of the stored classes [debug].
          *
@@ -372,8 +336,6 @@ namespace CSFlex
 
             GetClassCode(MaxChar);
         }
-
-
         /**
          * Returns an array of all CharClassIntervalls in this
          * char class collection. 
@@ -406,7 +368,6 @@ namespace CSFlex
                 result[i++] = new (iv.Start, iv.End, code);
                 c = iv.End + 1;
             }
-
             return result;
         }
     }

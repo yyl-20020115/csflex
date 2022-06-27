@@ -1,5 +1,4 @@
 // #define DEBUG_TRACE
-
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * C# Flex 1.4                                                             *
  * Copyright (C) 2004-2005  Jonathan Gilbert <logic@deltaq.org>            *
@@ -23,14 +22,9 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-using System;
-using System.Collections;
-using System.IO;
-using System.Text;
-
 namespace CSFlex
 {
+    using System.Text;
     /**
      * DFA representation in C# Flex.
      * Contains minimization algorithm.
@@ -42,74 +36,57 @@ namespace CSFlex
      */
     public sealed class DFA
     {
-
         /**
          * The initial number of states 
          */
         private const int STATES = 500;
-
         /**
          * The code for "no target state" in the transition table.
          */
         public const int NO_TARGET = -1;
-
         /**
          * table[current_state][character] is the next state for <code>current_state</code>
          * with input <code>character</code>, <code>NO_TARGET</code> if there is no transition for
          * this input in <code>current_state</code>
          */
         private int[][] table;
-
-
         /**
          * <code>isFinal[state] == true</code> <=> the state <code>state</code> is 
          * a final state.
          */
         private bool[] isFinal;
-
         /**
          * <code>isPushback[state] == true</code> <=> the state <code>state</code> is 
          * a final state of an expression that can only be matched when followed by
          * a certain lookaead.
          */
         private bool[] isPushback;
-
-
         /**
          * <code>isLookEnd[state] == true</code> <=> the state <code>state</code> is 
          * a final state of a lookahead expression.
          */
         private bool[] isLookEnd;
-
-
         /**
          * <code>action[state]</code> is the action that is to be carried out in
          * state <code>state</code>, <code>null</code> if there is no action.
          */
         private Action[] action;
-
         /**
          * lexState[i] is the start-state of lexical state i
          */
         private int[] lexState;
-
         /**
          * The number of states in this DFA
          */
         private int numStates;
-
-
         /**
          * The current maximum number of input characters
          */
         private int numInput;
-
-
         /**
          * all actions that are used in this DFA
          */
         private PrettyHashtable<Action,Action> usedActions = new ();
-
         public int[][] Table => table;
         public bool[] IsFinal => isFinal;
         public bool[] IsPushback => isPushback;
@@ -160,9 +137,7 @@ namespace CSFlex
         private void EnsureStateCapacity(int newNumStates)
         {
             int oldLength = isFinal.Length;
-
             if (newNumStates < oldLength) return;
-
             int newLength = oldLength * 2;
             while (newLength <= newNumStates) newLength *= 2;
 
@@ -197,7 +172,6 @@ namespace CSFlex
             table = newTable;
         }
 
-
         public void SetAction(int state, Action stateAction)
         {
 #if DEBUG_TRACE
@@ -224,8 +198,6 @@ namespace CSFlex
         {
             isPushback[state] = isPushbackState;
         }
-
-
         public void AddTransition(int start, char input, int dest)
         {
             int max = Math.Max(start, dest) + 1;
@@ -236,9 +208,6 @@ namespace CSFlex
 
             table[start][input] = dest;
         }
-
-
-
         public override string ToString()
         {
             var result = new StringBuilder();
@@ -260,8 +229,6 @@ namespace CSFlex
 
             return result.ToString();
         }
-
-
         public void WriteDot(File file)
         {
             try
@@ -276,8 +243,6 @@ namespace CSFlex
                 throw new GeneratorException();
             }
         }
-
-
         public string DotFormat()
         {
             var result = new StringBuilder();
@@ -306,11 +271,9 @@ namespace CSFlex
                 }
             }
 
-            result.Append("}").Append(OutputWriter.NewLine);
-
+            result.Append('}').Append(OutputWriter.NewLine);
             return result.ToString();
         }
-
 
         // check if all actions can actually be matched in this DFA
         public void CheckActions(LexScan scanner, LexParse parser)
@@ -325,7 +288,6 @@ namespace CSFlex
                     OutputWriter.Warning(scanner.file, ErrorMessages.NEVER_MATCH, ((Action)next).Priority - 1, -1);
             }
         }
-
 
         /**
          * Implementation of Hopcroft's O(n log n) minimization algorithm, follows
@@ -394,11 +356,9 @@ namespace CSFlex
             // if SD[B_i] == block[B_i], there is no need to split
             int[] SD = new int[2 * n]; // [only SD[n..2*n-1] is used]
 
-
             // for fixed (B_j,a), the D[0]..D[numD-1] are the inv_delta(B_j,a)
             int[] D = new int[n];
             int numD;
-
 
             // initialize inverse of transition table
             int lastDelta = 0;
@@ -700,11 +660,8 @@ namespace CSFlex
                                     // System.out.println("finished move");
                     }
                 } // of block splitting
-
                 // printBlocks(block, b_forward, b_backward, lastBlock);
-
                 // System.out.println("updating L");
-
                 // update L
                 for (int indexTwin = 0; indexTwin < numSplit; indexTwin++)
                 {
@@ -814,11 +771,9 @@ namespace CSFlex
             // the transition table is transformed in place (in O(c n))
             for (i = 0, j = 0; i < numStates; i++)
             {
-
                 // we only copy lines that have not been removed
                 if (!kill[i])
                 {
-
                     // translate the target states 
                     for (int c = 0; c < numInput; c++)
                     {
@@ -876,7 +831,7 @@ namespace CSFlex
                 int s = b_f[i];
                 while (s != i)
                 {
-                    line = line + (s - 1);
+                    line += (s - 1);
                     int t = s;
                     s = b_f[s];
                     if (s != i)
@@ -892,7 +847,7 @@ namespace CSFlex
 
         public void PrintL(int[] l_f, int[] l_b, int anchor)
         {
-            string l = "L = {";
+            var l = "L = {";
             int bc = l_f[anchor];
             while (bc != anchor)
             {
@@ -910,7 +865,6 @@ namespace CSFlex
 
         public bool[][] Old_minimize()
         {
-
             int i, j;
             char c;
 
@@ -948,7 +902,7 @@ namespace CSFlex
                     // i and j are both not final
 
                     if (isFinal[i] && isFinal[j] && (isPushback[i] == isPushback[j]) && (isLookEnd[i] == isLookEnd[j]))
-                        equiv[i][j] = action[i].IsEquiv(action[j]) && !Options.EmitCsharp; // C# #line directives get messed up by merged states
+                        equiv[i][j] = action[i].IsEquiv(action[j]) && !Options.EmitCSharp; // C# #line directives get messed up by merged states
                     else
                         equiv[i][j] = !isFinal[j] && !isFinal[i] && (isPushback[i] == isPushback[j]) && (isLookEnd[i] == isLookEnd[j]);
                 }
@@ -1037,7 +991,6 @@ namespace CSFlex
 
             return equiv;
         }
-
 
         public void PrintInvDelta(int[][] inv_delta, int[] inv_delta_set)
         {

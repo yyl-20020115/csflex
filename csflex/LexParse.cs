@@ -24,7 +24,7 @@ namespace CSFlex
 
         /** Production table. */
         protected static readonly short[][] _production_table =
-          unpackFromShorts(new short[] {
+          Unpack(new short[] {
         0, 73, 0, 2, 2, 4, 0, 2, 6, 6, 0, 2, 6,
         8, 0, 2, 6, 2, 0, 2, 3, 2, 0, 2, 3, 4,
         0, 2, 3, 3, 0, 2, 4, 3, 0, 2, 4, 3, 0,
@@ -50,11 +50,11 @@ namespace CSFlex
         0, 2, 17, 3, 0, 2, 17, 3,0 });
 
         /** Access to production table. */
-        public override short[][] production_table() => _production_table;
+        public override short[][] ProductionTable => _production_table;
 
         /** Parse-action table. */
         protected static readonly short[][] _action_table =
-          unpackFromShorts(new short[] {
+          Unpack(new short[] {
             0, 108, 0, 6, 2, -2, 32, 4, 1, 2, 0, 12, 3,
             8, 11, -3, 18, -3, 19, -3, 31, -3, 1, 2, 0, 4,
             2, 6, 1, 2, 0, 4, 2, 1, 1, 2, 0, 10, 11,
@@ -318,11 +318,11 @@ namespace CSFlex
             1, 2,0 });
 
         /** Access to parse-action table. */
-        public override short[][] action_table() => _action_table;
+        public override short[][] ActionTable => _action_table;
 
         /** <code>reduce_goto</code> table. */
         protected static readonly short[][] _reduce_table =
-          unpackFromShorts(new short[] {
+          Unpack(new short[] {
     0, 108, 0, 4, 6, 4, 1, 1, 0, 4, 3, 6, 1,
     1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 4, 4, 12,
     1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1,
@@ -373,19 +373,19 @@ namespace CSFlex
     1,0 });
 
         /** Access to <code>reduce_goto</code> table. */
-        public override short[][] reduce_table() => _reduce_table;
+        public override short[][] ReduceTable => _reduce_table;
 
         /** Instance of action encapsulation class. */
         protected CUP_LexParse_actions action_obj;
 
         /** Action encapsulation object initializer. */
-        protected override void init_actions()
+        protected override void InitActions()
         {
             action_obj = new (this);
         }
 
         /** Invoke a user supplied parse action. */
-        public override Symbol do_action(
+        public override Symbol DoAction(
           int act_num,
           LRParser parser,
           CSFlex.JCStack<Symbol> stack,
@@ -394,19 +394,19 @@ namespace CSFlex
             action_obj.CUP_LexParse_do_action(act_num, parser, stack, top);
 
         /** Indicates start state. */
-        public override int start_state() => 0;
+        public override int StartState() => 0;
         /** Indicates start production. */
-        public override int start_production() => 0;
+        public override int StartProduction() => 0;
 
         /** <code>EOF</code> Symbol index. */
-        public override int EOF_sym() => 0;
+        public override int EOF_Symbol() => 0;
 
         /** <code>error</code> Symbol index. */
-        public override int error_sym() => 1;
+        public override int ErrorSym() => 1;
 
 
         /** User initialization code. */
-        public override void user_init() => action_obj.scanner = this.scanner;
+        public override void UserInit() => action_obj.scanner = this.scanner;
 
 
         public LexScan scanner;
@@ -417,7 +417,7 @@ namespace CSFlex
 
         public EOFActions EOFActions => action_obj.eofActions;
 
-        public override void report_error(string message, Object info)
+        public override void ReportError(string message, Object info)
         {
             if (info is Symbol s)
             {
@@ -430,7 +430,7 @@ namespace CSFlex
                 OutputWriter.Error(ErrorMessages.UNKNOWN_SYNTAX);
         }
 
-        public override void report_fatal_error(string message, Object info)
+        public override void ReportFatalError(string message, Object info)
         {
             // report_error(message, info);
             throw new GeneratorException();
@@ -2013,9 +2013,8 @@ namespace CSFlex
                 /*. . . . . . . . . . . . . . . . . . . .*/
                 case 30: // hatOPT ::= 
                     {
-                        Boolean RESULT = null;
-
-                        RESULT = new Boolean(false);
+                        
+                        bool RESULT = (false);
 
                         CUP_LexParse_result = new CSFlex.Runtime.Symbol(17/*hatOPT*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
@@ -2024,11 +2023,10 @@ namespace CSFlex
                 /*. . . . . . . . . . . . . . . . . . . .*/
                 case 29: // hatOPT ::= HAT 
                     {
-                        Boolean RESULT = null;
+                        bool RESULT = true;
 
                         // assumption: there is no upper case for \n
                         charClasses.MakeClass('\n', false);
-                        RESULT = new Boolean(true);
 
                         CUP_LexParse_result = new CSFlex.Runtime.Symbol(17/*hatOPT*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
@@ -2203,7 +2201,7 @@ namespace CSFlex
                 /*. . . . . . . . . . . . . . . . . . . .*/
                 case 17: // rule ::= error 
                     {
-                        Integer RESULT = null;
+                        int RESULT = 0;
 
                         CUP_LexParse_result = new CSFlex.Runtime.Symbol(3/*rule*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
@@ -2329,9 +2327,9 @@ namespace CSFlex
                         ArrayList rlist = (ArrayList)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
                         int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
                         int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
-                        Integer r = (Integer)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
+                        int r = (int)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
-                        rlist.Add(r.intValue()); RESULT = rlist;
+                        rlist.Add(r); RESULT = rlist;
 
                         CUP_LexParse_result = new CSFlex.Runtime.Symbol(16/*rules*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
@@ -2473,7 +2471,7 @@ namespace CSFlex
                                 RESULT.addRegExp(i);
                         }
 
-                        if (scanner.standalone) RESULT.addStandaloneRule();
+                        if (scanner.IsStandalone) RESULT.addStandaloneRule();
                         t.Stop();
 
                         OutputWriter.Time("");
@@ -2528,7 +2526,7 @@ namespace CSFlex
                                 RESULT.addRegExp(i);
                         }
 
-                        if (scanner.standalone) RESULT.addStandaloneRule();
+                        if (scanner.IsStandalone) RESULT.addStandaloneRule();
                         t.Stop();
 
                         OutputWriter.Time("");
@@ -2551,7 +2549,7 @@ namespace CSFlex
                         CUP_LexParse_result = new CSFlex.Runtime.Symbol(0/*$START*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     /* ACCEPT */
-                    CUP_LexParse_parser.done_parsing();
+                    CUP_LexParse_parser.DoneParsing();
                     return CUP_LexParse_result;
 
                 /* . . . . . .*/

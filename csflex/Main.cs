@@ -85,7 +85,7 @@ namespace CSFlex
 
             try
             {
-                NFA nfa = (NFA)parser.parse().value;
+                NFA nfa = (NFA)parser.Parse().value;
 
                 OutputWriter.CheckErrors();
 
@@ -293,7 +293,7 @@ namespace CSFlex
 
                 if ((argv[i] == "--csharp") || (argv[i] == "-cs"))
                 {
-                    Options.EmitCsharp = true;
+                    Options.EmitCSharp = true;
                     continue;
                 }
 

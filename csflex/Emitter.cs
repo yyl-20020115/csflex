@@ -52,8 +52,7 @@ namespace CSFlex
 
         private static readonly string date = DateTime.Now.ToShortDateString();
 
-        private File inputFile;
-
+        private File? inputFile = null;
         private TextWriter output;
         private Skeleton skel;
         private LexScan scanner;
@@ -62,34 +61,33 @@ namespace CSFlex
 
         // for switch statement:
         // table[i][j] is the set of input characters that leads from state i to state j
-        private CharSet[][] table;
+        private CharSet[][]? table = null;
 
-        private bool[] isTransition;
+        private bool[]? isTransition = null;
 
         // noTarget[i] is the set of input characters that have no target state in state i
-        private CharSet[] noTarget;
+        private CharSet[]? noTarget = null;
 
         // for row killing:
-        private int numRows;
-        private int[] rowMap;
-        private bool[] rowKilled;
+        private int numRows = 0;
+        private int[]? rowMap = null;
+        private bool[]? rowKilled = null;
 
         // for col killing:
-        private int numCols;
-        private int[] colMap;
-        private bool[] colKilled;
-
+        private int numCols = 0;
+        private int[]? colMap = null;
+        private bool[]? colKilled = null;
 
         /** maps actions to their switch label */
-        private PrettyHashtable<Action,Integer> actionTable = new ();
+        private readonly PrettyHashtable<Action,int> actionTable = new ();
 
-        private CharClassInterval[] intervalls;
+        private CharClassInterval[] intervals = Array.Empty<CharClassInterval>();
 
         private string visibility = "public";
 
         public Emitter(File inputFile, LexParse parser, DFA dfa)
         {
-            var name = Options.EmitCsharp ? parser.scanner.className + ".cs" : parser.scanner.className + ".java";
+            var name = Options.EmitCSharp ? parser.scanner.ClassName + ".cs" : parser.scanner.ClassName + ".java";
             var outputFile = Normalize(name, inputFile);
 
             OutputWriter.Println("Writing code to \"" + outputFile + "\"");
@@ -117,18 +115,22 @@ namespace CSFlex
         {
             File outputFile;
 
-            if (Options.Dir == null)
-                if (input == null || input.Parent == null)
-                    outputFile = new File(name);
-                else
-                    outputFile = new File(input.Parent, name);
-            else
-                outputFile = new File(Options.Dir, name);
+            switch (Options.Dir)
+            {
+                case null:
+                    if (input == null || input.Parent == null)
+                        outputFile = new File(name);
+                    else
+                        outputFile = new File(input.Parent, name);
+                    break;
+                default:
+                    outputFile = new File(Options.Dir, name);
+                    break;
+            }
 
             if (outputFile.Exists&& !Options.NoBackup)
             {
-                File backup = new File(outputFile.ToString() + "~");
-
+                var backup = new File(outputFile.ToString() + "~");
                 if (backup.Exists) backup.Delete();
 
                 if (outputFile.RenameTo(backup))
@@ -140,40 +142,19 @@ namespace CSFlex
             return outputFile;
         }
 
-        private void Println()
-        {
-            output.WriteLine();
-        }
+        private void Println() => output.WriteLine();
 
-        private void Println(string line)
-        {
-            output.WriteLine(line);
-        }
+        private void Println(string line) => output.WriteLine(line);
 
-        private void Println_(int i)
-        {
-            output.WriteLine(i);
-        }
+        private void Println_(int i) => output.WriteLine(i);
 
-        private void Print(string line)
-        {
-            output.Write(line);
-        }
+        private void Print(string line) => output.Write(line);
 
-        private void Print(int i)
-        {
-            output.Write(i);
-        }
+        private void Print(int i) => output.Write(i);
 
         private void Print(int i, int tab)
         {
-            int exp;
-
-            if (i < 0)
-                exp = 1;
-            else
-                exp = 10;
-
+            int exp = i < 0 ? 1 : 10;
             while (tab-- > 1)
             {
                 if (Math.Abs(i) < exp) Print(" ");
@@ -187,7 +168,7 @@ namespace CSFlex
         {
             Print("  private void zzScanError(int errorCode)");
 
-            if (!Options.EmitCsharp)
+            if (!Options.EmitCSharp)
             {
                 if (scanner.scanErrorException != null)
                     Print(" throws " + scanner.scanErrorException);
@@ -199,7 +180,7 @@ namespace CSFlex
 
             if (scanner.scanErrorException == null)
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Println("    throw new Exception(message);");
                 else
                     Println("    throw new Error(message);");
@@ -215,17 +196,16 @@ namespace CSFlex
                 Println(" {");
             else
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Println(" {");
                 else
                     Println(" throws " + scanner.scanErrorException + " {");
             }
         }
 
-        private void emitMain()
+        private void EmitMain()
         {
-            if (!(scanner.standalone || scanner.debugOption || scanner.cupDebug)) return;
-
+            if (!(scanner.IsStandalone || scanner.debugOption || scanner.cupDebug)) return;
             if (scanner.cupDebug)
             {
                 Println("  /**");
@@ -234,7 +214,7 @@ namespace CSFlex
                 Println("   *");
                 Println("   * This code was contributed by Karl Meissner <meissnersd@yahoo.com>");
                 Println("   */");
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                 {
                     Println("  private string getTokenName(int token) {");
                     Println("    try {");
@@ -294,7 +274,7 @@ namespace CSFlex
 
                 Print(scanner.functionName);
 
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Print("()");
                 else
                 {
@@ -314,9 +294,8 @@ namespace CSFlex
                 }
 
                 Println(" {");
-
                 Println("    java_cup.runtime.Symbol s = " + scanner.functionName + "();");
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                 {
                     Print("    Console.WriteLine( \"");
 
@@ -342,7 +321,7 @@ namespace CSFlex
                 Println("");
             }
 
-            if (scanner.standalone)
+            if (scanner.IsStandalone)
             {
                 Println("  /**");
                 Println("   * Runs the scanner on input files.");
@@ -368,19 +347,19 @@ namespace CSFlex
                 Println("   */");
             }
 
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
             {
                 Println("  public static void Main(string[] argv) {");
                 Println("    if (argv.Length == 0) {");
-                Println("      Console.WriteLine(\"Usage : " + scanner.className + " <inputfile>\");");
+                Println("      Console.WriteLine(\"Usage : " + scanner.ClassName + " <inputfile>\");");
                 Println("    }");
                 Println("    else {");
                 Println("      for (int i = 0; i < argv.Length; i++) {");
-                Println("        " + scanner.className + " scanner = null;");
+                Println("        " + scanner.ClassName + " scanner = null;");
                 Println("        try {");
-                Println("          scanner = new " + scanner.className + "( new StreamReader(argv[i]) );");
+                Println("          scanner = new " + scanner.ClassName + "( new StreamReader(argv[i]) );");
 
-                if (scanner.standalone)
+                if (scanner.IsStandalone)
                 {
                     Println("          while ( !scanner.zzAtEOF ) scanner." + scanner.functionName + "();");
                 }
@@ -416,15 +395,15 @@ namespace CSFlex
             {
                 Println("  public static void main(string argv[]) {");
                 Println("    if (argv.length == 0) {");
-                Println("      System.out.println(\"Usage : java " + scanner.className + " <inputfile>\");");
+                Println("      System.out.println(\"Usage : java " + scanner.ClassName + " <inputfile>\");");
                 Println("    }");
                 Println("    else {");
                 Println("      for (int i = 0; i < argv.length; i++) {");
-                Println("        " + scanner.className + " scanner = null;");
+                Println("        " + scanner.ClassName + " scanner = null;");
                 Println("        try {");
-                Println("          scanner = new " + scanner.className + "( new java.io.FileReader(argv[i]) );");
+                Println("          scanner = new " + scanner.ClassName + "( new java.io.FileReader(argv[i]) );");
 
-                if (scanner.standalone)
+                if (scanner.IsStandalone)
                 {
                     Println("          while ( !scanner.zzAtEOF ) scanner." + scanner.functionName + "();");
                 }
@@ -459,18 +438,18 @@ namespace CSFlex
             Println("");
         }
 
-        private void emitNoMatch()
+        private void EmitNoMatch()
         {
             Println("            zzScanError(ZZ_NO_MATCH);");
         }
 
-        private void emitNextInput()
+        private void EmitNextInput()
         {
             Println("          if (zzCurrentPosL < zzEndReadL)");
             Println("            zzInput = zzBufferL[zzCurrentPosL++];");
             Println("          else if (zzAtEOF) {");
             Println("            zzInput = YYEOF;");
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Println("            goto zzForAction;");
             else
                 Println("            break zzForAction;");
@@ -481,7 +460,7 @@ namespace CSFlex
             Println("            zzMarkedPos   = zzMarkedPosL;");
             if (scanner.lookAheadUsed)
                 Println("            zzPushbackPos = zzPushbackPosL;");
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Println("            bool eof = zzRefill();");
             else
                 Println("            boolean eof = zzRefill();");
@@ -494,7 +473,7 @@ namespace CSFlex
                 Println("            zzPushbackPosL = zzPushbackPos;");
             Println("            if (eof) {");
             Println("              zzInput = YYEOF;");
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Println("            goto zzForAction;");
             else
                 Println("            break zzForAction;");
@@ -505,17 +484,17 @@ namespace CSFlex
             Println("          }");
         }
 
-        private void emitHeader()
+        private void EmitHeader()
         {
             Println("/* The following code was generated by CSFlex " + MainClass.version + " on " + date + " */");
             Println("");
         }
 
-        private void emitUserCode()
+        private void EmitUserCode()
         {
             if (scanner.userCode.Length > 0)
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                 {
                     Println("#line 1 \"" + scanner.file + "\"");
                     Println(scanner.userCode.ToString());
@@ -526,13 +505,13 @@ namespace CSFlex
             }
         }
 
-        private void emitEpilogue()
+        private void EmitEpilogue()
         {
             if (scanner.epilogue.Length > 0)
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                 {
-                    Println("#line " + scanner.epilogue_line + " \"" + scanner.file + "\"");
+                    Println("#line " + scanner.epilogue_line + " \"" + scanner.file! + "\"");
                     Println(scanner.epilogue.ToString());
                     Println("#line default");
                 }
@@ -541,11 +520,11 @@ namespace CSFlex
             }
         }
 
-        private void emitClassName()
+        private void EmitClassName()
         {
-            if (!endsWithJavadoc(scanner.userCode))
+            if (!EndsWithJavadoc(scanner.userCode))
             {
-                string path = inputFile.ToString();
+                string path = inputFile!.ToString();
                 // slashify path (avoid backslash u sequence = unicode escape)
                 if (File.separatorChar != '/')
                 {
@@ -560,42 +539,42 @@ namespace CSFlex
                 Println(" */");
             }
 
-            if (scanner.isPublic) Print("public ");
+            if (scanner.IsPublic) Print("public ");
 
-            if (scanner.isAbstract) Print("abstract ");
+            if (scanner.IsAbstract) Print("abstract ");
 
-            if (scanner.isFinal)
+            if (scanner.IsFinal)
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Print("sealed ");
                 else
                     Print("final ");
             }
 
             Print("class ");
-            Print(scanner.className);
+            Print(scanner.ClassName);
 
-            if (scanner.isExtending != null)
+            if (scanner.IsExtending != null)
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Print(": ");
                 else
                     Print(" extends ");
-                Print(scanner.isExtending);
+                Print(scanner.IsExtending);
             }
 
-            if (scanner.isImplementing != null)
+            if (scanner.IsImplementing != null)
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                 {
-                    if (scanner.isExtending != null) // then we already output the ':'
+                    if (scanner.IsExtending != null) // then we already output the ':'
                         Print(", ");
                     else
                         Print(": ");
                 }
                 else
                     Print(" implements ");
-                Print(scanner.isImplementing);
+                Print(scanner.IsImplementing);
             }
 
             Println(" {");
@@ -607,9 +586,9 @@ namespace CSFlex
          * @param buffer   the user code
          * @return true    if it ends with a javadoc comment
          */
-        public static bool endsWithJavadoc(StringBuilder usercode)
+        public static bool EndsWithJavadoc(StringBuilder usercode)
         {
-            string s = usercode.ToString().Trim();
+            var s = usercode.ToString().Trim();
 
             if (!s.EndsWith("*/")) return false;
 
@@ -622,11 +601,11 @@ namespace CSFlex
         }
 
 
-        private void emitLexicalStates()
+        private void EmitLexicalStates()
         {
-            IEnumerator stateNames = scanner.states.Names;
+            var stateNames = scanner.states.Names;
 
-            string @const = (Options.EmitCsharp ? "const" : "static final");
+            var _const = (Options.EmitCSharp ? "const" : "static final");
 
             while (stateNames.MoveNext())
             {
@@ -635,9 +614,9 @@ namespace CSFlex
                 int num = scanner.states.GetNumber(name);
 
                 if (scanner.bolUsed)
-                    Println("  " + visibility + " " + @const + " int " + name + " = " + 2 * num + ";");
+                    Println("  " + visibility + " " + _const + " int " + name + " = " + 2 * num + ";");
                 else
-                    Println("  " + visibility + " " + @const + " int " + name + " = " + dfa.LexState[2 * num] + ";");
+                    Println("  " + visibility + " " + _const + " int " + name + " = " + dfa.LexState[2 * num] + ";");
             }
 
             if (scanner.bolUsed)
@@ -649,7 +628,7 @@ namespace CSFlex
                 Println("   *                  at the beginning of a line");
                 Println("   * l is of the form l = 2*k, k a non negative integer");
                 Println("   */");
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Println("  private static readonly int[] ZZ_LEXSTATE = new int[]{ ");
                 else
                     Println("  private static final int ZZ_LEXSTATE[] = { ");
@@ -677,7 +656,7 @@ namespace CSFlex
             }
         }
 
-        private void emitDynamicInit()
+        private void EmitDynamicInit()
         {
             int count = 0;
             int value = dfa.Table[0][0];
@@ -686,7 +665,7 @@ namespace CSFlex
             Println("   * The transition table of the DFA");
             Println("   */");
 
-            CountEmitter e = new CountEmitter("Trans");
+            var e = new CountEmitter("Trans");
             e.SetValTranslation(+1); // allow vals in [-1, 0xFFFE]
             e.EmitInit();
 
@@ -721,10 +700,10 @@ namespace CSFlex
         }
 
 
-        private void emitCharMapInitFunction()
+        private void EmitCharMapInitFunction()
         {
 
-            CharClasses cl = parser.CharClasses;
+            var cl = parser.CharClasses;
 
             if (cl.MaxCharCode < 256) return;
 
@@ -735,13 +714,13 @@ namespace CSFlex
             Println("   * @param packed   the packed character translation table");
             Println("   * @return         the unpacked character translation table");
             Println("   */");
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
             {
                 Println("  private static char [] zzUnpackCMap(ushort[] packed) {");
                 Println("    char [] map = new char[0x10000];");
                 Println("    int i = 0;  /* index in packed string  */");
                 Println("    int j = 0;  /* index in unpacked array */");
-                Println("    while (i < " + 2 * intervalls.Length + ") {");
+                Println("    while (i < " + 2 * intervals.Length + ") {");
                 Println("      int  count = packed[i++];");
                 Println("      char value = (char)packed[i++];");
                 Println("      do map[j++] = value; while (--count > 0);");
@@ -755,7 +734,7 @@ namespace CSFlex
                 Println("    char [] map = new char[0x10000];");
                 Println("    int i = 0;  /* index in packed string  */");
                 Println("    int j = 0;  /* index in unpacked array */");
-                Println("    while (i < " + 2 * intervalls.Length + ") {");
+                Println("    while (i < " + 2 * intervals.Length + ") {");
                 Println("      int  count = packed.charAt(i++);");
                 Println("      char value = packed.charAt(i++);");
                 Println("      do map[j++] = value; while (--count > 0);");
@@ -765,7 +744,7 @@ namespace CSFlex
             }
         }
 
-        private void emitZZTrans()
+        private void EmitZZTrans()
         {
 
             int i, c;
@@ -774,7 +753,7 @@ namespace CSFlex
             Println("  /** ");
             Println("   * The transition table of the DFA");
             Println("   */");
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Println("  private static readonly int[] ZZ_TRANS = new int[] {");
             else
                 Println("  private static final int ZZ_TRANS [] = {"); //XXX
@@ -808,17 +787,17 @@ namespace CSFlex
             Println("  };");
         }
 
-        private void emitCharMapArrayUnPacked()
+        private void EmitCharMapArrayUnPacked()
         {
 
-            CharClasses cl = parser.CharClasses;
-            intervalls = cl.GetIntervalls();
+            var cl = parser.CharClasses;
+            intervals = cl.GetIntervalls();
 
             Println("");
             Println("  /** ");
             Println("   * Translates characters to character classes");
             Println("   */");
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Println("  private static readonly char[] ZZ_CMAP = new char[] {");
             else
                 Println("  private static final char [] ZZ_CMAP = {");
@@ -828,16 +807,16 @@ namespace CSFlex
 
             int max = cl.MaxCharCode;
             int i = 0;
-            while (i < intervalls.Length && intervalls[i].Start <= max)
+            while (i < intervals.Length && intervals[i].Start <= max)
             {
 
-                int end = Math.Min(intervalls[i].End, max);
-                for (int c = intervalls[i].Start; c <= end; c++)
+                int end = Math.Min(intervals[i].End, max);
+                for (int c = intervals[i].Start; c <= end; c++)
                 {
 
-                    if (Options.EmitCsharp)
+                    if (Options.EmitCSharp)
                         Print("(char)");
-                    Print(colMap[intervalls[i].CharClass], 2);
+                    Print(colMap[intervals[i].CharClass], 2);
 
                     if (c < max)
                     {
@@ -859,12 +838,12 @@ namespace CSFlex
             Println();
         }
 
-        private void emitCSharpStaticConstructor(bool include_char_map_array)
+        private void EmitCSharpStaticConstructor(bool include_char_map_array)
         {
-            if (!Options.EmitCsharp)
+            if (!Options.EmitCSharp)
                 return;
 
-            Println("  static " + scanner.className + "()");
+            Println("  static " + scanner.ClassName + "()");
             Println("  {");
             if (include_char_map_array)
                 Println("    ZZ_CMAP = zzUnpackCMap(ZZ_CMAP_PACKED);");
@@ -876,50 +855,50 @@ namespace CSFlex
             Println("");
         }
 
-        private void emitCharMapArray()
+        private void EmitCharMapArray()
         {
-            CharClasses cl = parser.CharClasses;
+            var cl = parser.CharClasses;
 
             if (cl.MaxCharCode < 256)
             {
-                emitCSharpStaticConstructor(false);
-                emitCharMapArrayUnPacked();
+                EmitCSharpStaticConstructor(false);
+                EmitCharMapArrayUnPacked();
                 return;
             }
             else
-                emitCSharpStaticConstructor(true);
+                EmitCSharpStaticConstructor(true);
 
             // ignores cl.getMaxCharCode(), emits all intervalls instead
 
-            intervalls = cl.GetIntervalls();
+            intervals = cl.GetIntervalls();
 
             Println("");
             Println("  /** ");
             Println("   * Translates characters to character classes");
             Println("   */");
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Println("  private static readonly ushort[] ZZ_CMAP_PACKED = new ushort[] {");
             else
                 Println("  private static final string ZZ_CMAP_PACKED = ");
 
             int n = 0;  // numbers of entries in current line    
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Print("   ");
             else
                 Print("    \"");
 
             int i = 0;
-            while (i < intervalls.Length - 1)
+            while (i < intervals.Length - 1)
             {
-                int count = intervalls[i].End - intervalls[i].Start + 1;
-                int value = colMap[intervalls[i].CharClass];
+                int count = intervals[i].End - intervals[i].Start + 1;
+                int value = colMap[intervals[i].CharClass];
 
-                printUC(count);
-                printUC(value);
+                PrintUnicode(count);
+                PrintUnicode(value);
 
                 if (++n >= 10)
                 {
-                    if (Options.EmitCsharp)
+                    if (Options.EmitCSharp)
                     {
                         Println("");
                         Print("   ");
@@ -935,10 +914,10 @@ namespace CSFlex
                 i++;
             }
 
-            printUC(intervalls[i].End - intervalls[i].Start + 1);
-            printUC(colMap[intervalls[i].CharClass]);
+            PrintUnicode(intervals[i].End - intervals[i].Start + 1);
+            PrintUnicode(colMap[intervals[i].CharClass]);
 
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Println(" 0 };"); // the extraneous 0 can't be avoided without restructuring printUC()
             else
                 Println("\";");
@@ -947,7 +926,7 @@ namespace CSFlex
             Println("  /** ");
             Println("   * Translates characters to character classes");
             Println("   */");
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Println("  private static readonly char[] ZZ_CMAP;");
             else
                 Println("  private static final char [] ZZ_CMAP = zzUnpackCMap(ZZ_CMAP_PACKED);");
@@ -961,50 +940,50 @@ namespace CSFlex
          * @param c   the value to print
          * @prec  0 <= c <= 0xFFFF 
          */
-        private void printUC(int c)
+        private void PrintUnicode(int c)
         {
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 output.Write(" ");
 
             if (c > 255)
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                 {
                     output.Write("0x");
                     if (c < 0x1000) output.Write("0");
-                    output.Write(Integer.ToHexString(c));
+                    output.Write(IntUtil.ToHexString(c));
                 }
                 else
                 {
                     output.Write("\\u");
                     if (c < 0x1000) output.Write("0");
-                    output.Write(Integer.ToHexString(c));
+                    output.Write(IntUtil.ToHexString(c));
                 }
             }
             else
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     output.Write(c.ToString());
                 else
                 {
                     output.Write("\\");
-                    output.Write(Integer.ToOctalString(c));
+                    output.Write(IntUtil.ToOctalString(c));
                 }
             }
 
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 output.Write(",");
         }
 
 
-        private void emitRowMapArray()
+        private void EmitRowMapArray()
         {
             Println("");
             Println("  /** ");
             Println("   * Translates a state to a row index in the transition table");
             Println("   */");
 
-            HiLowEmitter e = new HiLowEmitter("RowMap");
+            var e = new HiLowEmitter("RowMap");
             e.EmitInit();
             for (int i = 0; i < dfa.NumStates; i++)
             {
@@ -1015,13 +994,13 @@ namespace CSFlex
         }
 
 
-        private void emitAttributes()
+        private void EmitAttributes()
         {
             Println("  /**");
             Println("   * ZZ_ATTRIBUTE[aState] contains the attributes of state <code>aState</code>");
             Println("   */");
 
-            CountEmitter e = new CountEmitter("Attribute");
+            var e = new CountEmitter("Attribute");
             e.EmitInit();
 
             int count = 1;
@@ -1058,12 +1037,12 @@ namespace CSFlex
         }
 
 
-        private void emitClassCode()
+        private void EmitClassCode()
         {
             if (scanner.eofCode != null)
             {
                 Println("  /** denotes if the user-EOF-code has already been executed */");
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Println("  private bool zzEOFDone;");
                 else
                     Println("  private boolean zzEOFDone;");
@@ -1077,25 +1056,25 @@ namespace CSFlex
             }
         }
 
-        private void emitConstructorDecl()
+        private void EmitConstructorDecl()
         {
 
             Print("  ");
 
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
             {
-                if (scanner.isPublic)
+                if (scanner.IsPublic)
                     Print("public ");
                 else
                     Print("internal ");
-                Print(scanner.className);
+                Print(scanner.ClassName);
                 Print("(TextReader @in)");
             }
             else
             {
-                if (scanner.isPublic)
+                if (scanner.IsPublic)
                     Print("public ");
-                Print(scanner.className);
+                Print(scanner.ClassName);
                 Print("(java.io.Reader in)");
 
                 if (scanner.initThrow != null)
@@ -1119,7 +1098,7 @@ namespace CSFlex
             Println();
 
 
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
             {
                 Println("  /**");
                 Println("   * Creates a new scanner.");
@@ -1129,11 +1108,11 @@ namespace CSFlex
                 Println("   */");
 
                 Print("  ");
-                if (scanner.isPublic)
+                if (scanner.IsPublic)
                     Print("public ");
                 else
                     Print("internal ");
-                Print(scanner.className);
+                Print(scanner.ClassName);
                 Print("(Stream @in)");
 
                 Println(" : this(new StreamReader(@in))");
@@ -1150,8 +1129,8 @@ namespace CSFlex
                 Println("   */");
 
                 Print("  ");
-                if (scanner.isPublic) Print("public ");
-                Print(scanner.className);
+                if (scanner.IsPublic) Print("public ");
+                Print(scanner.ClassName);
                 Print("(java.io.InputStream in)");
 
                 if (scanner.initThrow != null)
@@ -1167,7 +1146,7 @@ namespace CSFlex
         }
 
 
-        private void emitDoEOF()
+        private void EmitDoEOF()
         {
             if (scanner.eofCode == null) return;
 
@@ -1178,7 +1157,7 @@ namespace CSFlex
 
             Print("  private void zzDoEOF()");
 
-            if (!Options.EmitCsharp)
+            if (!Options.EmitCSharp)
                 if (scanner.eofThrow != null)
                 {
                     Print(" throws ");
@@ -1196,9 +1175,8 @@ namespace CSFlex
             Println("");
         }
 
-        private void emitLexFunctHeader()
+        private void EmitLexFunctHeader()
         {
-
             if (scanner.cupCompatible)
             {
                 // force public, because we have to implement java_cup.runtime.Symbol
@@ -1226,7 +1204,7 @@ namespace CSFlex
 
             Print(scanner.functionName);
 
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Print("()");
             else
             {
@@ -1260,7 +1238,7 @@ namespace CSFlex
             if (scanner.lookAheadUsed)
             {
                 Println("    int zzPushbackPosL = zzPushbackPos = -1;");
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Println("    bool zzWasPushback;");
                 else
                     Println("    boolean zzWasPushback;");
@@ -1276,7 +1254,7 @@ namespace CSFlex
 
             if (scanner.lineCount || scanner.columnCount)
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Println("      bool zzR = false;");
                 else
                     Println("      boolean zzR = false;");
@@ -1315,7 +1293,7 @@ namespace CSFlex
                 Println("          zzR = false;");
                 if (scanner.columnCount)
                     Println("          yycolumn++;");
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Println("          break;");
                 Println("        }");
                 Println("      }");
@@ -1325,7 +1303,7 @@ namespace CSFlex
                 {
                     Println("      if (zzR) {");
                     Println("        // peek one character ahead if it is \\n (if we have counted one line too much)");
-                    if (Options.EmitCsharp)
+                    if (Options.EmitCSharp)
                         Println("        bool zzPeek;");
                     else
                         Println("        boolean zzPeek;");
@@ -1334,7 +1312,7 @@ namespace CSFlex
                     Println("        else if (zzAtEOF)");
                     Println("          zzPeek = false;");
                     Println("        else {");
-                    if (Options.EmitCsharp)
+                    if (Options.EmitCSharp)
                         Println("          bool eof = zzRefill();");
                     else
                         Println("          boolean eof = zzRefill();");
@@ -1371,7 +1349,7 @@ namespace CSFlex
                 Println("          else if (zzAtEOF)");
                 Println("            zzAtBOL = false;");
                 Println("          else {");
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Println("            bool eof = zzRefill();");
                 else
                     Println("            boolean eof = zzRefill();");
@@ -1385,7 +1363,7 @@ namespace CSFlex
                 Println("          break;");
                 Println("        default:");
                 Println("          zzAtBOL = false;");
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Println("          break;");
                 Println("        }");
                 Println("      }");
@@ -1414,10 +1392,10 @@ namespace CSFlex
         }
 
 
-        private void emitGetRowMapNext()
+        private void EmitGetRowMapNext()
         {
             Println("          int zzNext = zzTransL[ zzRowMapL[zzState] + zzCMapL[zzInput] ];");
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Println("          if (zzNext == " + DFA.NO_TARGET + ") goto zzForAction;");
             else
                 Println("          if (zzNext == " + DFA.NO_TARGET + ") break zzForAction;");
@@ -1439,7 +1417,7 @@ namespace CSFlex
 
             skel.EmitNext();
 
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Println("            if ( (zzAttributes & " + NOLOOK + ") == " + NOLOOK + " ) goto zzForAction;");
             else
                 Println("            if ( (zzAttributes & " + NOLOOK + ") == " + NOLOOK + " ) break zzForAction;");
@@ -1447,14 +1425,14 @@ namespace CSFlex
             skel.EmitNext();
         }
 
-        private void emitTransitionTable()
+        private void EmitTransitionTable()
         {
-            transformTransitionTable();
+            TransformTransitionTable();
 
             Println("          zzInput = zzCMapL[zzInput];");
             Println();
 
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
             {
                 if (scanner.lookAheadUsed)
                     Println("          bool zzPushback = false;");
@@ -1473,7 +1451,7 @@ namespace CSFlex
                 Println();
             }
 
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
             {
                 Println("          switch (zzState) {");
                 Println("            case 2147483647:");
@@ -1491,7 +1469,7 @@ namespace CSFlex
             Println("              // if this is ever reached, there is a serious bug in JFlex/C# Flex");
             Println("              zzScanError(ZZ_UNKNOWN_ERROR);");
             Println("              break;");
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Println("          }");
             else
                 Println("          } }");
@@ -1504,7 +1482,7 @@ namespace CSFlex
 
             skel.EmitNext();
 
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Println("            if ( zzNoLookAhead ) goto zzForAction;");
             else
                 Println("            if ( zzNoLookAhead ) break zzForAction;");
@@ -1516,9 +1494,9 @@ namespace CSFlex
         /**
          * Escapes all " ' \ tabs and newlines
          */
-        private string escapify(string s)
+        private string Escapify(string s)
         {
-            StringBuilder result = new StringBuilder(s.Length * 2);
+            var result = new StringBuilder(s.Length * 2);
 
             for (int i = 0; i < s.Length; i++)
             {
@@ -1540,7 +1518,7 @@ namespace CSFlex
             return result.ToString();
         }
 
-        public void emitActionTable()
+        public void EmitActionTable()
         {
             int lastAction = 1;
             int count = 0;
@@ -1558,13 +1536,12 @@ namespace CSFlex
                 if (dfa.IsFinal[i])
                 {
                     Action action = dfa.Action[i];
-                    Integer stored = (Integer)actionTable[action];
-                    if (stored == null)
+                    if (!actionTable.TryGetValue(action,out var stored))
                     {
-                        stored = new Integer(lastAction++);
+                        stored = lastAction++;
                         actionTable[action] = stored;
                     }
-                    newVal = stored.intValue();
+                    newVal = stored;
                 }
                 else
                 {
@@ -1589,20 +1566,20 @@ namespace CSFlex
             Println(e.ToString());
         }
 
-        private void emitActions()
+        private void EmitActions()
         {
             Println("      switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {");
 
             int i = actionTable.Count + 1;
-            IEnumerator actions = actionTable.Keys.GetEnumerator();
+            var actions = actionTable.Keys.GetEnumerator();
             while (actions.MoveNext())
             {
-                Action action = (Action)actions.Current;
-                int label = ((Integer)actionTable[action]).intValue();
+                Action action = actions.Current;
+                int label = actionTable[action];
 
                 Println("        case " + label + ": ");
 
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                 {
                     Println("          if (ZZ_SPURIOUS_WARNINGS_SUCK)");
                     Println("          {");
@@ -1621,11 +1598,11 @@ namespace CSFlex
                         Println("yytext());");
 
                         Print("            Console.WriteLine(\"action [" + action.Priority + "] { ");
-                        Print(escapify(action.Content));
+                        Print(Escapify(action.Content));
                         Println(" }\");");
                     }
 
-                    Println("#line " + action.Priority + " \"" + escapify(scanner.file) + "\"");
+                    Println("#line " + action.Priority + " \"" + Escapify(scanner.file) + "\"");
                     Println(action.Content);
                     Println("#line default");
                     Println("          }");
@@ -1642,7 +1619,7 @@ namespace CSFlex
                             Print("\"col: \"+(yycolumn+1)+\" \"+");
                         Println("\"match: --\"+yytext()+\"--\");");
                         Print("          System.out.println(\"action [" + action.Priority + "] { ");
-                        Print(escapify(action.Content));
+                        Print(Escapify(action.Content));
                         Println(" }\");");
                     }
 
@@ -1699,7 +1676,7 @@ namespace CSFlex
 
                     if (action != null && unused)
                     {
-                        if (Options.EmitCsharp)
+                        if (Options.EmitCSharp)
                         {
                             Println("            case " + name + ":");
                             Println("              if (ZZ_SPURIOUS_WARNINGS_SUCK)");
@@ -1724,7 +1701,7 @@ namespace CSFlex
 
             if (eofActions.Default != null)
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                 {
                     Action dfl = eofActions.Default;
 
@@ -1821,14 +1798,14 @@ namespace CSFlex
                 if (!isTransition[nextState])
                     Print("zzNoLookAhead = true; ");
 
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Println("zzState = " + nextState + "; goto zzForNext;");
                 else
                     Println("zzState = " + nextState + "; break zzForNext;");
             }
             else
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Println("goto zzForAction;");
                 else
                     Println("break zzForAction;");
@@ -1853,14 +1830,14 @@ namespace CSFlex
                 if (!isTransition[nextState])
                     Print("zzNoLookAhead = true; ");
 
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Println("zzState = " + nextState + "; goto zzForNext;");
                 else
                     Println("zzState = " + nextState + "; break zzForNext;");
             }
             else
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                     Println("goto zzForAction;");
                 else
                     Println("break zzForAction;");
@@ -1896,7 +1873,7 @@ namespace CSFlex
         }
 
         // for switch statement:
-        private void transformTransitionTable()
+        private void TransformTransitionTable()
         {
 
             int numInput = parser.CharClasses.NumClasses + 1;
@@ -2050,13 +2027,13 @@ namespace CSFlex
             reduceColumns();
             findActionStates();
 
-            emitHeader();
-            emitUserCode();
-            emitClassName();
+            EmitHeader();
+            EmitUserCode();
+            EmitClassName();
 
             skel.EmitNext();
 
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
             {
                 Println("  private const int ZZ_BUFFERSIZE = " + scanner.bufferSize + ";");
 
@@ -2094,38 +2071,38 @@ namespace CSFlex
 
             skel.EmitNext();
 
-            emitLexicalStates();
+            EmitLexicalStates();
 
-            emitCharMapArray();
+            EmitCharMapArray();
 
-            emitActionTable();
+            EmitActionTable();
 
             if (scanner.useRowMap)
             {
                 reduceRows();
 
-                emitRowMapArray();
+                EmitRowMapArray();
 
                 if (scanner.packed)
-                    emitDynamicInit();
+                    EmitDynamicInit();
                 else
-                    emitZZTrans();
+                    EmitZZTrans();
             }
 
             skel.EmitNext();
 
             if (scanner.useRowMap)
-                emitAttributes();
+                EmitAttributes();
 
             skel.EmitNext();
 
-            emitClassCode();
+            EmitClassCode();
 
             skel.EmitNext();
 
-            emitConstructorDecl();
+            EmitConstructorDecl();
 
-            emitCharMapInitFunction();
+            EmitCharMapInitFunction();
 
             skel.EmitNext();
 
@@ -2133,25 +2110,25 @@ namespace CSFlex
 
             skel.EmitNext();
 
-            emitDoEOF();
+            EmitDoEOF();
 
             skel.EmitNext();
 
-            emitLexFunctHeader();
+            EmitLexFunctHeader();
 
-            emitNextInput();
+            EmitNextInput();
 
             if (scanner.useRowMap)
-                emitGetRowMapNext();
+                EmitGetRowMapNext();
             else
-                emitTransitionTable();
+                EmitTransitionTable();
 
             if (scanner.lookAheadUsed)
                 emitPushback();
 
             skel.EmitNext();
 
-            emitActions();
+            EmitActions();
 
             skel.EmitNext();
 
@@ -2159,15 +2136,15 @@ namespace CSFlex
 
             skel.EmitNext();
 
-            emitNoMatch();
+            EmitNoMatch();
 
             skel.EmitNext();
 
-            emitMain();
+            EmitMain();
 
             skel.EmitNext();
 
-            emitEpilogue();
+            EmitEpilogue();
 
             output.Close();
         }

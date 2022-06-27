@@ -21,11 +21,8 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 namespace CSFlex
 {
-
-
     /**
      * Enumerator for the elements of a CharSet.
      *
@@ -38,16 +35,13 @@ namespace CSFlex
      */
     public sealed class CharSetEnumerator
     {
-
         private int index;
         private int offset;
         private long mask = 1;
-
         private CharSet set;
-
         public CharSetEnumerator(CharSet characters)
         {
-            set = characters??new();
+            set = characters ?? new();
 
             while (index < set.Bits.Length && set.Bits[index] == 0)
                 index++;
@@ -74,12 +68,9 @@ namespace CSFlex
                 do
                     index++;
                 while (index < set.Bits.Length && set.Bits[index] == 0);
-
                 if (index >= set.Bits.Length) return;
-
                 offset = 0;
                 mask = 1;
-
                 while (offset <= CharSet.MOD && ((set.Bits[index] & mask) == 0))
                 {
                     mask <<= 1;
@@ -89,7 +80,6 @@ namespace CSFlex
         }
 
         public bool HasMoreElements => index < set.Bits.Length;
-
         public int NextElement()
         {
             int x = (index << CharSet.BITS) + offset;

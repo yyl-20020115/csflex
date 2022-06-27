@@ -21,8 +21,6 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-using System;
 using System.Text;
 
 namespace CSFlex
@@ -36,14 +34,10 @@ namespace CSFlex
      */
     public sealed class CharSet
     {
-
         public const int BITS = 6;           // the number of bits to shift (2^6 = 64)
         public const int MOD = (1 << BITS) - 1;  // modulus
-
         private long[] bits;
-
         private int numElements;
-
         public long[] Bits => bits;
         public int NumElements => numElements;
 
@@ -51,21 +45,16 @@ namespace CSFlex
         {
             this.bits = new long[1];
         }
-
-
         public CharSet(int initialSize, int character)
         {
             this.bits = new long[(initialSize >> BITS) + 1];
             this.Add(character);
         }
 
-
         public void Add(int character)
         {
             this.Resize(character);
-
             if ((bits[character >> BITS] & (1L << (character & MOD))) == 0) numElements++;
-
             this.bits[character >> BITS] |= (1L << (character & MOD));
         }
 
@@ -74,14 +63,11 @@ namespace CSFlex
         private void Resize(int nbits)
         {
             var needed = NBitsToSize(nbits);
-
             if (needed < bits.Length) return;
-
             var newbits = new long[Math.Max(bits.Length * 2, needed)];
             Array.Copy(bits, 0, newbits, 0, bits.Length);
             this.bits = newbits;
         }
-
 
         public bool IsElement(int character)
         {
@@ -91,25 +77,18 @@ namespace CSFlex
         }
         public CharSetEnumerator GetCharacters() => new (this);
         public bool ContainsElements => numElements > 0;
-
         public int Size => this.numElements;
-
         public override string ToString()
         {
             var e = GetCharacters();
-
             var result = new StringBuilder("{");
-
             if (e.HasMoreElements) result.Append(e.NextElement());
-
             while (e.HasMoreElements)
             {
                 var i = e.NextElement();
                 result.Append(", ").Append(i);
             }
-
             result.Append("}");
-
             return result.ToString();
         }
     }

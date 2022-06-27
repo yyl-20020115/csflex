@@ -21,14 +21,8 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-using System;
-
 namespace CSFlex
 {
-
-
-
     /**
      * This Exception is used in class CharClasses.
      *
@@ -39,22 +33,15 @@ namespace CSFlex
      */
     public class CharClassException : RuntimeException
     {
-
         /**
          * Creates a new CharClassException without message
          */
-        public CharClassException()
-        {
-        }
-
+        public CharClassException() { }
         /**
          * Creates a new CharClassException with the specified message
          *
          * @param message   the error description presented to the user.
          */
-        public CharClassException(string message) : base(message)
-        {
-        }
-
+        public CharClassException(string message) : base(message) { }
     }
 }

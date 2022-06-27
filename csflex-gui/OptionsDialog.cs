@@ -373,7 +373,7 @@ namespace CSFlex.GUI
 
         private void CSharp_CheckedChanged(object sender, EventArgs e)
         {
-            Options.EmitCsharp = CSharpCheckBox.Checked;
+            Options.EmitCSharp = CSharpCheckBox.Checked;
         }
     }
 }

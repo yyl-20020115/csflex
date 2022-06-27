@@ -21,12 +21,8 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-using System;
-
 namespace CSFlex
 {
-
     /**
      * Stores an interval of characters together with the character class
      *
@@ -47,22 +43,17 @@ namespace CSFlex
          * The first character of the interval
          */
         private int start = 0;
-
         /**
          * The last character of the interval
          */
         private int end = 0;
-
         /**
          * The code of the class all characters of this interval belong to.
          */
         private int charClass = 0;
-
         public int Start => start;
         public int End => end;
         public int CharClass => charClass;
-
-
         /**
          * Creates a new CharClassInterval from <CODE>start</code> to <CODE>end</code>
          * that belongs to character class <CODE>charClass</code>.

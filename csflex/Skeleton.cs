@@ -97,7 +97,7 @@ namespace CSFlex
         {
             if (IsCSharpSkeleton)
             {
-                if (Options.EmitCsharp)
+                if (Options.EmitCSharp)
                 {
                     pos++;
                     writer.Write(line[pos++]);
@@ -110,7 +110,7 @@ namespace CSFlex
             }
             else
             {
-                if (Options.EmitCsharp && !notCSharpSkeletonWarned)
+                if (Options.EmitCSharp && !notCSharpSkeletonWarned)
                 {
                     OutputWriter.Warning(ErrorMessages.Get(ErrorMessages.NOT_CSHARP_SKELETON));
                     notCSharpSkeletonWarned = true;

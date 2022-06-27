@@ -72,7 +72,7 @@ namespace CSFlex
         /** If true, you will be flooded with information (e.g. dfa tables).  */
         public static bool Dump = false;
         /** If true, the output will be C# code instead of Java.  */
-        public static bool EmitCsharp = false;
+        public static bool EmitCSharp = false;
 
         static Options() { SetDefaults(); }
 

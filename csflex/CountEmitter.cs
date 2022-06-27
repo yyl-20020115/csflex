@@ -21,12 +21,8 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-using System;
-
 namespace CSFlex
 {
-
     /**
      * An emitter for an array encoded as count/value pairs in a string.
      * 
@@ -37,18 +33,14 @@ namespace CSFlex
     {
         /** number of entries in expanded array */
         private int numEntries;
-
         /** translate all values by this amount */
         private int translate = 0;
-
         /**
          * Create a count/value emitter for a specific field.
          * 
          * @param name   name of the generated array
          */
-        protected internal CountEmitter(string name) : base(name)
-        {
-        }
+        protected internal CountEmitter(string name) : base(name) { }
 
         /**
          * Emits count/value unpacking code for the generated array. 
@@ -57,11 +49,7 @@ namespace CSFlex
          */
         public override void EmitUnpack()
         {
-            if (Options.EmitCsharp)
-                Println(" 0 };"); // close array
-            else
-                Println("\";"); // close last string chunk:
-
+            Println(Options.EmitCSharp ? " 0 };" : "\";"); //close last string chunk: close array
             EmitNewLine();
             Println("  private static int [] zzUnpack" + name + "() {");
             Println("    int [] result = new int[" + numEntries + "];");
@@ -76,7 +64,7 @@ namespace CSFlex
             Println("  }");
             EmitNewLine();
 
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
             {
                 Println("  private static int zzUnpack" + name + "(ushort[] packed, int offset, int [] result) {");
                 Println("    int i = 0;       /* index in packed string  */");

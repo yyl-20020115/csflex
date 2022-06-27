@@ -152,19 +152,8 @@ namespace CSFlex
         public override string ToString() => name;
     }
 
-    public class Integer
+    public class IntUtil
     {
-        int v;
-
-        public Integer(int value)
-        {
-            v = value;
-        }
-
-        public int intValue()
-        {
-            return v;
-        }
 
         public static string ToOctalString(int c)
         {
@@ -233,30 +222,6 @@ namespace CSFlex
 
             return value;
         }
-
-        public override int GetHashCode() => v.GetHashCode();
-
-        public override bool Equals(object? obj) => obj switch
-        {
-            null => false,
-            int i => v == i,
-            Integer n => v == n.v,
-            _ => false,
-        };
-
-        public override string ToString() => v.ToString();
-    }
-
-    public class Boolean
-    {
-        bool v;
-
-        public Boolean(bool value)
-        {
-            v = value;
-        }
-
-        public bool BooleanValue => v;
     }
 
     public class PrettyArrayList<T> : List<T>

@@ -58,7 +58,7 @@ namespace CSFlex
         public override void EmitUnpack()
         {
 
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
                 Println(" 0 };"); // close array
             else
                 Println("\";"); // close last string chunk:
@@ -76,7 +76,7 @@ namespace CSFlex
             Println("  }");
 
             EmitNewLine();
-            if (Options.EmitCsharp)
+            if (Options.EmitCSharp)
             {
                 Println("  private static int zzUnpack" + name + "(ushort[] packed, int offset, int [] result) {");
                 Println("    int i = 0;  /* index in packed string  */");

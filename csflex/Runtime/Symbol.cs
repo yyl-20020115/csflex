@@ -4,7 +4,7 @@
     {
         public int sym = 0;
         public int parse_state = 0;
-        internal bool used_by_parser;
+        internal bool used_by_parser = false;
         public int left = 0;
         public int right = 0;
         public object? value = null;
@@ -39,8 +39,7 @@
             this.value = o;
         }
 
-        public override string ToString() => 
-            ("#" + this.sym);
+        public override string ToString() =>  "#" + this.sym;
     }
 }
 

@@ -7,56 +7,55 @@
     public abstract class LRParser
     {
         protected const int _error_sync_size = 3;
-        protected bool _done_parsing;
-        protected int tos;
-        protected Symbol cur_token;
+        protected bool _done_parsing = false;
+        protected int tos = 0;
+        protected Symbol cur_token = new(0);
         protected JCStack<Symbol> stack = new();
-        protected short[][] production_tab;
-        protected short[][] action_tab;
-        protected short[][] reduce_tab;
-        private Scanner _scanner;
-        protected Symbol[] lookahead;
-        protected int lookahead_pos;
+        protected short[][] production_tab = Array.Empty<short[]>();
+        protected short[][] action_tab = Array.Empty<short[]>();
+        protected short[][] reduce_tab = Array.Empty<short[]>();
+        private Scanner? _scanner = null;
+        protected Symbol[] lookahead = new Symbol[0];
+        protected int lookahead_pos = 0;
 
         public LRParser()
         {
-            this._done_parsing = false;
-            this.stack = new JCStack<Symbol>();
         }
 
         public LRParser(Scanner s) : this()
         {
-            this.setScanner(s);
+            this.SetScanner(s);
         }
 
-        public abstract short[][] action_table();
-        protected bool advance_lookahead()
+        public abstract short[][] ActionTable { get; }
+
+        protected bool AdvanceLookAhead()
         {
             this.lookahead_pos++;
-            return (this.lookahead_pos < this.error_sync_size());
+            return (this.lookahead_pos < this.ErrorSyncSIze);
         }
 
-        protected Symbol cur_err_token() => 
+        protected Symbol CurErrToken =>
             this.lookahead[this.lookahead_pos];
 
-        public virtual void debug_message(string mess)
+        public virtual void _DebugMessage(string mess)
         {
             Console.Error.WriteLine(mess);
         }
 
-        public Symbol debug_parse()
+        public Symbol _DebugParse()
         {
-            Symbol item = null;
-            this.production_tab = this.production_table();
-            this.action_tab = this.action_table();
-            this.reduce_tab = this.reduce_table();
-            this.debug_message("# Initializing parser");
-            this.init_actions();
-            this.user_init();
-            this.cur_token = this.scan();
-            this.debug_message("# Current Symbol is #" + this.cur_token.sym);
+            Symbol? item = null;
+            this.production_tab = this.ProductionTable;
+            this.action_tab = this.ActionTable;
+            this.reduce_tab = this.ReduceTable;
+            this._DebugMessage("# Initializing parser");
+            this.InitActions();
+            this.UserInit();
+            this.cur_token = this.Scan();
+            this._DebugMessage("# Current Symbol is #" + this.cur_token.sym);
             this.stack.Clear();
-            this.stack.Push(new Symbol(0, this.start_state()));
+            this.stack.Push(new Symbol(0, this.StartState()));
             this.tos = 0;
             this._done_parsing = false;
             while (!this._done_parsing)
@@ -65,46 +64,46 @@
                 {
                     throw new Exception("Symbol recycling detected (fix your scanner).");
                 }
-                int num = this.get_action((this.stack.Peek()).parse_state, this.cur_token.sym);
+                int num = this.GetAction(this.stack.Peek()!.parse_state, this.cur_token.sym);
                 if (num > 0)
                 {
                     this.cur_token.parse_state = num - 1;
                     this.cur_token.used_by_parser = true;
-                    this.debug_shift(this.cur_token);
+                    this._DebugShift(this.cur_token);
                     this.stack.Push(this.cur_token);
                     this.tos++;
-                    this.cur_token = this.scan();
-                    this.debug_message("# Current token is " + this.cur_token);
+                    this.cur_token = this.Scan();
+                    this._DebugMessage("# Current token is " + this.cur_token);
                 }
                 else
                 {
                     if (num < 0)
                     {
-                        item = this.do_action(-num - 1, this, this.stack, this.tos);
+                        item = this.DoAction(-num - 1, this, this.stack, this.tos);
                         short num3 = this.production_tab[-num - 1][0];
                         short num2 = this.production_tab[-num - 1][1];
-                        this.debug_reduce(-num - 1, num3, num2);
+                        this._DebugReduce(-num - 1, num3, num2);
                         for (int i = 0; i < num2; i++)
                         {
                             this.stack.Pop();
                             this.tos--;
                         }
-                        num = this.get_reduce(((Symbol) this.stack.Peek()).parse_state, num3);
-                        this.debug_message(string.Concat(new object[] { "# Reduce rule: top state ", ((Symbol) this.stack.Peek()).parse_state, ", lhs sym ", num3, " -> state ", num }));
+                        num = this.GetReduce(this.stack.Peek()!.parse_state, num3);
+                        this._DebugMessage(string.Concat(new object[] { "# Reduce rule: top state ", ((Symbol) this.stack.Peek()).parse_state, ", lhs sym ", num3, " -> state ", num }));
                         item.parse_state = num;
                         item.used_by_parser = true;
                         this.stack.Push(item);
                         this.tos++;
-                        this.debug_message("# Goto state #" + num);
+                        this._DebugMessage("# Goto state #" + num);
                         continue;
                     }
                     if (num == 0)
                     {
-                        this.syntax_error(this.cur_token);
-                        if (!this.error_recovery(true))
+                        this.SyntaxError(this.cur_token);
+                        if (!this.ErrorRecovery(true))
                         {
-                            this.unrecovered_syntax_error(this.cur_token);
-                            this.done_parsing();
+                            this.UnrecoveredSyntaxError(this.cur_token);
+                            this.DoneParsing();
                             continue;
                         }
                         item = this.stack.Peek();
@@ -114,138 +113,137 @@
             return item;
         }
 
-        public virtual void debug_reduce(int prod_num, int nt_num, int rhs_size)
+        public virtual void _DebugReduce(int prod_num, int nt_num, int rhs_size)
         {
-            this.debug_message(string.Concat(new object[] { "# Reduce with prod #", prod_num, " [NT=", nt_num, ", SZ=", rhs_size, "]" }));
+            this._DebugMessage(string.Concat(new object[] { "# Reduce with prod #", prod_num, " [NT=", nt_num, ", SZ=", rhs_size, "]" }));
         }
 
-        public virtual void debug_shift(Symbol shift_tkn)
+        public virtual void _DebugShift(Symbol shift_tkn)
         {
-            this.debug_message(string.Concat(new object[] { "# Shift under term #", shift_tkn.sym, " to state #", shift_tkn.parse_state }));
+            this._DebugMessage(string.Concat(new object[] { "# Shift under term #", shift_tkn.sym, " to state #", shift_tkn.parse_state }));
         }
 
-        public virtual void debug_stack()
+        public virtual void _DebugStack()
         {
-            StringBuilder builder = new StringBuilder("## STACK:");
+            var builder = new StringBuilder("## STACK:");
             for (int i = 0; i < this.stack.Size; i++)
             {
-                Symbol symbol = (Symbol) this.stack.GetAt(i);
+                var symbol = this.stack.GetAt(i);
                 builder.AppendFormat(" <state {0}, sym {1}>", symbol.parse_state, symbol.sym);
                 if (((i % 3) == 2) || (i == (this.stack.Size - 1)))
                 {
-                    this.debug_message(builder.ToString());
+                    this._DebugMessage(builder.ToString());
                     builder = new StringBuilder("         ");
                 }
             }
         }
 
-        public abstract Symbol do_action(int act_num, LRParser parser, JCStack<Symbol> stack, int top);
-        public void done_parsing()
+        public abstract Symbol DoAction(int act_num, LRParser parser, JCStack<Symbol> stack, int top);
+        public void DoneParsing()
         {
             this._done_parsing = true;
         }
 
-        public virtual void dump_stack()
+        public virtual void DumpStack()
         {
             if (this.stack == null)
             {
-                this.debug_message("# Stack dump requested, but stack is null");
+                this._DebugMessage("# Stack dump requested, but stack is null");
             }
             else
             {
-                this.debug_message("============ Parse Stack Dump ============");
+                this._DebugMessage("============ Parse Stack Dump ============");
                 for (int i = 0; i < this.stack.Size; i++)
                 {
-                    this.debug_message(string.Concat(new object[] { "Symbol: ", ( this.stack.GetAt(i)).sym, " State: ", ((Symbol) this.stack.GetAt(i)).parse_state }));
+                    this._DebugMessage(string.Concat(new object[] { "Symbol: ", ( this.stack.GetAt(i)).sym, " State: ", ((Symbol) this.stack.GetAt(i)).parse_state }));
                 }
-                this.debug_message("==========================================");
+                this._DebugMessage("==========================================");
             }
         }
 
-        public abstract int EOF_sym();
-        protected bool error_recovery(bool debug)
+        public abstract int EOF_Symbol();
+        protected bool ErrorRecovery(bool debug)
         {
             if (debug)
             {
-                this.debug_message("# Attempting error recovery");
+                this._DebugMessage("# Attempting error recovery");
             }
-            if (!this.find_recovery_config(debug))
+            if (!this.FindRecoveryConfig(debug))
             {
                 if (debug)
                 {
-                    this.debug_message("# Error recovery fails");
+                    this._DebugMessage("# Error recovery fails");
                 }
                 return false;
             }
-            this.read_lookahead();
+            this.ReadLookAhead();
             while (true)
             {
                 if (debug)
                 {
-                    this.debug_message("# Trying to parse ahead");
+                    this._DebugMessage("# Trying to parse ahead");
                 }
-                if (this.try_parse_ahead(debug))
+                if (this.TryParseAhead(debug))
                 {
                     break;
                 }
-                if (this.lookahead[0].sym == this.EOF_sym())
+                if (this.lookahead[0].sym == this.EOF_Symbol())
                 {
                     if (debug)
                     {
-                        this.debug_message("# Error recovery fails at EOF");
+                        this._DebugMessage("# Error recovery fails at EOF");
                     }
                     return false;
                 }
                 if (debug)
                 {
-                    this.debug_message("# Consuming Symbol #" + this.lookahead[0].sym);
+                    this._DebugMessage("# Consuming Symbol #" + this.lookahead[0].sym);
                 }
-                this.restart_lookahead();
+                this.RestartLookAhead();
             }
             if (debug)
             {
-                this.debug_message("# Parse-ahead ok, going back to normal parse");
+                this._DebugMessage("# Parse-ahead ok, going back to normal parse");
             }
-            this.parse_lookahead(debug);
+            this.ParseLookAhead(debug);
             return true;
         }
 
-        public abstract int error_sym();
-        protected int error_sync_size() => 
-            3;
+        public abstract int ErrorSym();
+        protected int ErrorSyncSIze => 3;
 
-        protected bool find_recovery_config(bool debug)
+        protected bool FindRecoveryConfig(bool debug)
         {
             if (debug)
             {
-                this.debug_message("# Finding recovery state on stack");
+                this._DebugMessage("# Finding recovery state on stack");
             }
-            int right = ((Symbol) this.stack.Peek()).right;
-            int left = ((Symbol) this.stack.Peek()).left;
-            while (!this.shift_under_error())
+            int right = this.stack.Peek()!.right;
+            int left = this.stack.Peek()!.left;
+            while (!this.ShiftUnderError())
             {
                 if (debug)
                 {
-                    this.debug_message("# Pop stack by one, state was # " + ( this.stack.Peek()).parse_state);
+                    this._DebugMessage("# Pop stack by one, state was # " + ( this.stack.Peek()).parse_state);
                 }
-                left = ((Symbol) this.stack.Pop()).left;
+                left = this.stack.Pop()!.left;
                 this.tos--;
                 if (this.stack.IsEmpty)
                 {
                     if (debug)
                     {
-                        this.debug_message("# No recovery state found on stack");
+                        this._DebugMessage("# No recovery state found on stack");
                     }
                     return false;
                 }
             }
-            int num = this.get_action((this.stack.Peek()).parse_state, this.error_sym());
+            int num = this.GetAction(this.stack.Peek()!.parse_state, this.ErrorSym());
             if (debug)
             {
-                this.debug_message("# Recover state found (#" + (this.stack.Peek()).parse_state + ")");
-                this.debug_message("# Shifting on error to state #" + (num - 1));
+                this._DebugMessage("# Recover state found (#" + this.stack.Peek()!.parse_state + ")");
+                this._DebugMessage("# Shifting on error to state #" + (num - 1));
             }
-            Symbol item = new Symbol(this.error_sym(), left, right) {
+            var item = new Symbol(this.ErrorSym(), left, right) {
                 parse_state = num - 1,
                 used_by_parser = true
             };
@@ -254,7 +252,7 @@
             return true;
         }
 
-        protected short get_action(int state, int sym)
+        protected short GetAction(int state, int sym)
         {
             int num4;
             short[] numArray = this.action_tab[state];
@@ -296,7 +294,7 @@
             return 0;
         }
 
-        protected short get_reduce(int state, int sym)
+        protected short GetReduce(int state, int sym)
         {
             short[] numArray = this.reduce_tab[state];
             if (numArray != null)
@@ -313,21 +311,21 @@
             return -1;
         }
 
-        public Scanner getScanner() => 
+        public Scanner? Scanner =>
             this._scanner;
 
-        protected abstract void init_actions();
-        public Symbol parse()
+        protected abstract void InitActions();
+        public Symbol? Parse()
         {
-            Symbol item = null;
-            this.production_tab = this.production_table();
-            this.action_tab = this.action_table();
-            this.reduce_tab = this.reduce_table();
-            this.init_actions();
-            this.user_init();
-            this.cur_token = this.scan();
+            Symbol? item = null;
+            this.production_tab = this.ProductionTable;
+            this.action_tab = this.ActionTable;
+            this.reduce_tab = this.ReduceTable;
+            this.InitActions();
+            this.UserInit();
+            this.cur_token = this.Scan();
             this.stack.Clear();
-            this.stack.Push(new (0, this.start_state()));
+            this.stack.Push(new (0, this.StartState()));
             this.tos = 0;
             this._done_parsing = false;
             while (!this._done_parsing)
@@ -336,20 +334,20 @@
                 {
                     throw new Exception("Symbol recycling detected (fix your scanner).");
                 }
-                int num = this.get_action( this.stack.Peek().parse_state, this.cur_token.sym);
+                int num = this.GetAction( this.stack.Peek().parse_state, this.cur_token.sym);
                 if (num > 0)
                 {
                     this.cur_token.parse_state = num - 1;
                     this.cur_token.used_by_parser = true;
                     this.stack.Push(this.cur_token);
                     this.tos++;
-                    this.cur_token = this.scan();
+                    this.cur_token = this.Scan();
                 }
                 else
                 {
                     if (num < 0)
                     {
-                        item = this.do_action(-num - 1, this, this.stack, this.tos);
+                        item = this.DoAction(-num - 1, this, this.stack, this.tos);
                         short sym = this.production_tab[-num - 1][0];
                         short num2 = this.production_tab[-num - 1][1];
                         for (int i = 0; i < num2; i++)
@@ -357,7 +355,7 @@
                             this.stack.Pop();
                             this.tos--;
                         }
-                        num = this.get_reduce(((Symbol) this.stack.Peek()).parse_state, sym);
+                        num = this.GetReduce(((Symbol) this.stack.Peek()).parse_state, sym);
                         item.parse_state = num;
                         item.used_by_parser = true;
                         this.stack.Push(item);
@@ -366,11 +364,11 @@
                     }
                     if (num == 0)
                     {
-                        this.syntax_error(this.cur_token);
-                        if (!this.error_recovery(false))
+                        this.SyntaxError(this.cur_token);
+                        if (!this.ErrorRecovery(false))
                         {
-                            this.unrecovered_syntax_error(this.cur_token);
-                            this.done_parsing();
+                            this.UnrecoveredSyntaxError(this.cur_token);
+                            this.DoneParsing();
                             continue;
                         }
                         item = this.stack.Peek();
@@ -380,92 +378,94 @@
             return item;
         }
 
-        protected void parse_lookahead(bool debug)
+        protected void ParseLookAhead(bool debug)
         {
             Symbol item = null;
             this.lookahead_pos = 0;
             if (debug)
             {
-                this.debug_message("# Reparsing saved input with actions");
-                this.debug_message("# Current Symbol is #" + this.cur_err_token().sym);
-                this.debug_message("# Current state is #" + (this.stack.Peek()).parse_state);
+                this._DebugMessage("# Reparsing saved input with actions");
+                this._DebugMessage("# Current Symbol is #" + this.CurErrToken.sym);
+                this._DebugMessage("# Current state is #" + this.stack.Peek()!.parse_state);
             }
             while (!this._done_parsing)
             {
-                int num = this.get_action(this.stack.Peek().parse_state, this.cur_err_token().sym);
+                int num = this.GetAction(this.stack.Peek()!.parse_state, this.CurErrToken.sym);
                 if (num > 0)
                 {
-                    this.cur_err_token().parse_state = num - 1;
-                    this.cur_err_token().used_by_parser = true;
+                    this.CurErrToken.parse_state = num - 1;
+                    this.CurErrToken.used_by_parser = true;
                     if (debug)
                     {
-                        this.debug_shift(this.cur_err_token());
+                        this._DebugShift(this.CurErrToken);
                     }
-                    this.stack.Push(this.cur_err_token());
+                    this.stack.Push(this.CurErrToken);
                     this.tos++;
-                    if (!this.advance_lookahead())
+                    if (!this.AdvanceLookAhead())
                     {
                         if (debug)
                         {
-                            this.debug_message("# Completed reparse");
+                            this._DebugMessage("# Completed reparse");
                         }
                         break;
                     }
                     if (debug)
                     {
-                        this.debug_message("# Current Symbol is #" + this.cur_err_token().sym);
+                        this._DebugMessage("# Current Symbol is #" + this.CurErrToken.sym);
                     }
                 }
                 else
                 {
                     if (num < 0)
                     {
-                        item = this.do_action(-num - 1, this, this.stack, this.tos);
+                        item = this.DoAction(-num - 1, this, this.stack, this.tos);
                         short num3 = this.production_tab[-num - 1][0];
                         short num2 = this.production_tab[-num - 1][1];
                         if (debug)
                         {
-                            this.debug_reduce(-num - 1, num3, num2);
+                            this._DebugReduce(-num - 1, num3, num2);
                         }
                         for (int i = 0; i < num2; i++)
                         {
                             this.stack.Pop();
                             this.tos--;
                         }
-                        num = this.get_reduce(this.stack.Peek().parse_state, num3);
+                        num = this.GetReduce(this.stack.Peek()!.parse_state, num3);
                         item.parse_state = num;
                         item.used_by_parser = true;
                         this.stack.Push(item);
                         this.tos++;
                         if (debug)
                         {
-                            this.debug_message("# Goto state #" + num);
+                            this._DebugMessage("# Goto state #" + num);
                         }
                         continue;
                     }
                     if (num == 0)
                     {
-                        this.report_fatal_error("Syntax error", item);
+                        this.ReportFatalError("Syntax error", item);
                         break;
                     }
                 }
             }
         }
 
-        public abstract short[][] production_table();
-        protected void read_lookahead()
+        public abstract short[][] ProductionTable { get; }
+
+        protected void ReadLookAhead()
         {
-            this.lookahead = new Symbol[this.error_sync_size()];
-            for (int i = 0; i < this.error_sync_size(); i++)
+            this.lookahead = new Symbol[this.ErrorSyncSIze];
+            for (int i = 0; i < this.ErrorSyncSIze; i++)
             {
                 this.lookahead[i] = this.cur_token;
-                this.cur_token = this.scan();
+                this.cur_token = this.Scan();
             }
             this.lookahead_pos = 0;
         }
 
-        public abstract short[][] reduce_table();
-        public virtual void report_error(string message, object info)
+        public abstract short[][] ReduceTable { get; }
+
+        public virtual void ReportError(string message, object info)
         {
             Console.Error.Write(message);
             if (info is Symbol)
@@ -485,74 +485,74 @@
             }
         }
 
-        public virtual void report_fatal_error(string message, object info)
+        public virtual void ReportFatalError(string message, object info)
         {
-            this.done_parsing();
-            this.report_error(message, info);
+            this.DoneParsing();
+            this.ReportError(message, info);
             throw new Exception("Can't recover from previous error(s)");
         }
 
-        protected void restart_lookahead()
+        protected void RestartLookAhead()
         {
-            for (int i = 1; i < this.error_sync_size(); i++)
+            for (int i = 1; i < this.ErrorSyncSIze; i++)
             {
                 this.lookahead[i - 1] = this.lookahead[i];
             }
-            this.lookahead[this.error_sync_size() - 1] = this.cur_token;
-            this.cur_token = this.scan();
+            this.lookahead[this.ErrorSyncSIze- 1] = this.cur_token;
+            this.cur_token = this.Scan();
             this.lookahead_pos = 0;
         }
 
-        public virtual Symbol scan()
+        public virtual Symbol Scan()
         {
-            Symbol symbol = this.getScanner().NextToken();
-            return ((symbol != null) ? symbol : new Symbol(this.EOF_sym()));
+            var symbol = this.Scanner.NextToken();
+            return ((symbol != null) ? symbol : new Symbol(this.EOF_Symbol()));
         }
 
-        public void setScanner(Scanner s)
+        public void SetScanner(Scanner s)
         {
             this._scanner = s;
         }
 
-        protected bool shift_under_error() => 
-            (this.get_action((this.stack.Peek()).parse_state, this.error_sym()) > 0);
+        protected bool ShiftUnderError() => 
+            (this.GetAction(this.stack.Peek()!.parse_state, this.ErrorSym()) > 0);
 
-        public abstract int start_production();
-        public abstract int start_state();
-        public virtual void syntax_error(Symbol cur_token)
+        public abstract int StartProduction();
+        public abstract int StartState();
+        public virtual void SyntaxError(Symbol cur_token)
         {
-            this.report_error("Syntax error", cur_token);
+            this.ReportError("Syntax error", cur_token);
         }
 
-        protected bool try_parse_ahead(bool debug)
+        protected bool TryParseAhead(bool debug)
         {
-            VIrtualParseStack _stack = new VIrtualParseStack(this.stack);
+            var _stack = new VIrtualParseStack(this.stack);
             while (true)
             {
-                int num = this.get_action(_stack.top(), this.cur_err_token().sym);
+                int num = this.GetAction(_stack.Top(), this.CurErrToken.sym);
                 if (num == 0)
                 {
                     return false;
                 }
                 if (num > 0)
                 {
-                    _stack.push(num - 1);
+                    _stack.Push(num - 1);
                     if (debug)
                     {
-                        this.debug_message(string.Concat(new object[] { "# Parse-ahead shifts Symbol #", this.cur_err_token().sym, " into state #", num - 1 }));
+                        this._DebugMessage(string.Concat(new object[] { "# Parse-ahead shifts Symbol #", this.CurErrToken.sym, " into state #", num - 1 }));
                     }
-                    if (!this.advance_lookahead())
+                    if (!this.AdvanceLookAhead())
                     {
                         return true;
                     }
                 }
                 else
                 {
-                    if ((-num - 1) == this.start_production())
+                    if ((-num - 1) == this.StartProduction())
                     {
                         if (debug)
                         {
-                            this.debug_message("# Parse-ahead accepts");
+                            this._DebugMessage("# Parse-ahead accepts");
                         }
                         return true;
                     }
@@ -560,22 +560,22 @@
                     short num3 = this.production_tab[-num - 1][1];
                     for (int i = 0; i < num3; i++)
                     {
-                        _stack.pop();
+                        _stack.Pop();
                     }
                     if (debug)
                     {
-                        this.debug_message(string.Concat(new object[] { "# Parse-ahead reduces: handle size = ", num3, " lhs = #", sym, " from state #", _stack.top() }));
+                        this._DebugMessage(string.Concat(new object[] { "# Parse-ahead reduces: handle size = ", num3, " lhs = #", sym, " from state #", _stack.Top() }));
                     }
-                    _stack.push(this.get_reduce(_stack.top(), sym));
+                    _stack.Push(this.GetReduce(_stack.Top(), sym));
                     if (debug)
                     {
-                        this.debug_message("# Goto state #" + _stack.top());
+                        this._DebugMessage("# Goto state #" + _stack.Top());
                     }
                 }
             }
         }
 
-        protected static short[][] unpackFromShorts(short[] sb)
+        protected static short[][] Unpack(short[] sb)
         {
             int index = 0;
             int num2 = (sb[index] << 0x10) | ((ushort) sb[index + 1]);
@@ -594,9 +594,9 @@
             return numArray;
         }
 
-        protected static short[][] unpackFromStrings(string[] sa)
+        protected static short[][] Unpack(string[] sa)
         {
-            StringBuilder builder = new StringBuilder(sa[0]);
+            var builder = new StringBuilder(sa[0]);
             for (int i = 1; i < sa.Length; i++)
             {
                 builder.Append(sa[i]);
@@ -618,12 +618,12 @@
             return numArray;
         }
 
-        public virtual void unrecovered_syntax_error(Symbol cur_token)
+        public virtual void UnrecoveredSyntaxError(Symbol cur_token)
         {
-            this.report_fatal_error("Couldn't repair and continue parse", cur_token);
+            this.ReportFatalError("Couldn't repair and continue parse", cur_token);
         }
 
-        public virtual void user_init()
+        public virtual void UserInit()
         {
         }
     }
