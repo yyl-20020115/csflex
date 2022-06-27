@@ -88,7 +88,7 @@ namespace CSFlex
                 var i = e.NextElement();
                 result.Append(", ").Append(i);
             }
-            result.Append("}");
+            result.Append('}');
             return result.ToString();
         }
     }

@@ -89,7 +89,7 @@
                             this.tos--;
                         }
                         num = this.GetReduce(this.stack.Peek()!.ParseState, num3);
-                        this.DebugMessage(string.Concat(new object[] { "# Reduce rule: top state ", ((Symbol) this.stack.Peek()).ParseState, ", lhs sym ", num3, " -> state ", num }));
+                        this.DebugMessage(string.Concat(new object[] { "# Reduce rule: top state ", this.stack.Peek()!.ParseState, ", lhs sym ", num3, " -> state ", num }));
                         item.ParseState = num;
                         item.UsedByParser = true;
                         this.stack.Push(item);

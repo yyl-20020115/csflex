@@ -1999,8 +1999,8 @@ namespace CSFlex
         {
             if (scanner.eofclose)
             {
-                scanner.eofCode = LexScan.conc(scanner.eofCode, "  yyclose();");
-                scanner.eofThrow = LexScan.concExc(scanner.eofThrow, "java.io.IOException");
+                scanner.eofCode = LexScan.Conc(scanner.eofCode, "  yyclose();");
+                scanner.eofThrow = LexScan.ConcExc(scanner.eofThrow, "java.io.IOException");
             }
         }
 

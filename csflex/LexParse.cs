@@ -17,10 +17,10 @@ namespace CSFlex
       */
     public class LexParse : LRParser
     {
-        public LexParse() { }
+        public LexParse() { this.action_obj = new(this); }
 
         /** Constructor which sets the default scanner. */
-        public LexParse(Scanner s) : base(s) { }
+        public LexParse(Scanner s) : base(s) { this.action_obj = new(this); }
 
         /** Production table. */
         protected static readonly short[][] _production_table =
@@ -428,7 +428,7 @@ namespace CSFlex
                 if (s.Sym == Symbols.EOF)
                     OutputWriter.Error(ErrorMessages.UNEXPECTED_EOF);
                 else
-                    OutputWriter.Error(scanner.file, ErrorMessages.SYNTAX_ERROR, s.Left, s.Right);
+                    OutputWriter.Error(scanner.file!, ErrorMessages.SYNTAX_ERROR, s.Left, s.Right);
             }
             else
                 OutputWriter.Error(ErrorMessages.UNKNOWN_SYNTAX);
@@ -460,13 +460,13 @@ namespace CSFlex
 
         private void fatalError(ErrorMessages message)
         {
-            fatalError(message, scanner.currentLine(), -1);
+            fatalError(message, scanner.CurrentLine(), -1);
             throw new GeneratorException();
         }
 
         private void syntaxError(ErrorMessages message)
         {
-            OutputWriter.Error(scanner.file!, message, scanner.currentLine(), -1);
+            OutputWriter.Error(scanner.file!, message, scanner.CurrentLine(), -1);
         }
 
         private void syntaxError(ErrorMessages message, int line)
@@ -2471,10 +2471,10 @@ namespace CSFlex
                             if (regExps.IsEOF(i))
                                 eofActions.Add(regExps.GetStates(i), regExps.GetAction(i));
                             else
-                                RESULT.addRegExp(i);
+                                RESULT.AddRegExp(i);
                         }
 
-                        if (scanner.IsStandalone) RESULT.addStandaloneRule();
+                        if (scanner.IsStandalone) RESULT.AddStandaloneRule();
                         t.Stop();
 
                         OutputWriter.Time("");
@@ -2526,10 +2526,10 @@ namespace CSFlex
                             if (regExps.IsEOF(i))
                                 eofActions.Add(regExps.GetStates(i), regExps.GetAction(i));
                             else
-                                RESULT.addRegExp(i);
+                                RESULT.AddRegExp(i);
                         }
 
-                        if (scanner.IsStandalone) RESULT.addStandaloneRule();
+                        if (scanner.IsStandalone) RESULT.AddStandaloneRule();
                         t.Stop();
 
                         OutputWriter.Time("");

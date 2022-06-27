@@ -54,9 +54,9 @@ namespace CSFlex
             var totalTime = new Timer();
             var time = new Timer();
 
-            LexScan scanner = null;
-            LexParse parser = null;
-            TextReader inputReader = null;
+            LexScan? scanner = null;
+            LexParse? parser = null;
+            TextReader? inputReader = null;
 
             totalTime.Start();
 
@@ -76,7 +76,7 @@ namespace CSFlex
 
             try
             {
-                NFA nfa = (NFA)parser.Parse().Value;
+                NFA? nfa = parser?.Parse()?.Value as NFA;
 
                 OutputWriter.CheckErrors();
 
@@ -84,12 +84,12 @@ namespace CSFlex
                                            OutputWriter.NewLine + nfa + OutputWriter.NewLine);
 
                 if (Options.Dot)
-                    nfa.writeDot(Emitter.Normalize("nfa.dot", null));       //$NON-NLS-1$
+                    nfa.WriteDot(Emitter.Normalize("nfa.dot", null));       //$NON-NLS-1$
 
                 OutputWriter.Println(ErrorMessages.NFA_STATES, nfa.numStates);
 
                 time.Start();
-                DFA dfa = nfa.getDFA();
+                DFA dfa = nfa.GetDFA();
                 time.Stop();
                 OutputWriter.Time(ErrorMessages.DFA_TOOK, time);
 

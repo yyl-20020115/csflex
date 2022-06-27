@@ -24,10 +24,7 @@
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
 using CSFlex.Runtime;
@@ -93,16 +90,16 @@ namespace CSFlex
          * l is of the form l = 2*k, k a non negative integer
          */
         private static readonly int[] ZZ_LEXSTATE = new int[]{
-     0,  0,  1,  1,  2,  2,  3,  4,  5,  5,  6,  6,  7,  7,  8,  8,
-     9,  9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14
-  };
+             0,  0,  1,  1,  2,  2,  3,  4,  5,  5,  6,  6,  7,  7,  8,  8,
+             9,  9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14
+          };
         static LexScan()
         {
-            ZZ_CMAP = zzUnpackCMap(ZZ_CMAP_PACKED);
-            ZZ_ACTION = zzUnpackAction();
-            ZZ_ROWMAP = zzUnpackRowMap();
-            ZZ_TRANS = zzUnpackTrans();
-            ZZ_ATTRIBUTE = zzUnpackAttribute();
+            ZZ_CMAP = ZZUnpackCMap(ZZ_CMAP_PACKED);
+            ZZ_ACTION = ZZUnpackAction();
+            ZZ_ROWMAP = ZZUnpackRowMap();
+            ZZ_TRANS = ZZUnpackTrans();
+            ZZ_ATTRIBUTE = ZZUnpackAttribute();
         }
 
 
@@ -110,86 +107,86 @@ namespace CSFlex
          * Translates characters to character classes
          */
         private static readonly ushort[] ZZ_CMAP_PACKED = new ushort[] {
-    8, 17, 1, 18, 1, 8, 1, 11, 2, 9, 1, 10, 14, 17, 4, 0, 1, 8, 1, 60,
-    1, 22, 1, 0, 1, 66, 1, 25, 1, 0, 1, 23, 1, 62, 1, 63, 1, 20, 1, 64,
-    1, 13, 1, 69, 1, 12, 1, 21, 1, 7, 1, 50, 2, 7, 2, 3, 1, 51, 1, 48,
-    1, 49, 1, 1, 1, 68, 1, 0, 1, 54, 1, 53, 1, 58, 1, 65, 1, 0, 4, 2,
-    1, 55, 1, 57, 8, 16, 1, 56, 11, 16, 1, 14, 1, 4, 1, 15, 1, 67, 1, 16,
-    1, 0, 1, 39, 1, 43, 1, 41, 1, 46, 1, 34, 1, 35, 1, 47, 1, 30, 1, 27,
-    1, 44, 1, 52, 1, 37, 1, 42, 1, 28, 1, 32, 1, 45, 1, 16, 1, 31, 1, 40,
-    1, 29, 1, 6, 1, 38, 1, 33, 1, 5, 1, 36, 1, 16, 1, 26, 1, 59, 1, 24,
-    1, 61, 6, 17, 1, 19, 26, 17, 2, 0, 4, 16, 4, 0, 1, 16, 7, 0, 2, 17,
-    1, 0, 1, 16, 3, 0, 1, 17, 1, 16, 5, 0, 23, 16, 1, 0, 31, 16, 1, 0,
-    0x0128, 16, 2, 0, 18, 16, 28, 0, 94, 16, 2, 0, 9, 16, 2, 0, 7, 16, 14, 0,
-    2, 16, 14, 0, 5, 16, 9, 0, 1, 16, 17, 0, 70, 17, 26, 0, 2, 17, 24, 0,
-    1, 16, 11, 0, 1, 16, 1, 0, 3, 16, 1, 0, 1, 16, 1, 0, 20, 16, 1, 0,
-    44, 16, 1, 0, 8, 16, 2, 0, 26, 16, 12, 0, 130, 16, 1, 0, 4, 17, 5, 0,
-    57, 16, 2, 0, 2, 16, 2, 0, 2, 16, 3, 0, 38, 16, 2, 0, 2, 16, 55, 0,
-    38, 16, 2, 0, 1, 16, 7, 0, 39, 16, 9, 0, 41, 17, 1, 0, 3, 17, 1, 0,
-    1, 17, 1, 0, 2, 17, 1, 0, 1, 17, 11, 0, 27, 16, 5, 0, 3, 16, 46, 0,
-    26, 16, 5, 0, 11, 16, 8, 17, 13, 0, 10, 17, 6, 0, 1, 17, 99, 16, 1, 0,
-    1, 16, 7, 17, 2, 0, 6, 17, 2, 16, 2, 17, 1, 0, 4, 17, 2, 0, 10, 17,
-    3, 16, 19, 0, 1, 16, 1, 0, 27, 16, 83, 0, 38, 16, 0x015b, 0, 3, 17, 1, 0,
-    53, 16, 2, 0, 1, 17, 1, 16, 16, 17, 2, 0, 1, 16, 4, 17, 3, 0, 10, 16,
-    2, 17, 2, 0, 10, 17, 17, 0, 3, 17, 1, 0, 8, 16, 2, 0, 2, 16, 2, 0,
-    22, 16, 1, 0, 7, 16, 1, 0, 1, 16, 3, 0, 4, 16, 2, 0, 1, 17, 1, 0,
-    7, 17, 2, 0, 2, 17, 2, 0, 3, 17, 9, 0, 1, 17, 4, 0, 2, 16, 1, 0,
-    3, 16, 2, 17, 2, 0, 10, 17, 4, 16, 4, 17, 1, 0, 1, 17, 8, 0, 1, 17,
-    2, 0, 6, 16, 4, 0, 2, 16, 2, 0, 22, 16, 1, 0, 7, 16, 1, 0, 2, 16,
-    1, 0, 2, 16, 1, 0, 2, 16, 2, 0, 1, 17, 1, 0, 5, 17, 4, 0, 2, 17,
-    2, 0, 3, 17, 11, 0, 4, 16, 1, 0, 1, 16, 7, 0, 12, 17, 3, 16, 12, 0,
-    3, 17, 1, 0, 7, 16, 1, 0, 1, 16, 1, 0, 3, 16, 1, 0, 22, 16, 1, 0,
-    7, 16, 1, 0, 2, 16, 1, 0, 5, 16, 2, 0, 1, 17, 1, 16, 8, 17, 1, 0,
-    3, 17, 1, 0, 3, 17, 2, 0, 1, 16, 15, 0, 1, 16, 5, 0, 10, 17, 17, 0,
-    3, 17, 1, 0, 8, 16, 2, 0, 2, 16, 2, 0, 22, 16, 1, 0, 7, 16, 1, 0,
-    2, 16, 2, 0, 4, 16, 2, 0, 1, 17, 1, 16, 6, 17, 3, 0, 7, 17, 8, 0,
-    2, 17, 4, 0, 2, 16, 1, 0, 3, 16, 4, 0, 10, 17, 18, 0, 2, 17, 1, 0,
-    6, 16, 3, 0, 3, 16, 1, 0, 4, 16, 3, 0, 2, 16, 1, 0, 1, 16, 1, 0,
-    2, 16, 3, 0, 2, 16, 3, 0, 3, 16, 3, 0, 8, 16, 1, 0, 3, 16, 4, 0,
-    71, 17, 8, 16, 1, 17, 3, 16, 1, 17, 23, 16, 1, 17, 10, 16, 1, 17, 5, 16,
-    11, 17, 1, 0, 3, 17, 1, 0, 4, 17, 7, 0, 2, 17, 9, 0, 2, 16, 4, 0,
-    10, 17, 18, 0, 2, 17, 1, 0, 8, 16, 1, 0, 3, 16, 1, 0, 23, 16, 1, 0,
-    10, 16, 1, 0, 5, 16, 4, 0, 7, 17, 1, 0, 3, 17, 1, 0, 4, 17, 7, 0,
-    2, 17, 7, 0, 1, 16, 1, 0, 2, 16, 4, 0, 10, 17, 18, 0, 2, 17, 1, 0,
-    8, 16, 1, 0, 3, 16, 1, 0, 23, 16, 1, 0, 16, 16, 4, 0, 6, 17, 2, 0,
-    3, 17, 1, 0, 4, 17, 9, 0, 1, 17, 8, 0, 2, 16, 4, 0, 10, 17, 21, 0,
-    18, 16, 3, 0, 24, 16, 1, 0, 9, 16, 1, 0, 1, 16, 2, 0, 7, 16, 58, 0,
-    48, 16, 1, 17, 2, 16, 7, 17, 4, 0, 8, 16, 8, 17, 1, 0, 10, 17, 39, 0,
-    2, 16, 1, 0, 1, 16, 2, 0, 2, 16, 1, 0, 1, 16, 2, 0, 1, 16, 6, 0,
-    4, 16, 1, 0, 7, 16, 1, 0, 3, 16, 1, 0, 1, 16, 1, 0, 1, 16, 2, 0,
-    2, 16, 1, 0, 4, 16, 1, 17, 2, 16, 6, 17, 1, 0, 2, 17, 1, 16, 2, 0,
-    5, 16, 1, 0, 1, 16, 1, 0, 6, 17, 2, 0, 10, 17, 2, 0, 2, 16, 34, 0,
-    1, 16, 23, 0, 2, 17, 6, 0, 10, 17, 11, 0, 1, 17, 1, 0, 1, 17, 1, 0,
-    1, 17, 4, 0, 2, 17, 8, 16, 1, 0, 34, 16, 6, 0, 23, 17, 4, 16, 4, 0,
-    6, 17, 1, 0, 1, 17, 1, 0, 21, 17, 3, 0, 7, 17, 1, 0, 1, 17, 70, 0,
-    34, 16, 1, 0, 5, 16, 1, 0, 2, 16, 37, 0, 6, 16, 74, 0, 38, 16, 10, 0,
-    39, 16, 9, 0, 90, 16, 5, 0, 68, 16, 5, 0, 82, 16, 6, 0, 7, 16, 1, 0,
-    63, 16, 1, 0, 1, 16, 1, 0, 4, 16, 2, 0, 7, 16, 1, 0, 1, 16, 1, 0,
-    4, 16, 2, 0, 39, 16, 1, 0, 1, 16, 1, 0, 4, 16, 2, 0, 31, 16, 1, 0,
-    1, 16, 1, 0, 4, 16, 2, 0, 7, 16, 1, 0, 1, 16, 1, 0, 4, 16, 2, 0,
-    7, 16, 1, 0, 7, 16, 1, 0, 23, 16, 1, 0, 31, 16, 1, 0, 1, 16, 1, 0,
-    4, 16, 2, 0, 7, 16, 1, 0, 39, 16, 1, 0, 19, 16, 69, 0, 85, 16, 12, 0,
-    0x026c, 16, 2, 0, 8, 16, 10, 0, 26, 16, 5, 0, 75, 16, 149, 0, 52, 16, 108, 0,
-    88, 16, 8, 0, 41, 16, 0x0557, 0, 156, 16, 4, 0, 90, 16, 6, 0, 22, 16, 2, 0,
-    6, 16, 2, 0, 38, 16, 2, 0, 6, 16, 2, 0, 8, 16, 1, 0, 1, 16, 1, 0,
-    1, 16, 1, 0, 1, 16, 1, 0, 31, 16, 2, 0, 53, 16, 1, 0, 7, 16, 1, 0,
-    1, 16, 3, 0, 3, 16, 1, 0, 7, 16, 3, 0, 4, 16, 2, 0, 6, 16, 4, 0,
-    13, 16, 5, 0, 3, 16, 1, 0, 7, 16, 15, 0, 4, 17, 24, 0, 2, 9, 5, 17,
-    16, 0, 2, 16, 41, 0, 7, 17, 3, 0, 6, 17, 5, 0, 1, 16, 10, 17, 22, 0,
-    12, 16, 36, 0, 13, 17, 4, 0, 1, 17, 32, 0, 1, 16, 4, 0, 1, 16, 2, 0,
-    10, 16, 1, 0, 1, 16, 3, 0, 5, 16, 6, 0, 1, 16, 1, 0, 1, 16, 1, 0,
-    1, 16, 1, 0, 4, 16, 1, 0, 3, 16, 1, 0, 7, 16, 37, 0, 36, 17, 0x02dd, 0,
-    60, 17, 78, 0, 1, 17, 0x028b, 0, 30, 17, 0x0871, 0, 2, 16, 1, 17, 25, 0, 15, 17,
-    1, 0, 5, 16, 11, 0, 84, 16, 4, 0, 2, 17, 2, 0, 2, 16, 2, 0, 90, 16,
-    1, 0, 3, 16, 6, 0, 40, 16, 4, 0, 94, 16, 17, 0, 24, 16, 200, 0, 10, 17,
-    0x0176, 0, 0x19b6, 16, 74, 0, 0x51a6, 16, 90, 0, 0x048d, 16, 0x0773, 0, 0x2ba4, 16, 0x215c, 0, 0x012e, 16,
-    210, 0, 7, 16, 12, 0, 5, 16, 5, 0, 1, 16, 1, 0, 10, 16, 1, 0, 13, 16,
-    1, 0, 5, 16, 1, 0, 1, 16, 1, 0, 2, 16, 1, 0, 2, 16, 1, 0, 108, 16,
-    33, 0, 0x016b, 16, 18, 0, 64, 16, 2, 0, 54, 16, 40, 0, 12, 16, 55, 0, 2, 16,
-    24, 0, 3, 16, 25, 0, 1, 16, 6, 0, 3, 16, 1, 0, 1, 16, 1, 0, 135, 16,
-    2, 0, 1, 17, 4, 0, 1, 16, 11, 0, 10, 17, 7, 0, 26, 16, 4, 0, 1, 16,
-    1, 0, 26, 16, 11, 0, 89, 16, 3, 0, 6, 16, 2, 0, 6, 16, 2, 0, 6, 16,
-    2, 0, 3, 16, 3, 0, 2, 16, 3, 0, 2, 16, 25, 0, 0 };
+        8, 17, 1, 18, 1, 8, 1, 11, 2, 9, 1, 10, 14, 17, 4, 0, 1, 8, 1, 60,
+        1, 22, 1, 0, 1, 66, 1, 25, 1, 0, 1, 23, 1, 62, 1, 63, 1, 20, 1, 64,
+        1, 13, 1, 69, 1, 12, 1, 21, 1, 7, 1, 50, 2, 7, 2, 3, 1, 51, 1, 48,
+        1, 49, 1, 1, 1, 68, 1, 0, 1, 54, 1, 53, 1, 58, 1, 65, 1, 0, 4, 2,
+        1, 55, 1, 57, 8, 16, 1, 56, 11, 16, 1, 14, 1, 4, 1, 15, 1, 67, 1, 16,
+        1, 0, 1, 39, 1, 43, 1, 41, 1, 46, 1, 34, 1, 35, 1, 47, 1, 30, 1, 27,
+        1, 44, 1, 52, 1, 37, 1, 42, 1, 28, 1, 32, 1, 45, 1, 16, 1, 31, 1, 40,
+        1, 29, 1, 6, 1, 38, 1, 33, 1, 5, 1, 36, 1, 16, 1, 26, 1, 59, 1, 24,
+        1, 61, 6, 17, 1, 19, 26, 17, 2, 0, 4, 16, 4, 0, 1, 16, 7, 0, 2, 17,
+        1, 0, 1, 16, 3, 0, 1, 17, 1, 16, 5, 0, 23, 16, 1, 0, 31, 16, 1, 0,
+        0x0128, 16, 2, 0, 18, 16, 28, 0, 94, 16, 2, 0, 9, 16, 2, 0, 7, 16, 14, 0,
+        2, 16, 14, 0, 5, 16, 9, 0, 1, 16, 17, 0, 70, 17, 26, 0, 2, 17, 24, 0,
+        1, 16, 11, 0, 1, 16, 1, 0, 3, 16, 1, 0, 1, 16, 1, 0, 20, 16, 1, 0,
+        44, 16, 1, 0, 8, 16, 2, 0, 26, 16, 12, 0, 130, 16, 1, 0, 4, 17, 5, 0,
+        57, 16, 2, 0, 2, 16, 2, 0, 2, 16, 3, 0, 38, 16, 2, 0, 2, 16, 55, 0,
+        38, 16, 2, 0, 1, 16, 7, 0, 39, 16, 9, 0, 41, 17, 1, 0, 3, 17, 1, 0,
+        1, 17, 1, 0, 2, 17, 1, 0, 1, 17, 11, 0, 27, 16, 5, 0, 3, 16, 46, 0,
+        26, 16, 5, 0, 11, 16, 8, 17, 13, 0, 10, 17, 6, 0, 1, 17, 99, 16, 1, 0,
+        1, 16, 7, 17, 2, 0, 6, 17, 2, 16, 2, 17, 1, 0, 4, 17, 2, 0, 10, 17,
+        3, 16, 19, 0, 1, 16, 1, 0, 27, 16, 83, 0, 38, 16, 0x015b, 0, 3, 17, 1, 0,
+        53, 16, 2, 0, 1, 17, 1, 16, 16, 17, 2, 0, 1, 16, 4, 17, 3, 0, 10, 16,
+        2, 17, 2, 0, 10, 17, 17, 0, 3, 17, 1, 0, 8, 16, 2, 0, 2, 16, 2, 0,
+        22, 16, 1, 0, 7, 16, 1, 0, 1, 16, 3, 0, 4, 16, 2, 0, 1, 17, 1, 0,
+        7, 17, 2, 0, 2, 17, 2, 0, 3, 17, 9, 0, 1, 17, 4, 0, 2, 16, 1, 0,
+        3, 16, 2, 17, 2, 0, 10, 17, 4, 16, 4, 17, 1, 0, 1, 17, 8, 0, 1, 17,
+        2, 0, 6, 16, 4, 0, 2, 16, 2, 0, 22, 16, 1, 0, 7, 16, 1, 0, 2, 16,
+        1, 0, 2, 16, 1, 0, 2, 16, 2, 0, 1, 17, 1, 0, 5, 17, 4, 0, 2, 17,
+        2, 0, 3, 17, 11, 0, 4, 16, 1, 0, 1, 16, 7, 0, 12, 17, 3, 16, 12, 0,
+        3, 17, 1, 0, 7, 16, 1, 0, 1, 16, 1, 0, 3, 16, 1, 0, 22, 16, 1, 0,
+        7, 16, 1, 0, 2, 16, 1, 0, 5, 16, 2, 0, 1, 17, 1, 16, 8, 17, 1, 0,
+        3, 17, 1, 0, 3, 17, 2, 0, 1, 16, 15, 0, 1, 16, 5, 0, 10, 17, 17, 0,
+        3, 17, 1, 0, 8, 16, 2, 0, 2, 16, 2, 0, 22, 16, 1, 0, 7, 16, 1, 0,
+        2, 16, 2, 0, 4, 16, 2, 0, 1, 17, 1, 16, 6, 17, 3, 0, 7, 17, 8, 0,
+        2, 17, 4, 0, 2, 16, 1, 0, 3, 16, 4, 0, 10, 17, 18, 0, 2, 17, 1, 0,
+        6, 16, 3, 0, 3, 16, 1, 0, 4, 16, 3, 0, 2, 16, 1, 0, 1, 16, 1, 0,
+        2, 16, 3, 0, 2, 16, 3, 0, 3, 16, 3, 0, 8, 16, 1, 0, 3, 16, 4, 0,
+        71, 17, 8, 16, 1, 17, 3, 16, 1, 17, 23, 16, 1, 17, 10, 16, 1, 17, 5, 16,
+        11, 17, 1, 0, 3, 17, 1, 0, 4, 17, 7, 0, 2, 17, 9, 0, 2, 16, 4, 0,
+        10, 17, 18, 0, 2, 17, 1, 0, 8, 16, 1, 0, 3, 16, 1, 0, 23, 16, 1, 0,
+        10, 16, 1, 0, 5, 16, 4, 0, 7, 17, 1, 0, 3, 17, 1, 0, 4, 17, 7, 0,
+        2, 17, 7, 0, 1, 16, 1, 0, 2, 16, 4, 0, 10, 17, 18, 0, 2, 17, 1, 0,
+        8, 16, 1, 0, 3, 16, 1, 0, 23, 16, 1, 0, 16, 16, 4, 0, 6, 17, 2, 0,
+        3, 17, 1, 0, 4, 17, 9, 0, 1, 17, 8, 0, 2, 16, 4, 0, 10, 17, 21, 0,
+        18, 16, 3, 0, 24, 16, 1, 0, 9, 16, 1, 0, 1, 16, 2, 0, 7, 16, 58, 0,
+        48, 16, 1, 17, 2, 16, 7, 17, 4, 0, 8, 16, 8, 17, 1, 0, 10, 17, 39, 0,
+        2, 16, 1, 0, 1, 16, 2, 0, 2, 16, 1, 0, 1, 16, 2, 0, 1, 16, 6, 0,
+        4, 16, 1, 0, 7, 16, 1, 0, 3, 16, 1, 0, 1, 16, 1, 0, 1, 16, 2, 0,
+        2, 16, 1, 0, 4, 16, 1, 17, 2, 16, 6, 17, 1, 0, 2, 17, 1, 16, 2, 0,
+        5, 16, 1, 0, 1, 16, 1, 0, 6, 17, 2, 0, 10, 17, 2, 0, 2, 16, 34, 0,
+        1, 16, 23, 0, 2, 17, 6, 0, 10, 17, 11, 0, 1, 17, 1, 0, 1, 17, 1, 0,
+        1, 17, 4, 0, 2, 17, 8, 16, 1, 0, 34, 16, 6, 0, 23, 17, 4, 16, 4, 0,
+        6, 17, 1, 0, 1, 17, 1, 0, 21, 17, 3, 0, 7, 17, 1, 0, 1, 17, 70, 0,
+        34, 16, 1, 0, 5, 16, 1, 0, 2, 16, 37, 0, 6, 16, 74, 0, 38, 16, 10, 0,
+        39, 16, 9, 0, 90, 16, 5, 0, 68, 16, 5, 0, 82, 16, 6, 0, 7, 16, 1, 0,
+        63, 16, 1, 0, 1, 16, 1, 0, 4, 16, 2, 0, 7, 16, 1, 0, 1, 16, 1, 0,
+        4, 16, 2, 0, 39, 16, 1, 0, 1, 16, 1, 0, 4, 16, 2, 0, 31, 16, 1, 0,
+        1, 16, 1, 0, 4, 16, 2, 0, 7, 16, 1, 0, 1, 16, 1, 0, 4, 16, 2, 0,
+        7, 16, 1, 0, 7, 16, 1, 0, 23, 16, 1, 0, 31, 16, 1, 0, 1, 16, 1, 0,
+        4, 16, 2, 0, 7, 16, 1, 0, 39, 16, 1, 0, 19, 16, 69, 0, 85, 16, 12, 0,
+        0x026c, 16, 2, 0, 8, 16, 10, 0, 26, 16, 5, 0, 75, 16, 149, 0, 52, 16, 108, 0,
+        88, 16, 8, 0, 41, 16, 0x0557, 0, 156, 16, 4, 0, 90, 16, 6, 0, 22, 16, 2, 0,
+        6, 16, 2, 0, 38, 16, 2, 0, 6, 16, 2, 0, 8, 16, 1, 0, 1, 16, 1, 0,
+        1, 16, 1, 0, 1, 16, 1, 0, 31, 16, 2, 0, 53, 16, 1, 0, 7, 16, 1, 0,
+        1, 16, 3, 0, 3, 16, 1, 0, 7, 16, 3, 0, 4, 16, 2, 0, 6, 16, 4, 0,
+        13, 16, 5, 0, 3, 16, 1, 0, 7, 16, 15, 0, 4, 17, 24, 0, 2, 9, 5, 17,
+        16, 0, 2, 16, 41, 0, 7, 17, 3, 0, 6, 17, 5, 0, 1, 16, 10, 17, 22, 0,
+        12, 16, 36, 0, 13, 17, 4, 0, 1, 17, 32, 0, 1, 16, 4, 0, 1, 16, 2, 0,
+        10, 16, 1, 0, 1, 16, 3, 0, 5, 16, 6, 0, 1, 16, 1, 0, 1, 16, 1, 0,
+        1, 16, 1, 0, 4, 16, 1, 0, 3, 16, 1, 0, 7, 16, 37, 0, 36, 17, 0x02dd, 0,
+        60, 17, 78, 0, 1, 17, 0x028b, 0, 30, 17, 0x0871, 0, 2, 16, 1, 17, 25, 0, 15, 17,
+        1, 0, 5, 16, 11, 0, 84, 16, 4, 0, 2, 17, 2, 0, 2, 16, 2, 0, 90, 16,
+        1, 0, 3, 16, 6, 0, 40, 16, 4, 0, 94, 16, 17, 0, 24, 16, 200, 0, 10, 17,
+        0x0176, 0, 0x19b6, 16, 74, 0, 0x51a6, 16, 90, 0, 0x048d, 16, 0x0773, 0, 0x2ba4, 16, 0x215c, 0, 0x012e, 16,
+        210, 0, 7, 16, 12, 0, 5, 16, 5, 0, 1, 16, 1, 0, 10, 16, 1, 0, 13, 16,
+        1, 0, 5, 16, 1, 0, 1, 16, 1, 0, 2, 16, 1, 0, 2, 16, 1, 0, 108, 16,
+        33, 0, 0x016b, 16, 18, 0, 64, 16, 2, 0, 54, 16, 40, 0, 12, 16, 55, 0, 2, 16,
+        24, 0, 3, 16, 25, 0, 1, 16, 6, 0, 3, 16, 1, 0, 1, 16, 1, 0, 135, 16,
+        2, 0, 1, 17, 4, 0, 1, 16, 11, 0, 10, 17, 7, 0, 26, 16, 4, 0, 1, 16,
+        1, 0, 26, 16, 11, 0, 89, 16, 3, 0, 6, 16, 2, 0, 6, 16, 2, 0, 6, 16,
+        2, 0, 3, 16, 3, 0, 2, 16, 3, 0, 2, 16, 25, 0, 0 };
 
         /** 
          * Translates characters to character classes
@@ -250,15 +247,15 @@ namespace CSFlex
     1, 62, 2, 155, 1, 153, 4, 0, 1, 35, 2, 0, 1, 35, 2, 159,
     1, 155, 4, 0, 1, 160, 0 };
 
-        private static int[] zzUnpackAction()
+        private static int[] ZZUnpackAction()
         {
             int[] result = new int[780];
             int offset = 0;
-            offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
+            offset = ZZUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
             return result;
         }
 
-        private static int zzUnpackAction(ushort[] packed, int offset, int[] result)
+        private static int ZZUnpackAction(ushort[] packed, int offset, int[] result)
         {
             int i = 0;       /* index in packed string  */
             int j = offset;  /* index in unpacked array */
@@ -378,15 +375,15 @@ namespace CSFlex
     0, 0xada2, 0, 0xade8, 0, 0xae2e, 0, 0xae74, 0, 0x0460, 0, 0x1298, 0, 0xaeba, 0, 0xaf00,
     0, 0xaf46, 0, 0xaf8c, 0, 0xafd2, 0, 0x0460, 0 };
 
-        private static int[] zzUnpackRowMap()
+        private static int[] ZZUnpackRowMap()
         {
             int[] result = new int[780];
             int offset = 0;
-            offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
+            offset = ZZUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
             return result;
         }
 
-        private static int zzUnpackRowMap(ushort[] packed, int offset, int[] result)
+        private static int ZZUnpackRowMap(ushort[] packed, int offset, int[] result)
         {
             int i = 0;  /* index in packed string  */
             int j = offset;  /* index in unpacked array */
@@ -1385,15 +1382,15 @@ namespace CSFlex
     2, 159, 1, 0x0282, 1, 159, 4, 0x0282, 3, 159, 1, 0x0282, 1, 159, 1, 0x0282,
     12, 159, 0 };
 
-        private static int[] zzUnpackTrans()
+        private static int[] ZZUnpackTrans()
         {
             int[] result = new int[45080];
             int offset = 0;
-            offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
+            offset = ZZUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
             return result;
         }
 
-        private static int zzUnpackTrans(ushort[] packed, int offset, int[] result)
+        private static int ZZUnpackTrans(ushort[] packed, int offset, int[] result)
         {
             int i = 0;       /* index in packed string  */
             int j = offset;  /* index in unpacked array */
@@ -1458,15 +1455,15 @@ namespace CSFlex
     5, 1, 4, 0, 1, 1, 2, 0, 1, 1, 1, 9, 2, 1, 4, 0,
     1, 9, 0 };
 
-        private static int[] zzUnpackAttribute()
+        private static int[] ZZUnpackAttribute()
         {
             int[] result = new int[780];
             int offset = 0;
-            offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
+            offset = ZZUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
             return result;
         }
 
-        private static int zzUnpackAttribute(ushort[] packed, int offset, int[] result)
+        private static int ZZUnpackAttribute(ushort[] packed, int offset, int[] result)
         {
             int i = 0;       /* index in packed string  */
             int j = offset;  /* index in unpacked array */
@@ -1484,7 +1481,7 @@ namespace CSFlex
         private System.IO.TextReader zzReader;
 
         /** the current state of the DFA */
-        private int zzState;
+        private int zzState = 0;
 
         /** the current lexical state */
         private int zzLexicalState = YYINITIAL;
@@ -1494,32 +1491,32 @@ namespace CSFlex
         private char[] zzBuffer = new char[ZZ_BUFFERSIZE];
 
         /** the textposition at the last accepting state */
-        private int zzMarkedPos;
+        private int zzMarkedPos = 0;
 
         /** the textposition at the last state to be included in yytext */
-        private int zzPushbackPos;
+        private int zzPushbackPos = 0;
 
         /** the current text position in the buffer */
-        private int zzCurrentPos;
+        private int zzCurrentPos = 0;
 
         /** startRead marks the beginning of the yytext() string in the buffer */
-        private int zzStartRead;
+        private int zzStartRead = 0;
 
         /** endRead marks the last character in the buffer, that has been read
             from input */
-        private int zzEndRead;
+        private int zzEndRead = 0;
 
         /** number of newlines encountered up to the start of the matched text */
-        private int yyline;
+        private int yyline = 0;
 
         /** the number of characters up to the start of the matched text */
-        private int yychar;
+        private int yychar = 0;
 
         /**
          * the number of characters from the last newline up to the start of the 
          * matched text
          */
-        private int yycolumn;
+        private int yycolumn = 0;
 
         /** 
          * zzAtBOL == true <=> the scanner is currently at the beginning of a line
@@ -1527,11 +1524,11 @@ namespace CSFlex
         private bool zzAtBOL = true;
 
         /** zzAtEOF == true <=> the scanner is at the EOF */
-        private bool zzAtEOF;
+        private bool zzAtEOF = false;
 
 
         /** the stack of open (nested) input streams to read from */
-        private System.Collections.Stack zzStreams = new System.Collections.Stack();
+        private Stack<ZzFlexStreamInfo> zzStreams = new();
 
         /**
          * inner class used to store info for nested
@@ -1585,18 +1582,18 @@ namespace CSFlex
         internal int epilogue_line = 0;
         private bool epilogue_sent = false;
 
-        internal string classCode;
-        internal string initCode;
-        internal string initThrow;
-        internal string eofCode;
-        internal string eofThrow;
-        internal string lexThrow;
-        internal string eofVal;
-        internal string scanErrorException;
+        internal string classCode = "";
+        internal string initCode = "";
+        internal string initThrow = "";
+        internal string eofCode = "";
+        internal string eofThrow = "";
+        internal string lexThrow = "";
+        internal string eofVal = "";
+        internal string scanErrorException = "";
         internal string cupSymbol = "sym";
 
-        internal StringBuilder actionText = new StringBuilder();
-        internal StringBuilder @string = new StringBuilder();
+        internal StringBuilder actionText = new ();
+        internal StringBuilder builder = new ();
 
         internal bool charCount;
         internal bool lineCount;
@@ -1635,9 +1632,9 @@ namespace CSFlex
 
         internal bool macroDefinition;
 
-        internal Timer t = new Timer();
+        internal Timer t = new ();
 
-        public int currentLine()
+        public int CurrentLine()
         {
             return yyline;
         }
@@ -1647,12 +1644,12 @@ namespace CSFlex
             this.file = file;
         }
 
-        private Symbol symbol(int type, Object value)
+        private Symbol Symbol(int type, Object value)
         {
             return new Symbol(type, yyline, yycolumn, value);
         }
 
-        private Symbol symbol(int type)
+        private Symbol Symbol(int type)
         {
             return new Symbol(type, yyline, yycolumn);
         }
@@ -1661,11 +1658,11 @@ namespace CSFlex
         // non whitespace character in yytext, but leaves yyline+yycolumn 
         // untouched
 
-        private Symbol symbol_countUpdate(int type, Object value)
+        private Symbol SymbolCountUpdate(int type, object? value)
         {
             int lc = yyline;
             int cc = yycolumn;
-            string text = yytext();
+            string text = YYText();
 
             for (int i = 0; i < text.Length; i++)
             {
@@ -1688,9 +1685,8 @@ namespace CSFlex
 
         int yyline_copy, yycolumn_copy;
 
-        private void updateCopyOfLineCount(string text)
+        private void UpdateCopyOfLineCount(string text)
         {
-
             yyline_copy = yyline;
             yycolumn_copy = yycolumn;
 
@@ -1709,28 +1705,28 @@ namespace CSFlex
 
         }
 
-        private string makeMacroIdent()
+        private string MakeMacroIdent()
         {
-            string matched = yytext().Trim();
-            return matched.Substring(1, matched.Length - 2).Trim();
+            string matched = YYText().Trim();
+            return matched[1..^1].Trim();
         }
 
-        public static string conc(Object a, Object b)
+        public static string? Conc(object? a, object? b)
         {
             if (a == null && b == null) return null;
-            if (a == null) return b.ToString();
-            if (b == null) return a.ToString();
+            if (a == null && b !=null) return b.ToString();
+            if (b == null && a !=null) return a.ToString();
 
-            return a.ToString() + b.ToString();
+            return a!.ToString() + b!.ToString();
         }
 
-        public static string concExc(Object a, Object b)
+        public static string? ConcExc(object? a, object? b)
         {
             if (a == null && b == null) return null;
-            if (a == null) return b.ToString();
-            if (b == null) return a.ToString();
+            if (a == null && b != null) return b.ToString();
+            if (b == null && a != null) return a.ToString();
 
-            return a.ToString() + ", " + b.ToString();
+            return a!.ToString() + ", " + b!.ToString();
         }
 
 
@@ -1740,10 +1736,10 @@ namespace CSFlex
          *
          * @param   in  the System.IO.TextReader to read input from.
          */
-        public LexScan(TextReader @in)
+        public LexScan(TextReader reader)
         {
             states.Insert("YYINITIAL", true);
-            this.zzReader = @in;
+            this.zzReader = reader;
         }
 
         /**
@@ -1752,7 +1748,7 @@ namespace CSFlex
          *
          * @param   in  the System.IO.Stream to read input from.
          */
-        public LexScan(Stream @in) : this(new StreamReader(@in))
+        public LexScan(Stream stream) : this(new StreamReader(stream))
         {
         }
 
@@ -1762,7 +1758,7 @@ namespace CSFlex
          * @param packed   the packed character translation table
          * @return         the unpacked character translation table
          */
-        private static char[] zzUnpackCMap(ushort[] packed)
+        private static char[] ZZUnpackCMap(ushort[] packed)
         {
             char[] map = new char[0x10000];
             int i = 0;  /* index in packed string  */
@@ -1784,7 +1780,7 @@ namespace CSFlex
          * 
          * @exception   System.IO.IOException  if any I/O-Error occurs
          */
-        private bool zzRefill()
+        private bool ZZRefill()
         {
 
             /* first: make room (if you can) */
@@ -1830,7 +1826,7 @@ namespace CSFlex
         /**
          * Closes the input stream.
          */
-        public void yyclose()
+        public void YYClose()
         {
             zzAtEOF = true;            /* indicate end of file */
             zzEndRead = zzStartRead;  /* invalidate buffer    */
@@ -1852,7 +1848,7 @@ namespace CSFlex
          *
          * @see #yypopStream()
          */
-        public void yypushStream(TextReader reader)
+        public void YYPushStream(TextReader reader)
         {
             zzStreams.Push(
               new ZzFlexStreamInfo(zzReader, zzEndRead, zzStartRead, zzCurrentPos,
@@ -1880,7 +1876,7 @@ namespace CSFlex
          *
          * @see #yypushStream(TextReader)
          */
-        public void yypopStream()
+        public void YYPopStream()
         {
             zzReader.Close();
             ZzFlexStreamInfo s = (ZzFlexStreamInfo)zzStreams.Pop();
@@ -1901,10 +1897,7 @@ namespace CSFlex
          * Returns true iff there are still streams left 
          * to read from on the stream stack.
          */
-        public bool yymoreStreams()
-        {
-            return zzStreams.Count != 0;
-        }
+        public bool YYMoreStream => zzStreams.Count != 0;
 
 
         /**
@@ -1920,7 +1913,7 @@ namespace CSFlex
          * @see #yypushStream(System.IO.TextReader)
          * @see #yypopStream()
          */
-        public void yyreset(System.IO.TextReader reader)
+        public void YYReset(System.IO.TextReader reader)
         {
             zzReader = reader;
             zzAtBOL = true;
@@ -1935,10 +1928,7 @@ namespace CSFlex
         /**
          * Returns the current lexical state.
          */
-        public int yystate()
-        {
-            return zzLexicalState;
-        }
+        public int YYState => zzLexicalState;
 
 
         /**
@@ -1946,7 +1936,7 @@ namespace CSFlex
          *
          * @param newState the new lexical state
          */
-        public void yybegin(int newState)
+        public void YYBegin(int newState)
         {
             zzLexicalState = newState;
         }
@@ -1955,10 +1945,7 @@ namespace CSFlex
         /**
          * Returns the text matched by the current regular expression.
          */
-        public string yytext()
-        {
-            return new string(zzBuffer, zzStartRead, zzMarkedPos - zzStartRead);
-        }
+        public string YYText() => new string(zzBuffer, zzStartRead, zzMarkedPos - zzStartRead);
 
 
         /**
@@ -1972,19 +1959,13 @@ namespace CSFlex
          *
          * @return the character at position pos
          */
-        public char yycharat(int pos)
-        {
-            return zzBuffer[zzStartRead + pos];
-        }
+        public char YYCharAT(int pos) => zzBuffer[zzStartRead + pos];
 
 
         /**
          * Returns the length of the matched text region.
          */
-        public int yylength()
-        {
-            return zzMarkedPos - zzStartRead;
-        }
+        public int YYLength => zzMarkedPos - zzStartRead;
 
 
         /**
@@ -2001,7 +1982,7 @@ namespace CSFlex
          *
          * @param   errorCode  the code of the errormessage to display
          */
-        private void zzScanError(int errorCode)
+        private void ZZScanError(int errorCode)
         {
             string message;
             try
@@ -2025,10 +2006,10 @@ namespace CSFlex
          * @param number  the number of characters to be read again.
          *                This number must not be greater than yylength()!
          */
-        public void yypushback(int number)
+        public void YYPushBack(int number)
         {
-            if (number > yylength())
-                zzScanError(ZZ_PUSHBACK_2BIG);
+            if (number > YYLength)
+                ZZScanError(ZZ_PUSHBACK_2BIG);
 
             zzMarkedPos -= number;
         }
@@ -2038,12 +2019,12 @@ namespace CSFlex
          * Contains user EOF-code, which will be executed exactly once,
          * when the end of file is reached
          */
-        private void zzDoEOF()
+        private void ZZDoEOF()
         {
             if (!zzEOFDone)
             {
                 zzEOFDone = true;
-                yyclose();
+                YYClose();
             }
         }
 
@@ -2121,7 +2102,7 @@ namespace CSFlex
                         zzPeek = false;
                     else
                     {
-                        bool eof = zzRefill();
+                        bool eof = ZZRefill();
                         zzMarkedPosL = zzMarkedPos;
                         zzBufferL = zzBuffer;
                         if (eof)
@@ -2150,7 +2131,7 @@ namespace CSFlex
                                 zzAtBOL = false;
                             else
                             {
-                                bool eof = zzRefill();
+                                bool eof = ZZRefill();
                                 zzMarkedPosL = zzMarkedPos;
                                 zzBufferL = zzBuffer;
                                 if (eof)
@@ -2195,7 +2176,7 @@ namespace CSFlex
                         zzCurrentPos = zzCurrentPosL;
                         zzMarkedPos = zzMarkedPosL;
                         zzPushbackPos = zzPushbackPosL;
-                        bool eof = zzRefill();
+                        bool eof = ZZRefill();
                         // get translated positions and possibly new buffer
                         zzCurrentPosL = zzCurrentPos;
                         zzMarkedPosL = zzMarkedPos;
@@ -2252,7 +2233,7 @@ namespace CSFlex
                     case 128:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            File f = new File(yytext().Substring(9).Trim());
+                            File f = new File(YYText().Substring(9).Trim());
                             if (!f.CanRead)
                                 throw new ScannerException(file, ErrorMessages.NOT_READABLE, yyline);
                             // check for cycle
@@ -2261,7 +2242,7 @@ namespace CSFlex
                                 throw new ScannerException(file!, ErrorMessages.FILE_CYCLE, yyline);
                             try
                             {
-                                yypushStream(new StreamReader(f));
+                                YYPushStream(new StreamReader(f));
                                 files.Push(file);
                                 file = f;
                                 OutputWriter.Println("Including \"" + file + "\"");
@@ -2282,26 +2263,26 @@ namespace CSFlex
                     case 30:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CLOSEBRACKET);
+                            return Symbol(CLOSEBRACKET);
                         }
                         break;
                     case 129:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            lexThrow = concExc(lexThrow, yytext().Substring(8).Trim());
+                            lexThrow = ConcExc(lexThrow, YYText().Substring(8).Trim());
                         }
                         break;
                     case 132:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            cupSymbol = yytext().Substring(8).Trim();
+                            cupSymbol = YYText().Substring(8).Trim();
                             if (cupCompatible) OutputWriter.Warning(ErrorMessages.CUPSYM_AFTER_CUP, yyline);
                         }
                         break;
                     case 51:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(DASH);
+                            return Symbol(DASH);
                         }
                         break;
                     case 66:
@@ -2313,19 +2294,19 @@ namespace CSFlex
                     case 27:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(BANG);
+                            return Symbol(BANG);
                         }
                         break;
                     case 143:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            eofThrow = concExc(eofThrow, yytext().Substring(10).Trim());
+                            eofThrow = ConcExc(eofThrow, YYText().Substring(10).Trim());
                         }
                         break;
                     case 81:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append('\"');
+                            builder.Append('\"');
                         }
                         break;
                     case 10:
@@ -2337,59 +2318,59 @@ namespace CSFlex
                     case 136:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(DIGITCLASS);
+                            return Symbol(DIGITCLASS);
                         }
                         break;
                     case 127:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            actionText.Length = 0; yybegin(JAVA_CODE);
-                            updateCopyOfLineCount(yytext());
+                            actionText.Length = 0; YYBegin(JAVA_CODE);
+                            UpdateCopyOfLineCount(YYText());
                             action_line = yyline_copy + 1;
                             actionText.Append(new string(' ', yycolumn_copy));
-                            return symbol_countUpdate(EOFRULE, null);
+                            return SymbolCountUpdate(EOFRULE, null);
                         }
                         break;
                     case 150:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            initThrow = concExc(initThrow, yytext().Substring(11).Trim());
+                            initThrow = ConcExc(initThrow, YYText().Substring(11).Trim());
                         }
                         break;
                     case 33:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            lookAheadUsed = true; return symbol(DOLLAR);
+                            lookAheadUsed = true; return Symbol(DOLLAR);
                         }
                         break;
                     case 26:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(BAR);
+                            return Symbol(BAR);
                         }
                         break;
                     case 22:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(STAR);
+                            return Symbol(STAR);
                         }
                         break;
                     case 97:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            classCode = conc(classCode, @string); yybegin(MACROS);
+                            classCode = Conc(classCode, builder); YYBegin(MACROS);
                         }
                         break;
                     case 14:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            yybegin(REGEXP);
+                            YYBegin(REGEXP);
                         }
                         break;
                     case 155:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            lexThrow = concExc(lexThrow, yytext().Substring(12).Trim());
+                            lexThrow = ConcExc(lexThrow, YYText().Substring(12).Trim());
                         }
                         break;
                     case 124:
@@ -2401,71 +2382,71 @@ namespace CSFlex
                     case 156:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(UPPERCLASS);
+                            return Symbol(UPPERCLASS);
                         }
                         break;
                     case 49:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Length = 0; nextState = CHARCLASS; yybegin(STRING_CONTENT);
+                            builder.Length = 0; nextState = CHARCLASS; YYBegin(STRING_CONTENT);
                         }
                         break;
                     case 83:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append('\t');
+                            builder.Append('\t');
                         }
                         break;
                     case 20:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(POINT);
+                            return Symbol(POINT);
                         }
                         break;
                     case 40:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(COMMA);
+                            return Symbol(COMMA);
                         }
                         break;
                     case 135:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            bufferSize = IntUtil.ParseInt(yytext().Substring(8).Trim());
+                            bufferSize = IntUtil.ParseInt(YYText().Substring(8).Trim());
                         }
                         break;
                     case 79:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append(yytext()[1]);
+                            builder.Append(YYText()[1]);
                         }
                         break;
                     case 74:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            actionText.Length = 0; yybegin(JAVA_CODE);
-                            updateCopyOfLineCount(yytext());
+                            actionText.Length = 0; YYBegin(JAVA_CODE);
+                            UpdateCopyOfLineCount(YYText());
                             action_line = yyline_copy + 1;
                             actionText.Append(new string(' ', yycolumn_copy));
-                            return symbol(REGEXPEND);
+                            return Symbol(REGEXPEND);
                         }
                         break;
                     case 154:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            initThrow = concExc(initThrow, @string); yybegin(MACROS);
+                            initThrow = ConcExc(initThrow, builder); YYBegin(MACROS);
                         }
                         break;
                     case 41:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            yybegin(REGEXP); return symbol(MORETHAN);
+                            YYBegin(REGEXP); return Symbol(MORETHAN);
                         }
                         break;
                     case 120:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            initCode = conc(initCode, @string); yybegin(MACROS);
+                            initCode = Conc(initCode, builder); YYBegin(MACROS);
                         }
                         break;
                     case 116:
@@ -2477,25 +2458,25 @@ namespace CSFlex
                     case 16:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            yybegin(STATES); return symbol_countUpdate(LESSTHAN, null);
+                            YYBegin(STATES); return SymbolCountUpdate(LESSTHAN, null);
                         }
                         break;
                     case 138:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            eofVal = @string.ToString(); yybegin(MACROS);
+                            eofVal = builder.ToString(); YYBegin(MACROS);
                         }
                         break;
                     case 50:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(HAT);
+                            return Symbol(HAT);
                         }
                         break;
                     case 73:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CHAR, '\b');
+                            return Symbol(CHAR, '\b');
                         }
                         break;
                     case 159:
@@ -2513,7 +2494,7 @@ namespace CSFlex
                     case 44:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            yybegin(nextState); return symbol(STRING, @string.ToString());
+                            YYBegin(nextState); return Symbol(STRING, builder.ToString());
                         }
                         break;
                     case 122:
@@ -2525,7 +2506,7 @@ namespace CSFlex
                     case 113:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            eofCode = conc(eofCode, @string); yybegin(MACROS);
+                            eofCode = Conc(eofCode, builder); YYBegin(MACROS);
                         }
                         break;
                     case 108:
@@ -2537,13 +2518,13 @@ namespace CSFlex
                     case 148:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(JLETTERCLASS);
+                            return Symbol(JLETTERCLASS);
                         }
                         break;
                     case 87:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            yypushback(1); yycolumn--; return symbol(CHAR, yytext()[0]);
+                            YYPushBack(1); yycolumn--; return Symbol(CHAR, YYText()[0]);
                         }
                         break;
                     case 62:
@@ -2567,29 +2548,29 @@ namespace CSFlex
                     case 15:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol_countUpdate(RBRACE, null);
+                            return SymbolCountUpdate(RBRACE, null);
                         }
                         break;
                     case 137:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            actionText.Length = 0; yybegin(JAVA_CODE);
-                            updateCopyOfLineCount(yytext());
+                            actionText.Length = 0; YYBegin(JAVA_CODE);
+                            UpdateCopyOfLineCount(YYText());
                             action_line = yyline_copy + 1;
                             actionText.Append(new string(' ', yycolumn_copy));
-                            return symbol(EOFRULE);
+                            return Symbol(EOFRULE);
                         }
                         break;
                     case 4:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            userCode.Append(yytext());
+                            userCode.Append(YYText());
                         }
                         break;
                     case 55:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            yybegin(REGEXP); return symbol(RBRACE);
+                            YYBegin(REGEXP); return Symbol(RBRACE);
                         }
                         break;
                     case 106:
@@ -2607,7 +2588,7 @@ namespace CSFlex
                     case 24:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Length = 0; nextState = REGEXP; yybegin(STRING_CONTENT);
+                            builder.Length = 0; nextState = REGEXP; YYBegin(STRING_CONTENT);
                         }
                         break;
                     case 11:
@@ -2619,37 +2600,37 @@ namespace CSFlex
                     case 25:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            yybegin(REGEXPSTART); return symbol(LBRACE);
+                            YYBegin(REGEXPSTART); return Symbol(LBRACE);
                         }
                         break;
                     case 68:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CHAR, (char)IntUtil.ParseInt(yytext().Substring(1, yytext().Length - 1), 8));
+                            return Symbol(CHAR, (char)IntUtil.ParseInt(YYText().Substring(1, YYText().Length - 1), 8));
                         }
                         break;
                     case 29:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(OPENBRACKET);
+                            return Symbol(OPENBRACKET);
                         }
                         break;
                     case 85:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append('\f');
+                            builder.Append('\f');
                         }
                         break;
                     case 86:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append('\b');
+                            builder.Append('\b');
                         }
                         break;
                     case 64:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            macroDefinition = false; yybegin(REGEXPSTART); return symbol(DELIMITER);
+                            macroDefinition = false; YYBegin(REGEXPSTART); return Symbol(DELIMITER);
                         }
                         break;
                     case 121:
@@ -2661,19 +2642,19 @@ namespace CSFlex
                     case 70:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CHAR, '\t');
+                            return Symbol(CHAR, '\t');
                         }
                         break;
                     case 57:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            epilogue.Append(yytext());
+                            epilogue.Append(YYText());
                         }
                         break;
                     case 101:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CHAR, (char)IntUtil.ParseInt(yytext().Substring(2, yytext().Length - 2), 16));
+                            return Symbol(CHAR, (char)IntUtil.ParseInt(YYText().Substring(2, YYText().Length - 2), 16));
                         }
                         break;
                     case 146:
@@ -2686,7 +2667,7 @@ namespace CSFlex
                     case 69:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CHAR, '\n');
+                            return Symbol(CHAR, '\n');
                         }
                         break;
                     case 130:
@@ -2704,43 +2685,43 @@ namespace CSFlex
                     case 125:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            ClassName = yytext().Substring(7).Trim();
+                            ClassName = YYText().Substring(7).Trim();
                         }
                         break;
                     case 103:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(FULL);
+                            return Symbol(FULL);
                         }
                         break;
                     case 1:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(EOF);
+                            return Symbol(EOF);
                         }
                         break;
                     case 61:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            nextState = MACROS; yybegin(COMMENT);
+                            nextState = MACROS; YYBegin(COMMENT);
                         }
                         break;
                     case 96:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(MACROUSE, yytext().Substring(1, yytext().Length - 2));
+                            return Symbol(MACROUSE, YYText().Substring(1, YYText().Length - 2));
                         }
                         break;
                     case 45:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CHAR, yytext()[0]);
+                            return Symbol(CHAR, YYText()[0]);
                         }
                         break;
                     case 52:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append(yytext());
+                            builder.Append(YYText());
                         }
                         break;
                     case 76:
@@ -2758,43 +2739,43 @@ namespace CSFlex
                     case 93:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CHAR, (char)IntUtil.ParseInt(yytext().Substring(2, yytext().Length - 2), 16));
+                            return Symbol(CHAR, (char)IntUtil.ParseInt(YYText().Substring(2, YYText().Length - 2), 16));
                         }
                         break;
                     case 56:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            yybegin(REGEXP);
+                            YYBegin(REGEXP);
                         }
                         break;
                     case 80:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append((char)IntUtil.ParseInt(yytext().Substring(1, yytext().Length - 1), 8));
+                            builder.Append((char)IntUtil.ParseInt(YYText().Substring(1, YYText().Length - 1), 8));
                         }
                         break;
                     case 91:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            inclusive_states = false; yybegin(STATELIST);
+                            inclusive_states = false; YYBegin(STATELIST);
                         }
                         break;
                     case 88:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(REPEAT, int.Parse(yytext().Substring(1).Trim()));
+                            return Symbol(REPEAT, int.Parse(YYText().Substring(1).Trim()));
                         }
                         break;
                     case 42:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append(yytext());
+                            builder.Append(YYText());
                         }
                         break;
                     case 102:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append((char)IntUtil.ParseInt(yytext().Substring(2, yytext().Length - 2), 16));
+                            builder.Append((char)IntUtil.ParseInt(YYText().Substring(2, YYText().Length - 2), 16));
                         }
                         break;
                     case 58:
@@ -2802,35 +2783,35 @@ namespace CSFlex
                         {
 
                             t.Start();
-                            yybegin(MACROS);
+                            YYBegin(MACROS);
                             macroDefinition = true;
-                            return symbol(USERCODE, userCode);
+                            return Symbol(USERCODE, userCode);
 
                         }
                         break;
                     case 72:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CHAR, '\f');
+                            return Symbol(CHAR, '\f');
                         }
                         break;
                     case 139:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            IsExtending = yytext().Substring(9).Trim();
+                            IsExtending = YYText().Substring(9).Trim();
                         }
                         break;
                     case 19:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            if (macroDefinition) { yybegin(MACROS); }
-                            return symbol(REGEXPEND);
+                            if (macroDefinition) { YYBegin(MACROS); }
+                            return Symbol(REGEXPEND);
                         }
                         break;
                     case 144:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            functionName = yytext().Substring(10).Trim();
+                            functionName = YYText().Substring(10).Trim();
                         }
                         break;
                     case 105:
@@ -2842,7 +2823,7 @@ namespace CSFlex
                     case 90:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Length = 0; yybegin(COPY);
+                            builder.Length = 0; YYBegin(COPY);
                         }
                         break;
                     case 147:
@@ -2854,7 +2835,7 @@ namespace CSFlex
                     case 82:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append('\n');
+                            builder.Append('\n');
                         }
                         break;
                     case 152:
@@ -2866,7 +2847,7 @@ namespace CSFlex
                     case 67:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CHAR, yytext()[1]);
+                            return Symbol(CHAR, YYText()[1]);
                         }
                         break;
                     case 111:
@@ -2884,7 +2865,7 @@ namespace CSFlex
                     case 75:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            nextState = REGEXP; yybegin(COMMENT);
+                            nextState = REGEXP; YYBegin(COMMENT);
                         }
                         break;
                     case 39:
@@ -2908,13 +2889,13 @@ namespace CSFlex
                     case 153:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            scanErrorException = yytext().Substring(11).Trim();
+                            scanErrorException = YYText().Substring(11).Trim();
                         }
                         break;
                     case 92:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            inclusive_states = true; yybegin(STATELIST);
+                            inclusive_states = true; YYBegin(STATELIST);
                         }
                         break;
                     case 104:
@@ -2926,19 +2907,19 @@ namespace CSFlex
                     case 160:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(JLETTERDIGITCLASS);
+                            return Symbol(JLETTERDIGITCLASS);
                         }
                         break;
                     case 84:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append('\r');
+                            builder.Append('\r');
                         }
                         break;
                     case 48:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            if (balance > 0) balance--; else yybegin(REGEXP); return symbol(CLOSECLASS);
+                            if (balance > 0) balance--; else YYBegin(REGEXP); return Symbol(CLOSECLASS);
                         }
                         break;
                     case 36:
@@ -2951,10 +2932,10 @@ namespace CSFlex
                             }
                             else
                             {
-                                yybegin(REGEXPSTART);
+                                YYBegin(REGEXPSTART);
                                 Action a = new Action(actionText.ToString(), action_line);
                                 actions.Add(a);
-                                return symbol(ACTION, a);
+                                return Symbol(ACTION, a);
                             }
 
                         }
@@ -2965,14 +2946,14 @@ namespace CSFlex
                             if (commentbalance > 0)
                                 commentbalance--;
                             else
-                                yybegin(nextState);
+                                YYBegin(nextState);
 
                         }
                         break;
                     case 94:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol_countUpdate(MACROUSE, makeMacroIdent());
+                            return SymbolCountUpdate(MACROUSE, MakeMacroIdent());
                         }
                         break;
                     case 119:
@@ -2984,13 +2965,13 @@ namespace CSFlex
                     case 38:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(IDENT, yytext());
+                            return Symbol(IDENT, YYText());
                         }
                         break;
                     case 35:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            actionText.Append(yytext());
+                            actionText.Append(YYText());
                         }
                         break;
                     case 110:
@@ -3002,7 +2983,7 @@ namespace CSFlex
                     case 112:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(UNICODE);
+                            return Symbol(UNICODE);
                         }
                         break;
                     case 109:
@@ -3014,7 +2995,7 @@ namespace CSFlex
                     case 13:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            yybegin(REGEXP); return symbol(EQUALS);
+                            YYBegin(REGEXP); return Symbol(EQUALS);
                         }
                         break;
                     case 60:
@@ -3026,7 +3007,7 @@ namespace CSFlex
                     case 151:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            IsImplementing = concExc(IsImplementing, yytext().Substring(12).Trim());
+                            IsImplementing = ConcExc(IsImplementing, YYText().Substring(12).Trim());
                         }
                         break;
                     case 53:
@@ -3038,23 +3019,23 @@ namespace CSFlex
                     case 3:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            epilogue.Append(yytext());
+                            epilogue.Append(YYText());
                         }
                         break;
                     case 149:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            eofThrow = concExc(eofThrow, @string); yybegin(MACROS);
+                            eofThrow = ConcExc(eofThrow, builder); YYBegin(MACROS);
                         }
                         break;
                     case 100:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            yybegin(USEREPILOGUE);
+                            YYBegin(USEREPILOGUE);
                             epilogue.Length = 0;
-                            updateCopyOfLineCount(yytext());
+                            UpdateCopyOfLineCount(YYText());
                             epilogue_line = yyline_copy + 1;
-                            return symbol(DELIMITER);
+                            return Symbol(DELIMITER);
                         }
                         break;
                     case 117:
@@ -3070,19 +3051,19 @@ namespace CSFlex
                     case 9:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(IDENT, yytext());
+                            return Symbol(IDENT, YYText());
                         }
                         break;
                     case 63:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            OutputWriter.Warning(ErrorMessages.NOT_AT_BOL, yyline); yypushback(1);
+                            OutputWriter.Warning(ErrorMessages.NOT_AT_BOL, yyline); YYPushBack(1);
                         }
                         break;
                     case 32:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(QUESTION);
+                            return Symbol(QUESTION);
                         }
                         break;
                     case 134:
@@ -3101,7 +3082,7 @@ namespace CSFlex
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
                             cupCompatible = true;
-                            IsImplementing = concExc(IsImplementing, "java_cup.runtime.Scanner");
+                            IsImplementing = ConcExc(IsImplementing, "java_cup.runtime.Scanner");
                             if (functionName == null)
                                 functionName = "next_token";
                             if (tokenType == null)
@@ -3121,37 +3102,37 @@ namespace CSFlex
                     case 158:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            lexThrow = concExc(lexThrow, @string); yybegin(MACROS);
+                            lexThrow = ConcExc(lexThrow, builder); YYBegin(MACROS);
                         }
                         break;
                     case 157:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(LOWERCLASS);
+                            return Symbol(LOWERCLASS);
                         }
                         break;
                     case 71:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CHAR, '\r');
+                            return Symbol(CHAR, '\r');
                         }
                         break;
                     case 8:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            yybegin(MACROS);
+                            YYBegin(MACROS);
                         }
                         break;
                     case 17:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(CHAR, yytext()[0]);
+                            return Symbol(CHAR, YYText()[0]);
                         }
                         break;
                     case 114:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            tokenType = yytext().Substring(6).Trim();
+                            tokenType = YYText().Substring(6).Trim();
                         }
                         break;
                     case 133:
@@ -3163,25 +3144,25 @@ namespace CSFlex
                     case 34:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            bolUsed = true; return symbol(HAT);
+                            bolUsed = true; return Symbol(HAT);
                         }
                         break;
                     case 21:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            yybegin(CHARCLASS); return symbol(OPENCLASS);
+                            YYBegin(CHARCLASS); return Symbol(OPENCLASS);
                         }
                         break;
                     case 65:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            nextState = REGEXPSTART; yybegin(COMMENT);
+                            nextState = REGEXPSTART; YYBegin(COMMENT);
                         }
                         break;
                     case 6:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            states.Insert(yytext(), inclusive_states);
+                            states.Insert(YYText(), inclusive_states);
                         }
                         break;
                     case 43:
@@ -3199,13 +3180,13 @@ namespace CSFlex
                     case 95:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            @string.Append((char)IntUtil.ParseInt(yytext().Substring(2, yytext().Length - 2), 16));
+                            builder.Append((char)IntUtil.ParseInt(YYText().Substring(2, YYText().Length - 2), 16));
                         }
                         break;
                     case 23:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            lookAheadUsed = true; return symbol(LOOKAHEAD);
+                            lookAheadUsed = true; return Symbol(LOOKAHEAD);
                         }
                         break;
                     case 107:
@@ -3223,13 +3204,13 @@ namespace CSFlex
                     case 77:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            yybegin(REPEATEXP); return symbol(REPEAT, int.Parse(yytext().Trim().Substring(1).Trim()));
+                            YYBegin(REPEATEXP); return Symbol(REPEAT, int.Parse(YYText().Trim().Substring(1).Trim()));
                         }
                         break;
                     case 47:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            balance++; return symbol(OPENCLASS);
+                            balance++; return Symbol(OPENCLASS);
                         }
                         break;
                     case 78:
@@ -3237,13 +3218,13 @@ namespace CSFlex
                         {
                             if (macroDefinition)
                             {
-                                yybegin(EATWSPNL);
-                                return symbol(BAR);
+                                YYBegin(EATWSPNL);
+                                return Symbol(BAR);
                             }
                             else
                             {
-                                yybegin(REGEXPSTART);
-                                return symbol(NOACTION);
+                                YYBegin(REGEXPSTART);
+                                return Symbol(NOACTION);
                             }
 
                         }
@@ -3257,7 +3238,7 @@ namespace CSFlex
                     case 141:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(LETTERCLASS);
+                            return Symbol(LETTERCLASS);
                         }
                         break;
                     case 12:
@@ -3269,20 +3250,20 @@ namespace CSFlex
                     case 31:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(PLUS);
+                            return Symbol(PLUS);
                         }
                         break;
                     case 28:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            return symbol(TILDE);
+                            return Symbol(TILDE);
                         }
                         break;
                     default:
                         if (zzInput == YYEOF && zzStartRead == zzCurrentPos)
                         {
                             zzAtEOF = true;
-                            zzDoEOF();
+                            ZZDoEOF();
                             switch (zzLexicalState)
                             {
                                 case JAVA_CODE:
@@ -3300,17 +3281,17 @@ namespace CSFlex
                                 case USEREPILOGUE:
                                     if (ZZ_SPURIOUS_WARNINGS_SUCK)
                                     {
-                                        if (yymoreStreams())
+                                        if (YYMoreStream)
                                         {
                                             file = files.Pop();
-                                            yypopStream();
+                                            YYPopStream();
                                         }
                                         else if (epilogue_sent)
-                                            return symbol(EOF);
+                                            return Symbol(EOF);
                                         else
                                         {
                                             epilogue_sent = true;
-                                            return symbol(EPILOGUE, epilogue);
+                                            return Symbol(EPILOGUE, epilogue);
                                         }
 
                                     }
@@ -3318,10 +3299,10 @@ namespace CSFlex
                                 case MACROS:
                                     if (ZZ_SPURIOUS_WARNINGS_SUCK)
                                     {
-                                        if (yymoreStreams())
+                                        if (YYMoreStream)
                                         {
                                             file = files.Pop();
-                                            yypopStream();
+                                            YYPopStream();
                                         }
                                         else
                                             throw new ScannerException(file!, ErrorMessages.EOF_IN_MACROS);
@@ -3367,20 +3348,20 @@ namespace CSFlex
                                 default:
                                     if (ZZ_SPURIOUS_WARNINGS_SUCK)
                                     {
-                                        if (yymoreStreams())
+                                        if (YYMoreStream)
                                         {
                                             file = files.Pop();
-                                            yypopStream();
+                                            YYPopStream();
                                         }
                                         else
-                                            return symbol(EOF);
+                                            return Symbol(EOF);
                                     }
                                     break;
                             }
                         }
                         else
                         {
-                            zzScanError(ZZ_NO_MATCH);
+                            ZZScanError(ZZ_NO_MATCH);
                         }
                         break;
                 }
@@ -3393,7 +3374,7 @@ namespace CSFlex
          *
          * This code was contributed by Karl Meissner <meissnersd@yahoo.com>
          */
-        private string getTokenName(int token)
+        private string GetTokenName(int token)
         {
             try
             {
@@ -3420,12 +3401,11 @@ namespace CSFlex
          *
          * This code was contributed by Karl Meissner <meissnersd@yahoo.com>
          */
-        public Symbol debug_next_token()
+        public Symbol DebugNextToken()
         {
             CSFlex.Runtime.Symbol s = NextToken();
             Console.WriteLine("line:{0} col:{1} --{2}--{3}--",
-
-        yyline + 1, yycolumn + 1, yytext(), getTokenName(s.Sym));
+                yyline + 1, yycolumn + 1, YYText(), GetTokenName(s.Sym));
             return s;
         }
 
@@ -3453,7 +3433,7 @@ namespace CSFlex
                     try
                     {
                         scanner = new LexScan(new StreamReader(argv[i]));
-                        while (!scanner.zzAtEOF) scanner.debug_next_token();
+                        while (!scanner.zzAtEOF) scanner.DebugNextToken();
                     }
                     catch (FileNotFoundException)
                     {

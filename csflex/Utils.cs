@@ -279,7 +279,7 @@ namespace CSFlex
         {
             var builder = new StringBuilder();
 
-            builder.Append("{");
+            builder.Append('{');
             var first = true;
             foreach(var v in this)
             {
@@ -290,7 +290,7 @@ namespace CSFlex
                 builder.Append($"{v.Key} = {v.Value}");
                 first = false;
             }
-            builder.Append("}");
+            builder.Append('}');
 
             return builder.ToString();
         }
