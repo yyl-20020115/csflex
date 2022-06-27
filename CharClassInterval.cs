@@ -27,57 +27,60 @@ using System;
 namespace CSFlex
 {
 
-/**
- * Stores an interval of characters together with the character class
- *
- * A character belongs to an interval, if its Unicode value is greater than or equal
- * to the Unicode value of <CODE>start</code> and smaller than or euqal to the Unicode
- * value of <CODE>end</code>.
- *
- * All characters of the interval must belong to the same character class.
- *
- * @author Gerwin Klein
- * @version JFlex 1.4, $Revision: 2.2 $, $Date: 2004/04/12 10:07:48 $
- * @author Jonathan Gilbert
- * @version CSFlex 1.4
- */
-public class CharClassInterval {
+    /**
+     * Stores an interval of characters together with the character class
+     *
+     * A character belongs to an interval, if its Unicode value is greater than or equal
+     * to the Unicode value of <CODE>start</code> and smaller than or euqal to the Unicode
+     * value of <CODE>end</code>.
+     *
+     * All characters of the interval must belong to the same character class.
+     *
+     * @author Gerwin Klein
+     * @version JFlex 1.4, $Revision: 2.2 $, $Date: 2004/04/12 10:07:48 $
+     * @author Jonathan Gilbert
+     * @version CSFlex 1.4
+     */
+    public class CharClassInterval
+    {
+        /**
+         * The first character of the interval
+         */
+        private int start = 0;
 
-  /**
-   * The first character of the interval
-   */
-  internal int start;
+        /**
+         * The last character of the interval
+         */
+        private int end = 0;
 
-  /**
-   * The last character of the interval
-   */
-  internal int end;
+        /**
+         * The code of the class all characters of this interval belong to.
+         */
+        private int charClass = 0;
 
-  /**
-   * The code of the class all characters of this interval belong to.
-   */
-  internal int charClass;
-  
+        public int Start => start;
+        public int End => end;
+        public int CharClass => charClass;
 
-  /**
-   * Creates a new CharClassInterval from <CODE>start</code> to <CODE>end</code>
-   * that belongs to character class <CODE>charClass</code>.
-   *
-   * @param start         The first character of the interval
-   * @param end           The last character of the interval  
-   * @param charClass     The code of the class all characters of this interval belong to.
-   */
-  public CharClassInterval(int start, int end, int charClass) {
-    this.start = start;
-    this.end = end;
-    this.charClass = charClass;
-  }
 
-  /**
-   * returns string representation of this class interval
-   */
-  public override String ToString() {
-    return "["+start+"-"+end+"="+charClass+"]";
-  }
-}
+        /**
+         * Creates a new CharClassInterval from <CODE>start</code> to <CODE>end</code>
+         * that belongs to character class <CODE>charClass</code>.
+         *
+         * @param start         The first character of the interval
+         * @param end           The last character of the interval  
+         * @param charClass     The code of the class all characters of this interval belong to.
+         */
+        public CharClassInterval(int start, int end, int charClass)
+        {
+            this.start = start;
+            this.end = end;
+            this.charClass = charClass;
+        }
+
+        /**
+         * returns string representation of this class interval
+         */
+        public override string ToString() => $"[{start}-{end}={charClass}]";
+    }
 }

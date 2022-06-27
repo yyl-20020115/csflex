@@ -30,2028 +30,2147 @@ using System.Text;
 namespace CSFlex
 {
 
-/**
- * This class manages the actual code generation, putting
- * the scanner together, filling in skeleton sections etc.
- *
- * Table compression, String packing etc. is also done here.
- *
- * @author Gerwin Klein
- * @version JFlex 1.4, $Revision: 2.22 $, $Date: 2004/04/12 10:07:48 $
- * @author Jonathan Gilbert
- * @version CSFlex 1.4
- */
-sealed public class Emitter {
-    
-  // bit masks for state attributes
-  private const int FINAL = 1;
-  private const int PUSHBACK = 2;
-  private const int LOOKEND = 4;
-  private const int NOLOOK = 8;
-
-  private static readonly String date = DateTime.Now.ToShortDateString();
-
-  private File inputFile;
-
-  private TextWriter @out;
-  private Skeleton skel;
-  private LexScan scanner;
-  private LexParse parser;
-  private DFA dfa;
-
-  // for switch statement:
-  // table[i][j] is the set of input characters that leads from state i to state j
-  private CharSet[][] table;
-
-  private bool[] isTransition;
-  
-  // noTarget[i] is the set of input characters that have no target state in state i
-  private CharSet[] noTarget;
-      
-  // for row killing:
-  private int numRows;
-  private int [] rowMap;
-  private bool [] rowKilled;
-  
-  // for col killing:
-  private int numCols;
-  private int [] colMap;
-  private bool [] colKilled;
-  
-
-  /** maps actions to their switch label */
-  private Hashtable actionTable = new PrettyHashtable();
-
-  private CharClassInterval [] intervalls;
-
-  private String visibility = "public";
-
-  public Emitter(File inputFile, LexParse parser, DFA dfa) {
-
-    String name;
-
-    if (Options.emit_csharp)
-      name = parser.scanner.className + ".cs";
-    else
-      name = parser.scanner.className + ".java";
-
-    File outputFile = normalize(name, inputFile);
-
-    Out.println("Writing code to \""+outputFile+"\"");
-    
-    this.@out = new StreamWriter(outputFile);
-    this.parser = parser;
-    this.scanner = parser.scanner;
-    this.visibility = scanner.visibility;
-    this.inputFile = inputFile;
-    this.dfa = dfa;
-    this.skel = new Skeleton(@out);
-  }
-
-
-  /**
-   * Constructs a file in Options.getDir() or in the same directory as
-   * another file. Makes a backup if the file already exists.
-   *
-   * @param name  the name (without path) of the file
-   * @param path  the path where to construct the file
-   * @param input fallback location if path = <tt>null</tt>
-   *              (expected to be a file in the directory to write to)   
-   */
-  public static File normalize(String name, File input) {
-    File outputFile;
-
-    if ( Options.getDir() == null ) 
-      if ( input == null || input.getParent() == null )
-        outputFile = new File(name);
-      else
-        outputFile = new File(input.getParent(), name);
-    else 
-      outputFile = new File(Options.getDir(), name);
-        
-    if ( outputFile.exists() && !Options.no_backup ) {      
-      File backup = new File( outputFile.ToString()+"~" );
-      
-      if ( backup.exists() ) backup.delete();
-      
-      if ( outputFile.renameTo( backup ) )
-        Out.println("Old file \""+outputFile+"\" saved as \""+backup+"\"");
-      else
-        Out.println("Couldn't save old file \""+outputFile+"\", overwriting!");
-    }
-
-    return outputFile;
-  }
-  
-  private void println() {
-    @out.WriteLine();
-  }
-
-  private void println(String line) {
-    @out.WriteLine(line);
-  }
-
-  private void println(int i) {
-    @out.WriteLine(i);
-  }
-
-  private void print(String line) {
-    @out.Write(line);
-  }
-
-  private void print(int i) {
-    @out.Write(i);
-  }
-
-  private void print(int i, int tab) {
-    int exp;
-
-    if (i < 0) 
-      exp = 1;
-    else
-      exp = 10;
-
-    while (tab-- > 1) {
-      if (Math.Abs(i) < exp) print(" ");
-      exp*= 10;
-    }
-
-    print(i);
-  }
-
-  private void emitScanError() {
-    print("  private void zzScanError(int errorCode)");
-
-    if (!Options.emit_csharp)
+    /**
+     * This class manages the actual code generation, putting
+     * the scanner together, filling in skeleton sections etc.
+     *
+     * Table compression, string packing etc. is also done here.
+     *
+     * @author Gerwin Klein
+     * @version JFlex 1.4, $Revision: 2.22 $, $Date: 2004/04/12 10:07:48 $
+     * @author Jonathan Gilbert
+     * @version CSFlex 1.4
+     */
+    public sealed class Emitter
     {
-      if (scanner.scanErrorException != null) 
-        print(" throws "+scanner.scanErrorException);
-    }
 
-    println(" {");
+        // bit masks for state attributes
+        private const int FINAL = 1;
+        private const int PUSHBACK = 2;
+        private const int LOOKEND = 4;
+        private const int NOLOOK = 8;
 
-    skel.emitNext();
+        private static readonly string date = DateTime.Now.ToShortDateString();
 
-    if (scanner.scanErrorException == null)
-    {
-      if (Options.emit_csharp)
-        println("    throw new Exception(message);");
-      else
-        println("    throw new Error(message);");
-    }
-    else
-      println("    throw new "+scanner.scanErrorException+"(message);");    
+        private File inputFile;
 
-    skel.emitNext();
+        private TextWriter output;
+        private Skeleton skel;
+        private LexScan scanner;
+        private LexParse parser;
+        private DFA dfa;
 
-    print("  "+visibility+" void yypushback(int number) ");     
-    
-    if (scanner.scanErrorException == null)
-      println(" {");
-    else
-    {
-      if (Options.emit_csharp)
-        println(" {");
-      else
-        println(" throws "+scanner.scanErrorException+" {");
-    }
-  }
+        // for switch statement:
+        // table[i][j] is the set of input characters that leads from state i to state j
+        private CharSet[][] table;
 
-  private void emitMain() {
-    if ( !(scanner.standalone || scanner.debugOption || scanner.cupDebug) ) return;
+        private bool[] isTransition;
 
-    if ( scanner.cupDebug ) {
-      println("  /**");
-      println("   * Converts an int token code into the name of the");
-      println("   * token by reflection on the cup symbol class/interface "+scanner.cupSymbol);
-      println("   *");
-      println("   * This code was contributed by Karl Meissner <meissnersd@yahoo.com>"); 
-      println("   */");
-      if (Options.emit_csharp)
-      {
-        println("  private String getTokenName(int token) {");
-        println("    try {");
-        println("      System.Reflection.FieldInfo[] classFields = typeof(" + scanner.cupSymbol + ").GetFields();");
-        println("      for (int i = 0; i < classFields.Length; i++) {");
-        println("        if (((int)classFields[i].GetValue(null)) == token) {");
-        println("          return classFields[i].Name;");
-        println("        }");
-        println("      }");
-        println("    } catch (Exception e) {");
-        println("      Out.error(e.ToString());");
-        println("    }");
-        println("");
-        println("    return \"UNKNOWN TOKEN\";");
-        println("  }");
-      }
-      else
-      {
-        println("  private String getTokenName(int token) {");
-        println("    try {");
-        println("      java.lang.reflect.Field [] classFields = " + scanner.cupSymbol + ".class.getFields();");
-        println("      for (int i = 0; i < classFields.length; i++) {");
-        println("        if (classFields[i].getInt(null) == token) {");
-        println("          return classFields[i].getName();");
-        println("        }");
-        println("      }");
-        println("    } catch (Exception e) {");
-        println("      e.printStackTrace(System.err);");
-        println("    }");
-        println("");
-        println("    return \"UNKNOWN TOKEN\";");
-        println("  }");
-      }
-      println("");
-      println("  /**");
-      println("   * Same as "+scanner.functionName+" but also prints the token to standard out");
-      println("   * for debugging.");
-      println("   *");
-      println("   * This code was contributed by Karl Meissner <meissnersd@yahoo.com>"); 
-      println("   */");
+        // noTarget[i] is the set of input characters that have no target state in state i
+        private CharSet[] noTarget;
 
-      print("  "+visibility+" ");
-      if ( scanner.tokenType == null ) {
-        if ( scanner.isInteger )
-          print( "int" );
-        else 
-          if ( scanner.isIntWrap )
-            print( "Integer" );
-          else
-            print( "Yytoken" );
-      }
-      else
-        print( scanner.tokenType );
-      
-      print(" debug_");
-      
-      print(scanner.functionName);
-      
-      if (Options.emit_csharp)
-        print("()");
-      else
-      {
-        print("() throws java.io.IOException");
-    
-        if ( scanner.lexThrow != null ) 
+        // for row killing:
+        private int numRows;
+        private int[] rowMap;
+        private bool[] rowKilled;
+
+        // for col killing:
+        private int numCols;
+        private int[] colMap;
+        private bool[] colKilled;
+
+
+        /** maps actions to their switch label */
+        private PrettyHashtable<Action,Integer> actionTable = new ();
+
+        private CharClassInterval[] intervalls;
+
+        private string visibility = "public";
+
+        public Emitter(File inputFile, LexParse parser, DFA dfa)
         {
-          print(", ");
-          print(scanner.lexThrow);
+            var name = Options.EmitCsharp ? parser.scanner.className + ".cs" : parser.scanner.className + ".java";
+            var outputFile = Normalize(name, inputFile);
+
+            OutputWriter.Println("Writing code to \"" + outputFile + "\"");
+
+            this.output = new StreamWriter(outputFile);
+            this.parser = parser;
+            this.scanner = parser.scanner;
+            this.visibility = scanner.visibility;
+            this.inputFile = inputFile;
+            this.dfa = dfa;
+            this.skel = new Skeleton(output);
         }
 
-        if ( scanner.scanErrorException != null ) 
+
+        /**
+         * Constructs a file in Options.getDir() or in the same directory as
+         * another file. Makes a backup if the file already exists.
+         *
+         * @param name  the name (without path) of the file
+         * @param path  the path where to construct the file
+         * @param input fallback location if path = <tt>null</tt>
+         *              (expected to be a file in the directory to write to)   
+         */
+        public static File Normalize(string name, File input)
         {
-          print(", ");
-          print(scanner.scanErrorException);
-        }
-      }
-      
-      println(" {");
+            File outputFile;
 
-      println("    java_cup.runtime.Symbol s = "+scanner.functionName+"();");
-      if (Options.emit_csharp)
-      {
-        print("    Console.WriteLine( \"");
-        
-        int @base = 0;
+            if (Options.Dir == null)
+                if (input == null || input.Parent == null)
+                    outputFile = new File(name);
+                else
+                    outputFile = new File(input.Parent, name);
+            else
+                outputFile = new File(Options.Dir, name);
 
-        if (scanner.lineCount) { print("line:{"+@base+"}"); @base++; }
-        if (scanner.columnCount) { print(" col:{"+@base+"}"); @base++; }
-        println(" --{" + (@base) + "}--{" + (@base + 1) + "}--\",");
-        println("      ");
-        if (scanner.lineCount) print("yyline+1, ");
-        if (scanner.columnCount) print("yycolumn+1, ");
-        println("yytext(), getTokenName(s.sym));");
-      }
-      else
-      {
-        print("    System.out.println( ");
-        if (scanner.lineCount) print("\"line:\" + (yyline+1) + ");
-        if (scanner.columnCount) print("\" col:\" + (yycolumn+1) + ");
-        println("\" --\"+ yytext() + \"--\" + getTokenName(s.sym) + \"--\");");
-      }
-      println("    return s;");
-      println("  }");
-      println("");
-    }
+            if (outputFile.Exists&& !Options.NoBackup)
+            {
+                File backup = new File(outputFile.ToString() + "~");
 
-    if ( scanner.standalone ) {
-      println("  /**");
-      println("   * Runs the scanner on input files.");
-      println("   *");
-      println("   * This is a standalone scanner, it will print any unmatched");
-      println("   * text to System.out unchanged.");      
-      println("   *");
-      println("   * @param argv   the command line, contains the filenames to run");
-      println("   *               the scanner on.");
-      println("   */");
-    }
-    else {
-      println("  /**");
-      println("   * Runs the scanner on input files.");
-      println("   *");
-      println("   * This main method is the debugging routine for the scanner.");
-      println("   * It prints debugging information about each returned token to");
-      println("   * System.out until the end of file is reached, or an error occured.");
-      println("   *"); 
-      println("   * @param argv   the command line, contains the filenames to run");
-      println("   *               the scanner on."); 
-      println("   */"); 
-    }      
-    
-    if (Options.emit_csharp)
-    {
-      println("  public static void Main(String[] argv) {");
-      println("    if (argv.Length == 0) {");
-      println("      Console.WriteLine(\"Usage : "+scanner.className+" <inputfile>\");");
-      println("    }");
-      println("    else {");
-      println("      for (int i = 0; i < argv.Length; i++) {");
-      println("        "+scanner.className+" scanner = null;");
-      println("        try {");
-      println("          scanner = new "+scanner.className+"( new StreamReader(argv[i]) );");
+                if (backup.Exists) backup.Delete();
 
-      if ( scanner.standalone ) 
-      {      
-        println("          while ( !scanner.zzAtEOF ) scanner."+scanner.functionName+"();");
-      }
-      else if (scanner.cupDebug ) 
-      {
-        println("          while ( !scanner.zzAtEOF ) scanner.debug_"+scanner.functionName+"();");
-      }
-      else 
-      {
-        println("          do {");
-        println("            System.out.println(scanner."+scanner.functionName+"());");
-        println("          } while (!scanner.zzAtEOF);");
-        println("");
-      }
- 
-      println("        }");
-      println("        catch (FileNotFoundException) {");
-      println("          Console.WriteLine(\"File not found : \\\"{0}\\\"\", argv[i]);");
-      println("        }");
-      println("        catch (IOException e) {");
-      println("          Console.WriteLine(\"IO error scanning file \\\"{0}\\\"\", argv[i]);");
-      println("          Console.WriteLine(e);");
-      println("        }"); 
-      println("        catch (Exception e) {");
-      println("          Console.WriteLine(\"Unexpected exception:\");");
-      println("          Console.WriteLine(e.ToString());");
-      println("        }"); 
-      println("      }");
-      println("    }");
-      println("  }");
-    }
-    else
-    {
-      println("  public static void main(String argv[]) {");
-      println("    if (argv.length == 0) {");
-      println("      System.out.println(\"Usage : java "+scanner.className+" <inputfile>\");");
-      println("    }");
-      println("    else {");
-      println("      for (int i = 0; i < argv.length; i++) {");
-      println("        "+scanner.className+" scanner = null;");
-      println("        try {");
-      println("          scanner = new "+scanner.className+"( new java.io.FileReader(argv[i]) );");
-
-      if ( scanner.standalone ) 
-      {      
-        println("          while ( !scanner.zzAtEOF ) scanner."+scanner.functionName+"();");
-      }
-      else if (scanner.cupDebug ) 
-      {
-        println("          while ( !scanner.zzAtEOF ) scanner.debug_"+scanner.functionName+"();");
-      }
-      else 
-      {
-        println("          do {");
-        println("            System.out.println(scanner."+scanner.functionName+"());");
-        println("          } while (!scanner.zzAtEOF);");
-        println("");
-      }
- 
-      println("        }");
-      println("        catch (java.io.FileNotFoundException e) {");
-      println("          System.out.println(\"File not found : \\\"\"+argv[i]+\"\\\"\");");
-      println("        }");
-      println("        catch (java.io.IOException e) {");
-      println("          System.out.println(\"IO error scanning file \\\"\"+argv[i]+\"\\\"\");");
-      println("          System.out.println(e);");
-      println("        }"); 
-      println("        catch (Exception e) {");
-      println("          System.out.println(\"Unexpected exception:\");");
-      println("          e.printStackTrace();");
-      println("        }"); 
-      println("      }");
-      println("    }");
-      println("  }");
-    }
-    println("");    
-  }
-  
-  private void emitNoMatch() {
-    println("            zzScanError(ZZ_NO_MATCH);");
-  }
-  
-  private void emitNextInput() {
-    println("          if (zzCurrentPosL < zzEndReadL)");
-    println("            zzInput = zzBufferL[zzCurrentPosL++];");
-    println("          else if (zzAtEOF) {");
-    println("            zzInput = YYEOF;");
-    if (Options.emit_csharp)
-      println("            goto zzForAction;");
-    else
-      println("            break zzForAction;");
-    println("          }");
-    println("          else {");
-    println("            // store back cached positions");
-    println("            zzCurrentPos  = zzCurrentPosL;");
-    println("            zzMarkedPos   = zzMarkedPosL;");
-    if ( scanner.lookAheadUsed ) 
-      println("            zzPushbackPos = zzPushbackPosL;");
-    if (Options.emit_csharp)
-      println("            bool eof = zzRefill();");
-    else
-      println("            boolean eof = zzRefill();");
-    println("            // get translated positions and possibly new buffer");
-    println("            zzCurrentPosL  = zzCurrentPos;");
-    println("            zzMarkedPosL   = zzMarkedPos;");
-    println("            zzBufferL      = zzBuffer;");
-    println("            zzEndReadL     = zzEndRead;");
-    if ( scanner.lookAheadUsed ) 
-      println("            zzPushbackPosL = zzPushbackPos;");
-    println("            if (eof) {");
-    println("              zzInput = YYEOF;");
-    if (Options.emit_csharp)
-      println("            goto zzForAction;");
-    else
-      println("            break zzForAction;");
-    println("            }");
-    println("            else {");
-    println("              zzInput = zzBufferL[zzCurrentPosL++];");
-    println("            }");
-    println("          }"); 
-  }
-
-  private void emitHeader() {
-    println("/* The following code was generated by CSFlex "+MainClass.version+" on "+date+" */");   
-    println(""); 
-  } 
-
-  private void emitUserCode() {
-    if ( scanner.userCode.Length > 0 )
-    {
-      if (Options.emit_csharp)
-      {
-        println("#line 1 \"" + scanner.file + "\"");
-        println(scanner.userCode.ToString());
-        println("#line default");
-      }
-      else
-        println(scanner.userCode.ToString());
-    }
-  }
-
-  private void emitEpilogue() 
-  {
-    if (scanner.epilogue.Length > 0)
-    {
-      if (Options.emit_csharp)
-      {
-        println("#line " + scanner.epilogue_line + " \"" + scanner.file + "\"");
-        println(scanner.epilogue.ToString());
-        println("#line default");
-      }
-      else
-        println(scanner.epilogue.ToString());
-    }
-  }
-
-  private void emitClassName() {    
-    if (!endsWithJavadoc(scanner.userCode)) {
-      String path = inputFile.ToString();
-      // slashify path (avoid backslash u sequence = unicode escape)
-      if (File.separatorChar != '/') {
-	    path = path.Replace(File.separatorChar, '/');
-      }
-    	
-      println("/**");
-      println(" * This class is a scanner generated by <a href=\"http://www.sourceforge.net/projects/csflex/\">C# Flex</a>, based on");
-      println(" * <a href=\"http://www.jflex.de/\">JFlex</a>, version "+MainClass.version);
-      println(" * on "+date+" from the specification file");
-      println(" * <tt>"+path+"</tt>");      
-      println(" */");
-    }   
-
-    if ( scanner.isPublic ) print("public ");
-
-    if ( scanner.isAbstract) print("abstract ");
-   
-    if ( scanner.isFinal )
-    {
-      if (Options.emit_csharp)
-        print("sealed ");
-      else
-        print("final ");
-    }
-    
-    print("class ");
-    print(scanner.className);
-    
-    if ( scanner.isExtending != null ) {
-      if (Options.emit_csharp)
-        print(": ");
-      else
-        print(" extends ");
-      print(scanner.isExtending);
-    }
-
-    if ( scanner.isImplementing != null ) {
-      if (Options.emit_csharp)
-      {
-        if (scanner.isExtending != null) // then we already output the ':'
-          print(", ");
-        else
-          print(": ");
-      }
-      else
-        print(" implements ");
-      print(scanner.isImplementing);
-    }   
-    
-    println(" {");
-  }  
-
-  /**
-   * Try to find out if user code ends with a javadoc comment 
-   * 
-   * @param buffer   the user code
-   * @return true    if it ends with a javadoc comment
-   */
-  public static bool endsWithJavadoc(StringBuilder usercode) {
-    String s = usercode.ToString().Trim();
-        
-    if (!s.EndsWith("*/")) return false;
-    
-    // find beginning of javadoc comment   
-    int i = s.LastIndexOf("/**");    
-    if (i < 0) return false; 
-       
-    // javadoc comment shouldn't contain a comment end
-    return s.Substring(i,s.Length-2-i).IndexOf("*/") < 0;
-  }
-
-
-  private void emitLexicalStates() {
-    IEnumerator stateNames = scanner.states.names();
-
-    string @const = (Options.emit_csharp ? "const" : "static final");
-    
-    while ( stateNames.MoveNext() ) {
-      String name = (String) stateNames.Current;
-      
-      int num = scanner.states.getNumber(name).intValue();
-
-      if (scanner.bolUsed)      
-        println("  "+visibility+" "+@const+" int "+name+" = "+2*num+";");
-      else
-        println("  "+visibility+" "+@const+" int "+name+" = "+dfa.lexState[2*num]+";");
-    }
-    
-    if (scanner.bolUsed) {
-      println("");
-      println("  /**");
-      println("   * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l");
-      println("   * ZZ_LEXSTATE[l+1] is the state in the DFA for the lexical state l");
-      println("   *                  at the beginning of a line");
-      println("   * l is of the form l = 2*k, k a non negative integer");
-      println("   */");
-      if (Options.emit_csharp)
-        println("  private static readonly int[] ZZ_LEXSTATE = new int[]{ ");
-      else
-        println("  private static final int ZZ_LEXSTATE[] = { ");
-  
-      int i, j = 0;
-      print("    ");
-
-      for (i = 0; i < dfa.lexState.Length-1; i++) {
-        print( dfa.lexState[i], 2 );
-
-        print(", ");
-
-        if (++j >= 16) {
-          println();
-          print("    ");
-          j = 0;
-        }
-      }
-            
-      println( dfa.lexState[i] );
-      println("  };");
-
-    }
-  }
-
-  private void emitDynamicInit() {    
-    int count = 0;
-    int value = dfa.table[0][0];
-
-    println("  /** ");
-    println("   * The transition table of the DFA");
-    println("   */");
-
-    CountEmitter e = new CountEmitter("Trans");
-    e.setValTranslation(+1); // allow vals in [-1, 0xFFFE]
-    e.emitInit();
-    
-    for (int i = 0; i < dfa.numStates; i++) {
-      if ( !rowKilled[i] ) {
-        for (int c = 0; c < dfa.numInput; c++) {
-          if ( !colKilled[c] ) {
-            if (dfa.table[i][c] == value) {
-              count++;
-            } 
-            else {
-              e.emit(count, value);
-
-              count = 1;
-              value = dfa.table[i][c];              
+                if (outputFile.RenameTo(backup))
+                    OutputWriter.Println("Old file \"" + outputFile + "\" saved as \"" + backup + "\"");
+                else
+                    OutputWriter.Println("Couldn't save old file \"" + outputFile + "\", overwriting!");
             }
-          }
+
+            return outputFile;
         }
-      }
-    }
 
-    e.emit(count, value);
-    e.emitUnpack();
-    
-    println(e.ToString());
-  }
+        private void Println()
+        {
+            output.WriteLine();
+        }
 
+        private void Println(string line)
+        {
+            output.WriteLine(line);
+        }
 
-  private void emitCharMapInitFunction() {
+        private void Println_(int i)
+        {
+            output.WriteLine(i);
+        }
 
-    CharClasses cl = parser.getCharClasses();
-    
-    if ( cl.getMaxCharCode() < 256 ) return;
+        private void Print(string line)
+        {
+            output.Write(line);
+        }
 
-    println("");
-    println("  /** ");
-    println("   * Unpacks the compressed character translation table.");
-    println("   *");
-    println("   * @param packed   the packed character translation table");
-    println("   * @return         the unpacked character translation table");
-    println("   */");
-    if (Options.emit_csharp)
-    {
-      println("  private static char [] zzUnpackCMap(ushort[] packed) {");
-      println("    char [] map = new char[0x10000];");
-      println("    int i = 0;  /* index in packed string  */");
-      println("    int j = 0;  /* index in unpacked array */");
-      println("    while (i < "+2*intervalls.Length+") {");
-      println("      int  count = packed[i++];");
-      println("      char value = (char)packed[i++];");
-      println("      do map[j++] = value; while (--count > 0);");
-      println("    }");
-      println("    return map;");
-      println("  }");
-    }
-    else
-    {
-      println("  private static char [] zzUnpackCMap(String packed) {");
-      println("    char [] map = new char[0x10000];");
-      println("    int i = 0;  /* index in packed string  */");
-      println("    int j = 0;  /* index in unpacked array */");
-      println("    while (i < "+2*intervalls.Length+") {");
-      println("      int  count = packed.charAt(i++);");
-      println("      char value = packed.charAt(i++);");
-      println("      do map[j++] = value; while (--count > 0);");
-      println("    }");
-      println("    return map;");
-      println("  }");
-    }
-  }
+        private void Print(int i)
+        {
+            output.Write(i);
+        }
 
-  private void emitZZTrans() {    
+        private void Print(int i, int tab)
+        {
+            int exp;
 
-    int i,c;
-    int n = 0;
-    
-    println("  /** ");
-    println("   * The transition table of the DFA");
-    println("   */");
-    if (Options.emit_csharp)
-      println("  private static readonly int[] ZZ_TRANS = new int[] {");
-    else
-      println("  private static final int ZZ_TRANS [] = {"); //XXX
+            if (i < 0)
+                exp = 1;
+            else
+                exp = 10;
 
-    print("    ");
-    for (i = 0; i < dfa.numStates; i++) {
-      
-      if ( !rowKilled[i] ) {        
-        for (c = 0; c < dfa.numInput; c++) {          
-          if ( !colKilled[c] ) {            
-            if (n >= 10) {
-              println();
-              print("    ");
-              n = 0;
+            while (tab-- > 1)
+            {
+                if (Math.Abs(i) < exp) Print(" ");
+                exp *= 10;
             }
-            print( dfa.table[i][c] );
-            if (i != dfa.numStates-1 || c != dfa.numInput-1)
-              print( ", ");
-            n++;
-          }
+
+            Print(i);
         }
-      }
-    }
 
-    println();
-    println("  };");
-  }
-  
-  private void emitCharMapArrayUnPacked() {
-   
-    CharClasses cl = parser.getCharClasses();
-    intervalls = cl.getIntervalls();
-    
-    println("");
-    println("  /** ");
-    println("   * Translates characters to character classes");
-    println("   */");
-    if (Options.emit_csharp)
-      println("  private static readonly char[] ZZ_CMAP = new char[] {");
-    else
-      println("  private static final char [] ZZ_CMAP = {");
-  
-    int n = 0;  // numbers of entries in current line    
-    print("    ");
-    
-    int max =  cl.getMaxCharCode();
-    int i = 0;     
-    while ( i < intervalls.Length && intervalls[i].start <= max ) {
-
-      int end = Math.Min(intervalls[i].end, max);
-      for (int c = intervalls[i].start; c <= end; c++) {
-
-        if (Options.emit_csharp)
-          print("(char)");
-        print(colMap[intervalls[i].charClass], 2);
-
-        if (c < max) {
-          print(", ");        
-          if ( ++n >= 16 ) { 
-            println();
-            print("    ");
-            n = 0; 
-          }
-        }
-      }
-
-      i++;
-    }
-
-    println();
-    println("  };");
-    println();
-  }
-
-  private void emitCSharpStaticConstructor(bool include_char_map_array)
-  {
-    if (!Options.emit_csharp)
-      return;
-
-    println("  static "+scanner.className+"()");
-    println("  {");
-    if (include_char_map_array)
-      println("    ZZ_CMAP = zzUnpackCMap(ZZ_CMAP_PACKED);");
-    println("    ZZ_ACTION = zzUnpackAction();");
-    println("    ZZ_ROWMAP = zzUnpackRowMap();");
-    println("    ZZ_TRANS = zzUnpackTrans();");
-    println("    ZZ_ATTRIBUTE = zzUnpackAttribute();");
-    println("  }");
-    println("");
-  }
-
-  private void emitCharMapArray() {       
-    CharClasses cl = parser.getCharClasses();
-
-    if ( cl.getMaxCharCode() < 256 ) {
-      emitCSharpStaticConstructor(false);
-      emitCharMapArrayUnPacked();
-      return;
-    }
-    else
-      emitCSharpStaticConstructor(true);
-
-    // ignores cl.getMaxCharCode(), emits all intervalls instead
-
-    intervalls = cl.getIntervalls();
-    
-    println("");
-    println("  /** ");
-    println("   * Translates characters to character classes");
-    println("   */");
-    if (Options.emit_csharp)
-      println("  private static readonly ushort[] ZZ_CMAP_PACKED = new ushort[] {");
-    else
-      println("  private static final String ZZ_CMAP_PACKED = ");
-  
-    int n = 0;  // numbers of entries in current line    
-    if (Options.emit_csharp)
-      print("   ");
-    else
-      print("    \"");
-    
-    int i = 0; 
-    while ( i < intervalls.Length-1 ) {
-      int count = intervalls[i].end-intervalls[i].start+1;
-      int value = colMap[intervalls[i].charClass];
-      
-      printUC(count);
-      printUC(value);
-
-      if ( ++n >= 10 ) { 
-        if (Options.emit_csharp)
+        private void EmitScanError()
         {
-          println("");
-          print("   ");
+            Print("  private void zzScanError(int errorCode)");
+
+            if (!Options.EmitCsharp)
+            {
+                if (scanner.scanErrorException != null)
+                    Print(" throws " + scanner.scanErrorException);
+            }
+
+            Println(" {");
+
+            skel.EmitNext();
+
+            if (scanner.scanErrorException == null)
+            {
+                if (Options.EmitCsharp)
+                    Println("    throw new Exception(message);");
+                else
+                    Println("    throw new Error(message);");
+            }
+            else
+                Println("    throw new " + scanner.scanErrorException + "(message);");
+
+            skel.EmitNext();
+
+            Print("  " + visibility + " void yypushback(int number) ");
+
+            if (scanner.scanErrorException == null)
+                Println(" {");
+            else
+            {
+                if (Options.EmitCsharp)
+                    Println(" {");
+                else
+                    Println(" throws " + scanner.scanErrorException + " {");
+            }
         }
-        else
+
+        private void emitMain()
         {
-          println("\"+");
-          print("    \"");
+            if (!(scanner.standalone || scanner.debugOption || scanner.cupDebug)) return;
+
+            if (scanner.cupDebug)
+            {
+                Println("  /**");
+                Println("   * Converts an int token code into the name of the");
+                Println("   * token by reflection on the cup symbol class/interface " + scanner.cupSymbol);
+                Println("   *");
+                Println("   * This code was contributed by Karl Meissner <meissnersd@yahoo.com>");
+                Println("   */");
+                if (Options.EmitCsharp)
+                {
+                    Println("  private string getTokenName(int token) {");
+                    Println("    try {");
+                    Println("      System.Reflection.FieldInfo[] classFields = typeof(" + scanner.cupSymbol + ").GetFields();");
+                    Println("      for (int i = 0; i < classFields.Length; i++) {");
+                    Println("        if (((int)classFields[i].GetValue(null)) == token) {");
+                    Println("          return classFields[i].Name;");
+                    Println("        }");
+                    Println("      }");
+                    Println("    } catch (Exception e) {");
+                    Println("      Out.error(e.ToString());");
+                    Println("    }");
+                    Println("");
+                    Println("    return \"UNKNOWN TOKEN\";");
+                    Println("  }");
+                }
+                else
+                {
+                    Println("  private string getTokenName(int token) {");
+                    Println("    try {");
+                    Println("      java.lang.reflect.Field [] classFields = " + scanner.cupSymbol + ".class.getFields();");
+                    Println("      for (int i = 0; i < classFields.length; i++) {");
+                    Println("        if (classFields[i].getInt(null) == token) {");
+                    Println("          return classFields[i].getName();");
+                    Println("        }");
+                    Println("      }");
+                    Println("    } catch (Exception e) {");
+                    Println("      e.printStackTrace(System.err);");
+                    Println("    }");
+                    Println("");
+                    Println("    return \"UNKNOWN TOKEN\";");
+                    Println("  }");
+                }
+                Println("");
+                Println("  /**");
+                Println("   * Same as " + scanner.functionName + " but also prints the token to standard out");
+                Println("   * for debugging.");
+                Println("   *");
+                Println("   * This code was contributed by Karl Meissner <meissnersd@yahoo.com>");
+                Println("   */");
+
+                Print("  " + visibility + " ");
+                if (scanner.tokenType == null)
+                {
+                    if (scanner.isInteger)
+                        Print("int");
+                    else
+                      if (scanner.isIntWrap)
+                        Print("Integer");
+                    else
+                        Print("Yytoken");
+                }
+                else
+                    Print(scanner.tokenType);
+
+                Print(" debug_");
+
+                Print(scanner.functionName);
+
+                if (Options.EmitCsharp)
+                    Print("()");
+                else
+                {
+                    Print("() throws java.io.IOException");
+
+                    if (scanner.lexThrow != null)
+                    {
+                        Print(", ");
+                        Print(scanner.lexThrow);
+                    }
+
+                    if (scanner.scanErrorException != null)
+                    {
+                        Print(", ");
+                        Print(scanner.scanErrorException);
+                    }
+                }
+
+                Println(" {");
+
+                Println("    java_cup.runtime.Symbol s = " + scanner.functionName + "();");
+                if (Options.EmitCsharp)
+                {
+                    Print("    Console.WriteLine( \"");
+
+                    int @base = 0;
+
+                    if (scanner.lineCount) { Print("line:{" + @base + "}"); @base++; }
+                    if (scanner.columnCount) { Print(" col:{" + @base + "}"); @base++; }
+                    Println(" --{" + (@base) + "}--{" + (@base + 1) + "}--\",");
+                    Println("      ");
+                    if (scanner.lineCount) Print("yyline+1, ");
+                    if (scanner.columnCount) Print("yycolumn+1, ");
+                    Println("yytext(), getTokenName(s.sym));");
+                }
+                else
+                {
+                    Print("    System.out.println( ");
+                    if (scanner.lineCount) Print("\"line:\" + (yyline+1) + ");
+                    if (scanner.columnCount) Print("\" col:\" + (yycolumn+1) + ");
+                    Println("\" --\"+ yytext() + \"--\" + getTokenName(s.sym) + \"--\");");
+                }
+                Println("    return s;");
+                Println("  }");
+                Println("");
+            }
+
+            if (scanner.standalone)
+            {
+                Println("  /**");
+                Println("   * Runs the scanner on input files.");
+                Println("   *");
+                Println("   * This is a standalone scanner, it will print any unmatched");
+                Println("   * text to System.out unchanged.");
+                Println("   *");
+                Println("   * @param argv   the command line, contains the filenames to run");
+                Println("   *               the scanner on.");
+                Println("   */");
+            }
+            else
+            {
+                Println("  /**");
+                Println("   * Runs the scanner on input files.");
+                Println("   *");
+                Println("   * This main method is the debugging routine for the scanner.");
+                Println("   * It prints debugging information about each returned token to");
+                Println("   * System.out until the end of file is reached, or an error occured.");
+                Println("   *");
+                Println("   * @param argv   the command line, contains the filenames to run");
+                Println("   *               the scanner on.");
+                Println("   */");
+            }
+
+            if (Options.EmitCsharp)
+            {
+                Println("  public static void Main(string[] argv) {");
+                Println("    if (argv.Length == 0) {");
+                Println("      Console.WriteLine(\"Usage : " + scanner.className + " <inputfile>\");");
+                Println("    }");
+                Println("    else {");
+                Println("      for (int i = 0; i < argv.Length; i++) {");
+                Println("        " + scanner.className + " scanner = null;");
+                Println("        try {");
+                Println("          scanner = new " + scanner.className + "( new StreamReader(argv[i]) );");
+
+                if (scanner.standalone)
+                {
+                    Println("          while ( !scanner.zzAtEOF ) scanner." + scanner.functionName + "();");
+                }
+                else if (scanner.cupDebug)
+                {
+                    Println("          while ( !scanner.zzAtEOF ) scanner.debug_" + scanner.functionName + "();");
+                }
+                else
+                {
+                    Println("          do {");
+                    Println("            System.out.println(scanner." + scanner.functionName + "());");
+                    Println("          } while (!scanner.zzAtEOF);");
+                    Println("");
+                }
+
+                Println("        }");
+                Println("        catch (FileNotFoundException) {");
+                Println("          Console.WriteLine(\"File not found : \\\"{0}\\\"\", argv[i]);");
+                Println("        }");
+                Println("        catch (IOException e) {");
+                Println("          Console.WriteLine(\"IO error scanning file \\\"{0}\\\"\", argv[i]);");
+                Println("          Console.WriteLine(e);");
+                Println("        }");
+                Println("        catch (Exception e) {");
+                Println("          Console.WriteLine(\"Unexpected exception:\");");
+                Println("          Console.WriteLine(e.ToString());");
+                Println("        }");
+                Println("      }");
+                Println("    }");
+                Println("  }");
+            }
+            else
+            {
+                Println("  public static void main(string argv[]) {");
+                Println("    if (argv.length == 0) {");
+                Println("      System.out.println(\"Usage : java " + scanner.className + " <inputfile>\");");
+                Println("    }");
+                Println("    else {");
+                Println("      for (int i = 0; i < argv.length; i++) {");
+                Println("        " + scanner.className + " scanner = null;");
+                Println("        try {");
+                Println("          scanner = new " + scanner.className + "( new java.io.FileReader(argv[i]) );");
+
+                if (scanner.standalone)
+                {
+                    Println("          while ( !scanner.zzAtEOF ) scanner." + scanner.functionName + "();");
+                }
+                else if (scanner.cupDebug)
+                {
+                    Println("          while ( !scanner.zzAtEOF ) scanner.debug_" + scanner.functionName + "();");
+                }
+                else
+                {
+                    Println("          do {");
+                    Println("            System.out.println(scanner." + scanner.functionName + "());");
+                    Println("          } while (!scanner.zzAtEOF);");
+                    Println("");
+                }
+
+                Println("        }");
+                Println("        catch (java.io.FileNotFoundException e) {");
+                Println("          System.out.println(\"File not found : \\\"\"+argv[i]+\"\\\"\");");
+                Println("        }");
+                Println("        catch (java.io.IOException e) {");
+                Println("          System.out.println(\"IO error scanning file \\\"\"+argv[i]+\"\\\"\");");
+                Println("          System.out.println(e);");
+                Println("        }");
+                Println("        catch (Exception e) {");
+                Println("          System.out.println(\"Unexpected exception:\");");
+                Println("          e.printStackTrace();");
+                Println("        }");
+                Println("      }");
+                Println("    }");
+                Println("  }");
+            }
+            Println("");
         }
-        n = 0; 
-      }
 
-      i++;
-    }
-
-    printUC(intervalls[i].end-intervalls[i].start+1);
-    printUC(colMap[intervalls[i].charClass]);
-
-    if (Options.emit_csharp)
-      println(" 0 };"); // the extraneous 0 can't be avoided without restructuring printUC()
-    else
-      println("\";");
-    println();
-
-    println("  /** ");
-    println("   * Translates characters to character classes");
-    println("   */");
-    if (Options.emit_csharp)
-      println("  private static readonly char[] ZZ_CMAP;");
-    else
-      println("  private static final char [] ZZ_CMAP = zzUnpackCMap(ZZ_CMAP_PACKED);");
-    println();
-  }
-
-
-  /**
-   * Print number as octal/unicode escaped string character.
-   * 
-   * @param c   the value to print
-   * @prec  0 <= c <= 0xFFFF 
-   */
-  private void printUC(int c) {
-    if (Options.emit_csharp)
-      @out.Write(" ");
-
-    if (c > 255) 
-    {
-      if (Options.emit_csharp)
-      {
-        @out.Write("0x");
-        if (c < 0x1000) @out.Write("0");
-        @out.Write(Integer.toHexString(c));
-      }
-      else
-      {
-        @out.Write("\\u");
-        if (c < 0x1000) @out.Write("0");
-        @out.Write(Integer.toHexString(c));
-      }
-    }
-    else {
-      if (Options.emit_csharp)
-        @out.Write(c.ToString());
-      else
-      {
-        @out.Write("\\");
-        @out.Write(Integer.toOctalString(c));
-      }
-    }    
-
-    if (Options.emit_csharp)
-      @out.Write(",");
-  }
-
-
-  private void emitRowMapArray() {
-    println("");
-    println("  /** ");
-    println("   * Translates a state to a row index in the transition table");
-    println("   */");
-    
-    HiLowEmitter e = new HiLowEmitter("RowMap");
-    e.emitInit();
-    for (int i = 0; i < dfa.numStates; i++) {
-      e.emit(rowMap[i]*numCols);
-    }    
-    e.emitUnpack();
-    println(e.ToString());
-  }
-
-
-  private void emitAttributes() {
-    println("  /**");
-    println("   * ZZ_ATTRIBUTE[aState] contains the attributes of state <code>aState</code>");
-    println("   */");
-    
-    CountEmitter e = new CountEmitter("Attribute");    
-    e.emitInit();
-    
-    int count = 1;
-    int value = 0; 
-    if ( dfa.isFinal[0]    ) value = FINAL;
-    if ( dfa.isPushback[0] ) value|= PUSHBACK;
-    if ( dfa.isLookEnd[0]  ) value|= LOOKEND;
-    if ( !isTransition[0]  ) value|= NOLOOK;
-       
-    for (int i = 1;  i < dfa.numStates; i++) {      
-      int attribute = 0;      
-      if ( dfa.isFinal[i]    ) attribute = FINAL;
-      if ( dfa.isPushback[i] ) attribute|= PUSHBACK;
-      if ( dfa.isLookEnd[i]  ) attribute|= LOOKEND;
-      if ( !isTransition[i]  ) attribute|= NOLOOK;
-
-      if (value == attribute) {
-        count++;
-      }
-      else {        
-        e.emit(count, value);
-        count = 1;
-        value = attribute;
-      }
-    }
-    
-    e.emit(count, value);    
-    e.emitUnpack();
-    
-    println(e.ToString());
-  }
-
-
-  private void emitClassCode() {
-    if ( scanner.eofCode != null ) {
-      println("  /** denotes if the user-EOF-code has already been executed */");
-      if (Options.emit_csharp)
-        println("  private bool zzEOFDone;");
-      else
-        println("  private boolean zzEOFDone;");
-      println("");
-    }
-    
-    if ( scanner.classCode != null ) {
-      println("  /* user code: */");
-      println(scanner.classCode);
-    }
-  }
-
-  private void emitConstructorDecl() {
-    
-    print("  ");
-
-    if (Options.emit_csharp)
-    {
-      if ( scanner.isPublic )
-        print("public ");
-      else
-        print("internal ");
-      print( scanner.className );      
-      print("(TextReader @in)");
-    }
-    else
-    {
-      if ( scanner.isPublic )
-        print("public ");
-      print( scanner.className );      
-      print("(java.io.Reader in)");
-
-      if ( scanner.initThrow != null ) 
-      {
-        print(" throws ");
-        print( scanner.initThrow );
-      }
-    }
-   
-    println(" {");
-
-    if ( scanner.initCode != null ) {
-      print("  ");
-      print( scanner.initCode );
-    }
-
-    println("    this.zzReader = @in;");
-
-    println("  }");
-    println();
-
-
-    if (Options.emit_csharp)
-    {
-      println("  /**");
-      println("   * Creates a new scanner.");
-      println("   * There is also TextReader version of this constructor.");
-      println("   *");
-      println("   * @param   in  the System.IO.Stream to read input from.");
-      println("   */");
-
-      print("  ");
-      if ( scanner.isPublic )
-        print("public ");
-      else
-        print("internal ");
-      print( scanner.className );      
-      print("(Stream @in)");
-    
-      println(" : this(new StreamReader(@in))");
-      println("  {");    
-      println("  }");
-    }
-    else
-    {
-      println("  /**");
-      println("   * Creates a new scanner.");
-      println("   * There is also java.io.Reader version of this constructor.");
-      println("   *");
-      println("   * @param   in  the java.io.Inputstream to read input from.");
-      println("   */");
-
-      print("  ");
-      if ( scanner.isPublic ) print("public ");    
-      print( scanner.className );      
-      print("(java.io.InputStream in)");
-    
-      if ( scanner.initThrow != null ) 
-      {
-        print(" throws ");
-        print( scanner.initThrow );
-      }
-    
-      println("  {");    
-      println("    this(new java.io.InputStreamReader(in));");
-      println("  }");
-    }
-  }
-
-
-  private void emitDoEOF() {
-    if ( scanner.eofCode == null ) return;
-    
-    println("  /**");
-    println("   * Contains user EOF-code, which will be executed exactly once,");
-    println("   * when the end of file is reached");
-    println("   */");
-    
-    print("  private void zzDoEOF()");
-    
-    if (!Options.emit_csharp)
-      if ( scanner.eofThrow != null ) 
-      {
-        print(" throws ");
-        print(scanner.eofThrow);
-      }
-    
-    println(" {");
-    
-    println("    if (!zzEOFDone) {");
-    println("      zzEOFDone = true;");
-    println("      "+scanner.eofCode );
-    println("    }");
-    println("  }");
-    println("");
-    println("");
-  }
-
-  private void emitLexFunctHeader() {
-    
-    if (scanner.cupCompatible)  {
-      // force public, because we have to implement java_cup.runtime.Symbol
-      print("  public ");
-    }
-    else {
-      print("  "+visibility+" ");
-    }
-    
-    if ( scanner.tokenType == null ) {
-      if ( scanner.isInteger )
-        print( "int" );
-      else 
-      if ( scanner.isIntWrap )
-        print( "Integer" );
-      else
-        print( "Yytoken" );
-    }
-    else
-      print( scanner.tokenType );
-      
-    print(" ");
-    
-    print(scanner.functionName);
-      
-    if (Options.emit_csharp)
-      print("()");
-    else
-    {
-      print("() throws java.io.IOException");
-    
-      if ( scanner.lexThrow != null ) 
-      {
-        print(", ");
-        print(scanner.lexThrow);
-      }
-
-      if ( scanner.scanErrorException != null ) 
-      {
-        print(", ");
-        print(scanner.scanErrorException);
-      }
-    }
-    
-    println(" {");
-    
-    skel.emitNext();
-
-    if ( scanner.useRowMap ) {
-      println("    int [] zzTransL = ZZ_TRANS;");
-      println("    int [] zzRowMapL = ZZ_ROWMAP;");
-      println("    int [] zzAttrL = ZZ_ATTRIBUTE;");
-
-    }
-
-    if ( scanner.lookAheadUsed ) {
-      println("    int zzPushbackPosL = zzPushbackPos = -1;");
-      if (Options.emit_csharp)
-        println("    bool zzWasPushback;");
-      else
-        println("    boolean zzWasPushback;");
-    }
-
-    skel.emitNext();    
-        
-    if ( scanner.charCount ) {
-      println("      yychar+= zzMarkedPosL-zzStartRead;");
-      println("");
-    }
-    
-    if ( scanner.lineCount || scanner.columnCount ) {
-      if (Options.emit_csharp)
-        println("      bool zzR = false;");
-      else
-        println("      boolean zzR = false;");
-      println("      for (zzCurrentPosL = zzStartRead; zzCurrentPosL < zzMarkedPosL;");
-      println("                                                             zzCurrentPosL++) {");
-      println("        switch (zzBufferL[zzCurrentPosL]) {");
-      println("        case '\\u000B':"); 
-      println("        case '\\u000C':"); 
-      println("        case '\\u0085':");
-      println("        case '\\u2028':"); 
-      println("        case '\\u2029':"); 
-      if ( scanner.lineCount )
-        println("          yyline++;");
-      if ( scanner.columnCount )
-        println("          yycolumn = 0;");
-      println("          zzR = false;");
-      println("          break;");      
-      println("        case '\\r':");
-      if ( scanner.lineCount )
-        println("          yyline++;");
-      if ( scanner.columnCount )
-        println("          yycolumn = 0;");
-      println("          zzR = true;");
-      println("          break;");
-      println("        case '\\n':");
-      println("          if (zzR)");
-      println("            zzR = false;");
-      println("          else {");
-      if ( scanner.lineCount )
-        println("            yyline++;");
-      if ( scanner.columnCount )
-        println("            yycolumn = 0;");
-      println("          }");
-      println("          break;");
-      println("        default:");
-      println("          zzR = false;");
-      if ( scanner.columnCount ) 
-        println("          yycolumn++;");
-      if (Options.emit_csharp)
-        println("          break;");
-      println("        }");
-      println("      }");
-      println();
-
-      if ( scanner.lineCount ) {
-        println("      if (zzR) {");
-        println("        // peek one character ahead if it is \\n (if we have counted one line too much)");
-        if (Options.emit_csharp)
-          println("        bool zzPeek;");
-        else
-          println("        boolean zzPeek;");
-        println("        if (zzMarkedPosL < zzEndReadL)");
-        println("          zzPeek = zzBufferL[zzMarkedPosL] == '\\n';");
-        println("        else if (zzAtEOF)");
-        println("          zzPeek = false;");
-        println("        else {");
-        if (Options.emit_csharp)
-          println("          bool eof = zzRefill();");
-        else
-          println("          boolean eof = zzRefill();");
-        println("          zzMarkedPosL = zzMarkedPos;");
-        println("          zzBufferL = zzBuffer;");
-        println("          if (eof) ");
-        println("            zzPeek = false;");
-        println("          else ");
-        println("            zzPeek = zzBufferL[zzMarkedPosL] == '\\n';");
-        println("        }");
-        println("        if (zzPeek) yyline--;");
-        println("      }");
-      }
-    }
-
-    if ( scanner.bolUsed ) {
-      // zzMarkedPos > zzStartRead <=> last match was not empty
-      // if match was empty, last value of zzAtBOL can be used
-      // zzStartRead is always >= 0
-      println("      if (zzMarkedPosL > zzStartRead) {");
-      println("        switch (zzBufferL[zzMarkedPosL-1]) {");
-      println("        case '\\n':");
-      println("        case '\\u000B':"); 
-      println("        case '\\u000C':"); 
-      println("        case '\\u0085':");
-      println("        case '\\u2028':"); 
-      println("        case '\\u2029':"); 
-      println("          zzAtBOL = true;");
-      println("          break;"); 
-      println("        case '\\r': "); 
-      println("          if (zzMarkedPosL < zzEndReadL)");
-      println("            zzAtBOL = zzBufferL[zzMarkedPosL] != '\\n';");
-      println("          else if (zzAtEOF)");
-      println("            zzAtBOL = false;");
-      println("          else {");
-      if (Options.emit_csharp)
-        println("            bool eof = zzRefill();");
-      else
-        println("            boolean eof = zzRefill();");
-      println("            zzMarkedPosL = zzMarkedPos;");
-      println("            zzBufferL = zzBuffer;");
-      println("            if (eof) ");
-      println("              zzAtBOL = false;");
-      println("            else ");
-      println("              zzAtBOL = zzBufferL[zzMarkedPosL] != '\\n';");
-      println("          }");      
-      println("          break;"); 
-      println("        default:"); 
-      println("          zzAtBOL = false;");
-      if (Options.emit_csharp)
-        println("          break;");
-      println("        }"); 
-      println("      }"); 
-    }
-
-    skel.emitNext();
-    
-    if (scanner.bolUsed) {
-      println("      if (zzAtBOL)");
-      println("        zzState = ZZ_LEXSTATE[zzLexicalState+1];");
-      println("      else");    
-      println("        zzState = ZZ_LEXSTATE[zzLexicalState];");
-      println();
-    }
-    else {
-      println("      zzState = zzLexicalState;");
-      println();
-    }
-
-    if (scanner.lookAheadUsed)
-      println("      zzWasPushback = false;");
-
-    skel.emitNext();
-  }
-
-  
-  private void emitGetRowMapNext() {
-    println("          int zzNext = zzTransL[ zzRowMapL[zzState] + zzCMapL[zzInput] ];");
-    if (Options.emit_csharp)
-      println("          if (zzNext == "+DFA.NO_TARGET+") goto zzForAction;");
-    else
-      println("          if (zzNext == "+DFA.NO_TARGET+") break zzForAction;");
-    println("          zzState = zzNext;");
-    println();
-
-    println("          int zzAttributes = zzAttrL[zzState];");
-
-    if ( scanner.lookAheadUsed ) {
-      println("          if ( (zzAttributes & "+PUSHBACK+") == "+PUSHBACK+" )");
-      println("            zzPushbackPosL = zzCurrentPosL;");
-      println();
-    }
-
-    println("          if ( (zzAttributes & "+FINAL+") == "+FINAL+" ) {");
-    if ( scanner.lookAheadUsed ) 
-      println("            zzWasPushback = (zzAttributes & "+LOOKEND+") == "+LOOKEND+";");
-
-    skel.emitNext();
-
-    if (Options.emit_csharp)
-      println("            if ( (zzAttributes & "+NOLOOK+") == "+NOLOOK+" ) goto zzForAction;");
-    else
-      println("            if ( (zzAttributes & "+NOLOOK+") == "+NOLOOK+" ) break zzForAction;");
-
-    skel.emitNext();    
-  }  
-
-  private void emitTransitionTable() {
-    transformTransitionTable();
-    
-    println("          zzInput = zzCMapL[zzInput];");
-    println();
-
-    if (Options.emit_csharp)
-    {
-      if ( scanner.lookAheadUsed ) 
-        println("          bool zzPushback = false;");
-      
-      println("          bool zzIsFinal = false;");
-      println("          bool zzNoLookAhead = false;");
-      println();
-    }
-    else
-    {
-      if ( scanner.lookAheadUsed ) 
-        println("          boolean zzPushback = false;");
-      
-      println("          boolean zzIsFinal = false;");
-      println("          boolean zzNoLookAhead = false;");
-      println();
-    }
-    
-    if (Options.emit_csharp)
-    {
-      println("          switch (zzState) {");
-      println("            case 2147483647:");
-      println("              zzForNext: break;");
-      println("            case 2147483646:");
-      println("              goto zzForNext;");
-    }
-    else
-      println("          zzForNext: { switch (zzState) {");
-
-    for (int state = 0; state < dfa.numStates; state++)
-      if (isTransition[state]) emitState(state);
-
-    println("            default:");
-    println("              // if this is ever reached, there is a serious bug in JFlex/C# Flex");
-    println("              zzScanError(ZZ_UNKNOWN_ERROR);");
-    println("              break;");
-    if (Options.emit_csharp)
-      println("          }");
-    else
-      println("          } }");
-    println();
-    
-    println("          if ( zzIsFinal ) {");
-    
-    if ( scanner.lookAheadUsed ) 
-      println("            zzWasPushback = zzPushback;");
-    
-    skel.emitNext();
-    
-    if (Options.emit_csharp)
-      println("            if ( zzNoLookAhead ) goto zzForAction;");
-    else
-      println("            if ( zzNoLookAhead ) break zzForAction;");
-
-    skel.emitNext();    
-  }
-
-
-  /**
-   * Escapes all " ' \ tabs and newlines
-   */
-  private String escapify(String s) {
-    StringBuilder result = new StringBuilder(s.Length*2);
-    
-    for (int i = 0; i < s.Length; i++) {
-      char c = s[i];
-      switch (c) {
-      case '\'': result.Append("\\\'"); break;
-      case '\"': result.Append("\\\""); break;
-      case '\\': result.Append("\\\\"); break;
-      case '\t': result.Append("\\t"); break;
-      case '\r': if (i+1 == s.Length || s[i+1] != '\n') result.Append("\"+ZZ_NL+\""); 
-                 break;
-      case '\n': result.Append("\"+ZZ_NL+\""); break;
-      default: result.Append(c); break;
-      }
-    }
-
-    return result.ToString();
-  }
-
-  public void emitActionTable() {
-    int lastAction = 1;    
-    int count = 0;
-    int value = 0;
-
-    println("  /** ");
-    println("   * Translates DFA states to action switch labels.");
-    println("   */");
-    CountEmitter e = new CountEmitter("Action");    
-    e.emitInit();
-
-    for (int i = 0; i < dfa.numStates; i++) {
-      int newVal; 
-      if ( dfa.isFinal[i] ) {
-        Action action = dfa.action[i];
-        Integer stored = (Integer) actionTable[action];
-        if ( stored == null ) { 
-          stored = new Integer(lastAction++);
-          actionTable[action] = stored;
-        }
-        newVal = stored.intValue();
-      }
-      else {
-        newVal = 0;
-      }
-      
-      if (value == newVal) {
-        count++;
-      }
-      else {
-        if (count > 0) e.emit(count,value);
-        count = 1;
-        value = newVal;        
-      }
-    }
-    
-    if (count > 0) e.emit(count,value);
-
-    e.emitUnpack();    
-    println(e.ToString());
-  }
-
-  private void emitActions() {
-    println("      switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {");
-
-    int i = actionTable.Count+1;  
-    IEnumerator actions = actionTable.Keys.GetEnumerator();
-    while ( actions.MoveNext() ) {
-      Action action = (Action) actions.Current;
-      int label = ((Integer) actionTable[action]).intValue();
-
-      println("        case "+label+": "); 
-
-      if (Options.emit_csharp)
-      {
-        println("          if (ZZ_SPURIOUS_WARNINGS_SUCK)");
-        println("          {");
-
-        if ( scanner.debugOption ) 
+        private void emitNoMatch()
         {
-          int @base = 0;
-
-          print("            Console.WriteLine(\"");
-          if ( scanner.lineCount ) { print("line: {"+@base+"} "); @base++; }
-          if ( scanner.columnCount ) { print("col: {"+@base+"} "); @base++; }
-          println("match: --{"+@base+"}--\",");
-          print("              ");
-          if ( scanner.lineCount ) print("yyline+1, ");
-          if ( scanner.columnCount ) print("yycolumn+1, ");
-          println("yytext());");
-
-          print("            Console.WriteLine(\"action ["+action.priority+"] { ");
-          print(escapify(action.content));
-          println(" }\");");
+            Println("            zzScanError(ZZ_NO_MATCH);");
         }
 
-        println("#line " + action.priority + " \"" + escapify(scanner.file) + "\"");
-        println(action.content);
-        println("#line default");
-        println("          }");
-        println("          break;");
-      }
-      else
-      {
-        if ( scanner.debugOption ) 
+        private void emitNextInput()
         {
-          print("          System.out.println(");
-          if ( scanner.lineCount )
-            print("\"line: \"+(yyline+1)+\" \"+");
-          if ( scanner.columnCount )
-            print("\"col: \"+(yycolumn+1)+\" \"+");
-          println("\"match: --\"+yytext()+\"--\");");        
-          print("          System.out.println(\"action ["+action.priority+"] { ");
-          print(escapify(action.content));
-          println(" }\");");
-        }
-      
-        println("          { "+action.content);
-        println("          }");
-        println("        case "+(i++)+": break;"); 
-      }
-    }
-  }
-
-  private void emitEOFVal() {
-    EOFActions eofActions = parser.getEOFActions();
-
-    if ( scanner.eofCode != null ) 
-      println("            zzDoEOF();");
-      
-    if ( eofActions.numActions() > 0 ) {
-      println("            switch (zzLexicalState) {");
-      
-      IEnumerator stateNames = scanner.states.names();
-
-      // record lex states already emitted:
-      Hashtable used = new PrettyHashtable();
-
-      // pick a start value for break case labels. 
-      // must be larger than any value of a lex state:
-      int last = dfa.numStates;
-      
-      while ( stateNames.MoveNext() ) {
-        String name = (String) stateNames.Current;
-        int num = scanner.states.getNumber(name).intValue();
-        Action action = eofActions.getAction(num);
-
-        // only emit code if the lex state is not redundant, so
-        // that case labels don't overlap
-        // (redundant = points to the same dfa state as another one).
-        // applies only to scanners that don't use BOL, because
-        // in BOL scanners lex states get mapped at runtime, so
-        // case labels will always be unique.
-        bool unused = true;                
-        if (!scanner.bolUsed) {
-          Integer key = new Integer(dfa.lexState[2*num]);
-          unused = used[key] == null;
-          
-          if (!unused) 
-            Out.warning("Lexical states <"+name+"> and <"+used[key]+"> are equivalent.");
-          else
-            used[key] = name;
+            Println("          if (zzCurrentPosL < zzEndReadL)");
+            Println("            zzInput = zzBufferL[zzCurrentPosL++];");
+            Println("          else if (zzAtEOF) {");
+            Println("            zzInput = YYEOF;");
+            if (Options.EmitCsharp)
+                Println("            goto zzForAction;");
+            else
+                Println("            break zzForAction;");
+            Println("          }");
+            Println("          else {");
+            Println("            // store back cached positions");
+            Println("            zzCurrentPos  = zzCurrentPosL;");
+            Println("            zzMarkedPos   = zzMarkedPosL;");
+            if (scanner.lookAheadUsed)
+                Println("            zzPushbackPos = zzPushbackPosL;");
+            if (Options.EmitCsharp)
+                Println("            bool eof = zzRefill();");
+            else
+                Println("            boolean eof = zzRefill();");
+            Println("            // get translated positions and possibly new buffer");
+            Println("            zzCurrentPosL  = zzCurrentPos;");
+            Println("            zzMarkedPosL   = zzMarkedPos;");
+            Println("            zzBufferL      = zzBuffer;");
+            Println("            zzEndReadL     = zzEndRead;");
+            if (scanner.lookAheadUsed)
+                Println("            zzPushbackPosL = zzPushbackPos;");
+            Println("            if (eof) {");
+            Println("              zzInput = YYEOF;");
+            if (Options.EmitCsharp)
+                Println("            goto zzForAction;");
+            else
+                Println("            break zzForAction;");
+            Println("            }");
+            Println("            else {");
+            Println("              zzInput = zzBufferL[zzCurrentPosL++];");
+            Println("            }");
+            Println("          }");
         }
 
-        if (action != null && unused) 
+        private void emitHeader()
         {
-          if (Options.emit_csharp)
-          {
-            println("            case "+name+":");
-            println("              if (ZZ_SPURIOUS_WARNINGS_SUCK)");
-            println("              {");
-            println("#line " + action.priority + " \"" + scanner.file + "\"");
-            println(action.content);
-            println("#line default");
-            println("              }");
-            println("              break;");
-          }
-          else
-          {
-            println("            case "+name+":");
-            println("              { "+action.content+" }");
-            println("            case "+(++last)+": break;");
-          }
+            Println("/* The following code was generated by CSFlex " + MainClass.version + " on " + date + " */");
+            Println("");
         }
-      }
-      
-      println("            default:");
-    }
 
-    if (eofActions.getDefault() != null) 
-    {
-      if (Options.emit_csharp)
-      {
-        Action dfl = eofActions.getDefault();
-
-        println("              if (ZZ_SPURIOUS_WARNINGS_SUCK)");
-        println("              {");
-        println("#line " + dfl.priority + " \"" + scanner.file + "\"");
-        println(dfl.content);
-        println("#line default");
-        println("              }");
-      }
-      else
-      {
-        println("              if (ZZ_SPURIOUS_WARNINGS_SUCK)");
-        println("              { " + eofActions.getDefault().content + " }");
-      }
-      println("              break;");
-    }
-    else if ( scanner.eofVal != null ) 
-    {
-      println("              if (ZZ_SPURIOUS_WARNINGS_SUCK)");
-      println("              { " + scanner.eofVal + " }");
-      println("              break;");
-    }
-    else if ( scanner.isInteger ) 
-      println("            return YYEOF;");
-    else
-      println("            return null;");
-
-    if (eofActions.numActions() > 0)
-      println("            }");
-  }
-  
-  private void emitState(int state) {
-    
-    println("            case "+state+":");
-    println("              switch (zzInput) {");
-   
-    int defaultTransition = getDefaultTransition(state);
-    
-    for (int next = 0; next < dfa.numStates; next++) {
-            
-      if ( next != defaultTransition && table[state][next] != null ) {
-        emitTransition(state, next);
-      }
-    }
-    
-    if ( defaultTransition != DFA.NO_TARGET && noTarget[state] != null ) {
-      emitTransition(state, DFA.NO_TARGET);
-    }
-    
-    emitDefaultTransition(state, defaultTransition);
-    
-    println("              }");
-    println("");
-  }
-  
-  private void emitTransition(int state, int nextState) 
-  {
-
-    CharSetEnumerator chars;
-    
-    if (nextState != DFA.NO_TARGET) 
-      chars = table[state][nextState].characters();
-    else 
-      chars = noTarget[state].characters();
-  
-    print("                case ");
-    print((int)chars.nextElement());
-    print(": ");
-    
-    while ( chars.hasMoreElements() ) 
-    {
-      println();
-      print("                case ");
-      print((int)chars.nextElement());
-      print(": ");
-    } 
-    
-    if ( nextState != DFA.NO_TARGET ) 
-    {
-      if ( dfa.isFinal[nextState] )
-        print("zzIsFinal = true; ");
-        
-      if ( dfa.isPushback[nextState] ) 
-        print("zzPushbackPosL = zzCurrentPosL; ");
-      
-      if ( dfa.isLookEnd[nextState] )
-        print("zzPushback = true; ");
-
-      if ( !isTransition[nextState] )
-        print("zzNoLookAhead = true; ");
-        
-      if ( Options.emit_csharp ) 
-        println("zzState = "+nextState+"; goto zzForNext;");
-      else
-        println("zzState = "+nextState+"; break zzForNext;");
-    }
-    else
-    {
-      if (Options.emit_csharp)
-        println("goto zzForAction;");
-      else
-        println("break zzForAction;");
-    }
-  }
-  
-  private void emitDefaultTransition(int state, int nextState) {
-    print("                default: ");
-    
-    if ( nextState != DFA.NO_TARGET ) 
-    {
-      if ( dfa.isFinal[nextState] )
-        print("zzIsFinal = true; ");
-        
-      if ( dfa.isPushback[nextState] ) 
-        print("zzPushbackPosL = zzCurrentPosL; ");
-
-      if ( dfa.isLookEnd[nextState] )
-        print("zzPushback = true; ");
-          
-      if ( !isTransition[nextState] )
-        print("zzNoLookAhead = true; ");
-        
-      if ( Options.emit_csharp ) 
-        println("zzState = "+nextState+"; goto zzForNext;");
-      else
-        println("zzState = "+nextState+"; break zzForNext;");
-    }
-    else
-    {
-      if (Options.emit_csharp)
-        println( "goto zzForAction;" );
-      else
-        println( "break zzForAction;" );
-    }
-  }
-  
-  private void emitPushback() {
-    println("      if (zzWasPushback)");
-    println("        zzMarkedPos = zzPushbackPosL;");
-  }
-  
-  private int getDefaultTransition(int state) {
-    int max = 0;
-    
-    for (int i = 0; i < dfa.numStates; i++) {
-      if ( table[state][max] == null )
-        max = i;
-      else
-      if ( table[state][i] != null && table[state][max].size() < table[state][i].size() )
-        max = i;
-    }
-    
-    if ( table[state][max] == null ) return DFA.NO_TARGET;
-    if ( noTarget[state] == null ) return max;
-    
-    if ( table[state][max].size() < noTarget[state].size() ) 
-      max = DFA.NO_TARGET;
-    
-    return max;
-  }
-
-  // for switch statement:
-  private void transformTransitionTable() {
-    
-    int numInput = parser.getCharClasses().getNumClasses()+1;
-
-    int i;    
-    char j;
-    
-    table = new CharSet[dfa.numStates][];
-    for (i=0; i < table.Length; i++)
-      table[i] = new CharSet[dfa.numStates];
-    noTarget = new CharSet[dfa.numStates];
-    
-    for (i = 0; i < dfa.numStates;  i++) 
-      for (j = (char)0; j < dfa.numInput; j++) {
-
-        int nextState = dfa.table[i][j];
-        
-        if ( nextState == DFA.NO_TARGET ) {
-          if ( noTarget[i] == null ) 
-            noTarget[i] = new CharSet(numInput, colMap[j]);
-          else
-            noTarget[i].add(colMap[j]);
+        private void emitUserCode()
+        {
+            if (scanner.userCode.Length > 0)
+            {
+                if (Options.EmitCsharp)
+                {
+                    Println("#line 1 \"" + scanner.file + "\"");
+                    Println(scanner.userCode.ToString());
+                    Println("#line default");
+                }
+                else
+                    Println(scanner.userCode.ToString());
+            }
         }
-        else {
-          if ( table[i][nextState] == null ) 
-            table[i][nextState] = new CharSet(numInput, colMap[j]);
-          else
-            table[i][nextState].add(colMap[j]);
+
+        private void emitEpilogue()
+        {
+            if (scanner.epilogue.Length > 0)
+            {
+                if (Options.EmitCsharp)
+                {
+                    Println("#line " + scanner.epilogue_line + " \"" + scanner.file + "\"");
+                    Println(scanner.epilogue.ToString());
+                    Println("#line default");
+                }
+                else
+                    Println(scanner.epilogue.ToString());
+            }
         }
-      }
-  }
 
-  private void findActionStates() {
-    isTransition = new bool [dfa.numStates];
-    
-    for (int i = 0; i < dfa.numStates;  i++) {
-      char j = (char)0;
-      while ( !isTransition[i] && j < dfa.numInput )
-        isTransition[i] = dfa.table[i][j++] != DFA.NO_TARGET;
+        private void emitClassName()
+        {
+            if (!endsWithJavadoc(scanner.userCode))
+            {
+                string path = inputFile.ToString();
+                // slashify path (avoid backslash u sequence = unicode escape)
+                if (File.separatorChar != '/')
+                {
+                    path = path.Replace(File.separatorChar, '/');
+                }
+
+                Println("/**");
+                Println(" * This class is a scanner generated by <a href=\"http://www.sourceforge.net/projects/csflex/\">C# Flex</a>, based on");
+                Println(" * <a href=\"http://www.jflex.de/\">JFlex</a>, version " + MainClass.version);
+                Println(" * on " + date + " from the specification file");
+                Println(" * <tt>" + path + "</tt>");
+                Println(" */");
+            }
+
+            if (scanner.isPublic) Print("public ");
+
+            if (scanner.isAbstract) Print("abstract ");
+
+            if (scanner.isFinal)
+            {
+                if (Options.EmitCsharp)
+                    Print("sealed ");
+                else
+                    Print("final ");
+            }
+
+            Print("class ");
+            Print(scanner.className);
+
+            if (scanner.isExtending != null)
+            {
+                if (Options.EmitCsharp)
+                    Print(": ");
+                else
+                    Print(" extends ");
+                Print(scanner.isExtending);
+            }
+
+            if (scanner.isImplementing != null)
+            {
+                if (Options.EmitCsharp)
+                {
+                    if (scanner.isExtending != null) // then we already output the ':'
+                        Print(", ");
+                    else
+                        Print(": ");
+                }
+                else
+                    Print(" implements ");
+                Print(scanner.isImplementing);
+            }
+
+            Println(" {");
+        }
+
+        /**
+         * Try to find out if user code ends with a javadoc comment 
+         * 
+         * @param buffer   the user code
+         * @return true    if it ends with a javadoc comment
+         */
+        public static bool endsWithJavadoc(StringBuilder usercode)
+        {
+            string s = usercode.ToString().Trim();
+
+            if (!s.EndsWith("*/")) return false;
+
+            // find beginning of javadoc comment   
+            int i = s.LastIndexOf("/**");
+            if (i < 0) return false;
+
+            // javadoc comment shouldn't contain a comment end
+            return s.Substring(i, s.Length - 2 - i).IndexOf("*/") < 0;
+        }
+
+
+        private void emitLexicalStates()
+        {
+            IEnumerator stateNames = scanner.states.Names;
+
+            string @const = (Options.EmitCsharp ? "const" : "static final");
+
+            while (stateNames.MoveNext())
+            {
+                string name = (string)stateNames.Current;
+
+                int num = scanner.states.GetNumber(name);
+
+                if (scanner.bolUsed)
+                    Println("  " + visibility + " " + @const + " int " + name + " = " + 2 * num + ";");
+                else
+                    Println("  " + visibility + " " + @const + " int " + name + " = " + dfa.LexState[2 * num] + ";");
+            }
+
+            if (scanner.bolUsed)
+            {
+                Println("");
+                Println("  /**");
+                Println("   * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l");
+                Println("   * ZZ_LEXSTATE[l+1] is the state in the DFA for the lexical state l");
+                Println("   *                  at the beginning of a line");
+                Println("   * l is of the form l = 2*k, k a non negative integer");
+                Println("   */");
+                if (Options.EmitCsharp)
+                    Println("  private static readonly int[] ZZ_LEXSTATE = new int[]{ ");
+                else
+                    Println("  private static final int ZZ_LEXSTATE[] = { ");
+
+                int i, j = 0;
+                Print("    ");
+
+                for (i = 0; i < dfa.LexState.Length - 1; i++)
+                {
+                    Print(dfa.LexState[i], 2);
+
+                    Print(", ");
+
+                    if (++j >= 16)
+                    {
+                        Println();
+                        Print("    ");
+                        j = 0;
+                    }
+                }
+
+                Println_(dfa.LexState[i]);
+                Println("  };");
+
+            }
+        }
+
+        private void emitDynamicInit()
+        {
+            int count = 0;
+            int value = dfa.Table[0][0];
+
+            Println("  /** ");
+            Println("   * The transition table of the DFA");
+            Println("   */");
+
+            CountEmitter e = new CountEmitter("Trans");
+            e.SetValTranslation(+1); // allow vals in [-1, 0xFFFE]
+            e.EmitInit();
+
+            for (int i = 0; i < dfa.NumStates; i++)
+            {
+                if (!rowKilled[i])
+                {
+                    for (int c = 0; c < dfa.NumInput; c++)
+                    {
+                        if (!colKilled[c])
+                        {
+                            if (dfa.Table[i][c] == value)
+                            {
+                                count++;
+                            }
+                            else
+                            {
+                                e.Emit(count, value);
+
+                                count = 1;
+                                value = dfa.Table[i][c];
+                            }
+                        }
+                    }
+                }
+            }
+
+            e.Emit(count, value);
+            e.EmitUnpack();
+
+            Println(e.ToString());
+        }
+
+
+        private void emitCharMapInitFunction()
+        {
+
+            CharClasses cl = parser.CharClasses;
+
+            if (cl.MaxCharCode < 256) return;
+
+            Println("");
+            Println("  /** ");
+            Println("   * Unpacks the compressed character translation table.");
+            Println("   *");
+            Println("   * @param packed   the packed character translation table");
+            Println("   * @return         the unpacked character translation table");
+            Println("   */");
+            if (Options.EmitCsharp)
+            {
+                Println("  private static char [] zzUnpackCMap(ushort[] packed) {");
+                Println("    char [] map = new char[0x10000];");
+                Println("    int i = 0;  /* index in packed string  */");
+                Println("    int j = 0;  /* index in unpacked array */");
+                Println("    while (i < " + 2 * intervalls.Length + ") {");
+                Println("      int  count = packed[i++];");
+                Println("      char value = (char)packed[i++];");
+                Println("      do map[j++] = value; while (--count > 0);");
+                Println("    }");
+                Println("    return map;");
+                Println("  }");
+            }
+            else
+            {
+                Println("  private static char [] zzUnpackCMap(string packed) {");
+                Println("    char [] map = new char[0x10000];");
+                Println("    int i = 0;  /* index in packed string  */");
+                Println("    int j = 0;  /* index in unpacked array */");
+                Println("    while (i < " + 2 * intervalls.Length + ") {");
+                Println("      int  count = packed.charAt(i++);");
+                Println("      char value = packed.charAt(i++);");
+                Println("      do map[j++] = value; while (--count > 0);");
+                Println("    }");
+                Println("    return map;");
+                Println("  }");
+            }
+        }
+
+        private void emitZZTrans()
+        {
+
+            int i, c;
+            int n = 0;
+
+            Println("  /** ");
+            Println("   * The transition table of the DFA");
+            Println("   */");
+            if (Options.EmitCsharp)
+                Println("  private static readonly int[] ZZ_TRANS = new int[] {");
+            else
+                Println("  private static final int ZZ_TRANS [] = {"); //XXX
+
+            Print("    ");
+            for (i = 0; i < dfa.NumStates; i++)
+            {
+
+                if (!rowKilled[i])
+                {
+                    for (c = 0; c < dfa.NumInput; c++)
+                    {
+                        if (!colKilled[c])
+                        {
+                            if (n >= 10)
+                            {
+                                Println();
+                                Print("    ");
+                                n = 0;
+                            }
+                            Print(dfa.Table[i][c]);
+                            if (i != dfa.NumStates - 1 || c != dfa.NumInput - 1)
+                                Print(", ");
+                            n++;
+                        }
+                    }
+                }
+            }
+
+            Println();
+            Println("  };");
+        }
+
+        private void emitCharMapArrayUnPacked()
+        {
+
+            CharClasses cl = parser.CharClasses;
+            intervalls = cl.GetIntervalls();
+
+            Println("");
+            Println("  /** ");
+            Println("   * Translates characters to character classes");
+            Println("   */");
+            if (Options.EmitCsharp)
+                Println("  private static readonly char[] ZZ_CMAP = new char[] {");
+            else
+                Println("  private static final char [] ZZ_CMAP = {");
+
+            int n = 0;  // numbers of entries in current line    
+            Print("    ");
+
+            int max = cl.MaxCharCode;
+            int i = 0;
+            while (i < intervalls.Length && intervalls[i].Start <= max)
+            {
+
+                int end = Math.Min(intervalls[i].End, max);
+                for (int c = intervalls[i].Start; c <= end; c++)
+                {
+
+                    if (Options.EmitCsharp)
+                        Print("(char)");
+                    Print(colMap[intervalls[i].CharClass], 2);
+
+                    if (c < max)
+                    {
+                        Print(", ");
+                        if (++n >= 16)
+                        {
+                            Println();
+                            Print("    ");
+                            n = 0;
+                        }
+                    }
+                }
+
+                i++;
+            }
+
+            Println();
+            Println("  };");
+            Println();
+        }
+
+        private void emitCSharpStaticConstructor(bool include_char_map_array)
+        {
+            if (!Options.EmitCsharp)
+                return;
+
+            Println("  static " + scanner.className + "()");
+            Println("  {");
+            if (include_char_map_array)
+                Println("    ZZ_CMAP = zzUnpackCMap(ZZ_CMAP_PACKED);");
+            Println("    ZZ_ACTION = zzUnpackAction();");
+            Println("    ZZ_ROWMAP = zzUnpackRowMap();");
+            Println("    ZZ_TRANS = zzUnpackTrans();");
+            Println("    ZZ_ATTRIBUTE = zzUnpackAttribute();");
+            Println("  }");
+            Println("");
+        }
+
+        private void emitCharMapArray()
+        {
+            CharClasses cl = parser.CharClasses;
+
+            if (cl.MaxCharCode < 256)
+            {
+                emitCSharpStaticConstructor(false);
+                emitCharMapArrayUnPacked();
+                return;
+            }
+            else
+                emitCSharpStaticConstructor(true);
+
+            // ignores cl.getMaxCharCode(), emits all intervalls instead
+
+            intervalls = cl.GetIntervalls();
+
+            Println("");
+            Println("  /** ");
+            Println("   * Translates characters to character classes");
+            Println("   */");
+            if (Options.EmitCsharp)
+                Println("  private static readonly ushort[] ZZ_CMAP_PACKED = new ushort[] {");
+            else
+                Println("  private static final string ZZ_CMAP_PACKED = ");
+
+            int n = 0;  // numbers of entries in current line    
+            if (Options.EmitCsharp)
+                Print("   ");
+            else
+                Print("    \"");
+
+            int i = 0;
+            while (i < intervalls.Length - 1)
+            {
+                int count = intervalls[i].End - intervalls[i].Start + 1;
+                int value = colMap[intervalls[i].CharClass];
+
+                printUC(count);
+                printUC(value);
+
+                if (++n >= 10)
+                {
+                    if (Options.EmitCsharp)
+                    {
+                        Println("");
+                        Print("   ");
+                    }
+                    else
+                    {
+                        Println("\"+");
+                        Print("    \"");
+                    }
+                    n = 0;
+                }
+
+                i++;
+            }
+
+            printUC(intervalls[i].End - intervalls[i].Start + 1);
+            printUC(colMap[intervalls[i].CharClass]);
+
+            if (Options.EmitCsharp)
+                Println(" 0 };"); // the extraneous 0 can't be avoided without restructuring printUC()
+            else
+                Println("\";");
+            Println();
+
+            Println("  /** ");
+            Println("   * Translates characters to character classes");
+            Println("   */");
+            if (Options.EmitCsharp)
+                Println("  private static readonly char[] ZZ_CMAP;");
+            else
+                Println("  private static final char [] ZZ_CMAP = zzUnpackCMap(ZZ_CMAP_PACKED);");
+            Println();
+        }
+
+
+        /**
+         * Print number as octal/unicode escaped string character.
+         * 
+         * @param c   the value to print
+         * @prec  0 <= c <= 0xFFFF 
+         */
+        private void printUC(int c)
+        {
+            if (Options.EmitCsharp)
+                output.Write(" ");
+
+            if (c > 255)
+            {
+                if (Options.EmitCsharp)
+                {
+                    output.Write("0x");
+                    if (c < 0x1000) output.Write("0");
+                    output.Write(Integer.ToHexString(c));
+                }
+                else
+                {
+                    output.Write("\\u");
+                    if (c < 0x1000) output.Write("0");
+                    output.Write(Integer.ToHexString(c));
+                }
+            }
+            else
+            {
+                if (Options.EmitCsharp)
+                    output.Write(c.ToString());
+                else
+                {
+                    output.Write("\\");
+                    output.Write(Integer.ToOctalString(c));
+                }
+            }
+
+            if (Options.EmitCsharp)
+                output.Write(",");
+        }
+
+
+        private void emitRowMapArray()
+        {
+            Println("");
+            Println("  /** ");
+            Println("   * Translates a state to a row index in the transition table");
+            Println("   */");
+
+            HiLowEmitter e = new HiLowEmitter("RowMap");
+            e.EmitInit();
+            for (int i = 0; i < dfa.NumStates; i++)
+            {
+                e.Emit(rowMap[i] * numCols);
+            }
+            e.EmitUnpack();
+            Println(e.ToString());
+        }
+
+
+        private void emitAttributes()
+        {
+            Println("  /**");
+            Println("   * ZZ_ATTRIBUTE[aState] contains the attributes of state <code>aState</code>");
+            Println("   */");
+
+            CountEmitter e = new CountEmitter("Attribute");
+            e.EmitInit();
+
+            int count = 1;
+            int value = 0;
+            if (dfa.IsFinal[0]) value = FINAL;
+            if (dfa.IsPushback[0]) value |= PUSHBACK;
+            if (dfa.IsLookEnd[0]) value |= LOOKEND;
+            if (!isTransition[0]) value |= NOLOOK;
+
+            for (int i = 1; i < dfa.NumStates; i++)
+            {
+                int attribute = 0;
+                if (dfa.IsFinal[i]) attribute = FINAL;
+                if (dfa.IsPushback[i]) attribute |= PUSHBACK;
+                if (dfa.IsLookEnd[i]) attribute |= LOOKEND;
+                if (!isTransition[i]) attribute |= NOLOOK;
+
+                if (value == attribute)
+                {
+                    count++;
+                }
+                else
+                {
+                    e.Emit(count, value);
+                    count = 1;
+                    value = attribute;
+                }
+            }
+
+            e.Emit(count, value);
+            e.EmitUnpack();
+
+            Println(e.ToString());
+        }
+
+
+        private void emitClassCode()
+        {
+            if (scanner.eofCode != null)
+            {
+                Println("  /** denotes if the user-EOF-code has already been executed */");
+                if (Options.EmitCsharp)
+                    Println("  private bool zzEOFDone;");
+                else
+                    Println("  private boolean zzEOFDone;");
+                Println("");
+            }
+
+            if (scanner.classCode != null)
+            {
+                Println("  /* user code: */");
+                Println(scanner.classCode);
+            }
+        }
+
+        private void emitConstructorDecl()
+        {
+
+            Print("  ");
+
+            if (Options.EmitCsharp)
+            {
+                if (scanner.isPublic)
+                    Print("public ");
+                else
+                    Print("internal ");
+                Print(scanner.className);
+                Print("(TextReader @in)");
+            }
+            else
+            {
+                if (scanner.isPublic)
+                    Print("public ");
+                Print(scanner.className);
+                Print("(java.io.Reader in)");
+
+                if (scanner.initThrow != null)
+                {
+                    Print(" throws ");
+                    Print(scanner.initThrow);
+                }
+            }
+
+            Println(" {");
+
+            if (scanner.initCode != null)
+            {
+                Print("  ");
+                Print(scanner.initCode);
+            }
+
+            Println("    this.zzReader = @in;");
+
+            Println("  }");
+            Println();
+
+
+            if (Options.EmitCsharp)
+            {
+                Println("  /**");
+                Println("   * Creates a new scanner.");
+                Println("   * There is also TextReader version of this constructor.");
+                Println("   *");
+                Println("   * @param   in  the System.IO.Stream to read input from.");
+                Println("   */");
+
+                Print("  ");
+                if (scanner.isPublic)
+                    Print("public ");
+                else
+                    Print("internal ");
+                Print(scanner.className);
+                Print("(Stream @in)");
+
+                Println(" : this(new StreamReader(@in))");
+                Println("  {");
+                Println("  }");
+            }
+            else
+            {
+                Println("  /**");
+                Println("   * Creates a new scanner.");
+                Println("   * There is also java.io.Reader version of this constructor.");
+                Println("   *");
+                Println("   * @param   in  the java.io.Inputstream to read input from.");
+                Println("   */");
+
+                Print("  ");
+                if (scanner.isPublic) Print("public ");
+                Print(scanner.className);
+                Print("(java.io.InputStream in)");
+
+                if (scanner.initThrow != null)
+                {
+                    Print(" throws ");
+                    Print(scanner.initThrow);
+                }
+
+                Println("  {");
+                Println("    this(new java.io.InputStreamReader(in));");
+                Println("  }");
+            }
+        }
+
+
+        private void emitDoEOF()
+        {
+            if (scanner.eofCode == null) return;
+
+            Println("  /**");
+            Println("   * Contains user EOF-code, which will be executed exactly once,");
+            Println("   * when the end of file is reached");
+            Println("   */");
+
+            Print("  private void zzDoEOF()");
+
+            if (!Options.EmitCsharp)
+                if (scanner.eofThrow != null)
+                {
+                    Print(" throws ");
+                    Print(scanner.eofThrow);
+                }
+
+            Println(" {");
+
+            Println("    if (!zzEOFDone) {");
+            Println("      zzEOFDone = true;");
+            Println("      " + scanner.eofCode);
+            Println("    }");
+            Println("  }");
+            Println("");
+            Println("");
+        }
+
+        private void emitLexFunctHeader()
+        {
+
+            if (scanner.cupCompatible)
+            {
+                // force public, because we have to implement java_cup.runtime.Symbol
+                Print("  public ");
+            }
+            else
+            {
+                Print("  " + visibility + " ");
+            }
+
+            if (scanner.tokenType == null)
+            {
+                if (scanner.isInteger)
+                    Print("int");
+                else
+                if (scanner.isIntWrap)
+                    Print("Integer");
+                else
+                    Print("Yytoken");
+            }
+            else
+                Print(scanner.tokenType);
+
+            Print(" ");
+
+            Print(scanner.functionName);
+
+            if (Options.EmitCsharp)
+                Print("()");
+            else
+            {
+                Print("() throws java.io.IOException");
+
+                if (scanner.lexThrow != null)
+                {
+                    Print(", ");
+                    Print(scanner.lexThrow);
+                }
+
+                if (scanner.scanErrorException != null)
+                {
+                    Print(", ");
+                    Print(scanner.scanErrorException);
+                }
+            }
+
+            Println(" {");
+
+            skel.EmitNext();
+
+            if (scanner.useRowMap)
+            {
+                Println("    int [] zzTransL = ZZ_TRANS;");
+                Println("    int [] zzRowMapL = ZZ_ROWMAP;");
+                Println("    int [] zzAttrL = ZZ_ATTRIBUTE;");
+
+            }
+
+            if (scanner.lookAheadUsed)
+            {
+                Println("    int zzPushbackPosL = zzPushbackPos = -1;");
+                if (Options.EmitCsharp)
+                    Println("    bool zzWasPushback;");
+                else
+                    Println("    boolean zzWasPushback;");
+            }
+
+            skel.EmitNext();
+
+            if (scanner.charCount)
+            {
+                Println("      yychar+= zzMarkedPosL-zzStartRead;");
+                Println("");
+            }
+
+            if (scanner.lineCount || scanner.columnCount)
+            {
+                if (Options.EmitCsharp)
+                    Println("      bool zzR = false;");
+                else
+                    Println("      boolean zzR = false;");
+                Println("      for (zzCurrentPosL = zzStartRead; zzCurrentPosL < zzMarkedPosL;");
+                Println("                                                             zzCurrentPosL++) {");
+                Println("        switch (zzBufferL[zzCurrentPosL]) {");
+                Println("        case '\\u000B':");
+                Println("        case '\\u000C':");
+                Println("        case '\\u0085':");
+                Println("        case '\\u2028':");
+                Println("        case '\\u2029':");
+                if (scanner.lineCount)
+                    Println("          yyline++;");
+                if (scanner.columnCount)
+                    Println("          yycolumn = 0;");
+                Println("          zzR = false;");
+                Println("          break;");
+                Println("        case '\\r':");
+                if (scanner.lineCount)
+                    Println("          yyline++;");
+                if (scanner.columnCount)
+                    Println("          yycolumn = 0;");
+                Println("          zzR = true;");
+                Println("          break;");
+                Println("        case '\\n':");
+                Println("          if (zzR)");
+                Println("            zzR = false;");
+                Println("          else {");
+                if (scanner.lineCount)
+                    Println("            yyline++;");
+                if (scanner.columnCount)
+                    Println("            yycolumn = 0;");
+                Println("          }");
+                Println("          break;");
+                Println("        default:");
+                Println("          zzR = false;");
+                if (scanner.columnCount)
+                    Println("          yycolumn++;");
+                if (Options.EmitCsharp)
+                    Println("          break;");
+                Println("        }");
+                Println("      }");
+                Println();
+
+                if (scanner.lineCount)
+                {
+                    Println("      if (zzR) {");
+                    Println("        // peek one character ahead if it is \\n (if we have counted one line too much)");
+                    if (Options.EmitCsharp)
+                        Println("        bool zzPeek;");
+                    else
+                        Println("        boolean zzPeek;");
+                    Println("        if (zzMarkedPosL < zzEndReadL)");
+                    Println("          zzPeek = zzBufferL[zzMarkedPosL] == '\\n';");
+                    Println("        else if (zzAtEOF)");
+                    Println("          zzPeek = false;");
+                    Println("        else {");
+                    if (Options.EmitCsharp)
+                        Println("          bool eof = zzRefill();");
+                    else
+                        Println("          boolean eof = zzRefill();");
+                    Println("          zzMarkedPosL = zzMarkedPos;");
+                    Println("          zzBufferL = zzBuffer;");
+                    Println("          if (eof) ");
+                    Println("            zzPeek = false;");
+                    Println("          else ");
+                    Println("            zzPeek = zzBufferL[zzMarkedPosL] == '\\n';");
+                    Println("        }");
+                    Println("        if (zzPeek) yyline--;");
+                    Println("      }");
+                }
+            }
+
+            if (scanner.bolUsed)
+            {
+                // zzMarkedPos > zzStartRead <=> last match was not empty
+                // if match was empty, last value of zzAtBOL can be used
+                // zzStartRead is always >= 0
+                Println("      if (zzMarkedPosL > zzStartRead) {");
+                Println("        switch (zzBufferL[zzMarkedPosL-1]) {");
+                Println("        case '\\n':");
+                Println("        case '\\u000B':");
+                Println("        case '\\u000C':");
+                Println("        case '\\u0085':");
+                Println("        case '\\u2028':");
+                Println("        case '\\u2029':");
+                Println("          zzAtBOL = true;");
+                Println("          break;");
+                Println("        case '\\r': ");
+                Println("          if (zzMarkedPosL < zzEndReadL)");
+                Println("            zzAtBOL = zzBufferL[zzMarkedPosL] != '\\n';");
+                Println("          else if (zzAtEOF)");
+                Println("            zzAtBOL = false;");
+                Println("          else {");
+                if (Options.EmitCsharp)
+                    Println("            bool eof = zzRefill();");
+                else
+                    Println("            boolean eof = zzRefill();");
+                Println("            zzMarkedPosL = zzMarkedPos;");
+                Println("            zzBufferL = zzBuffer;");
+                Println("            if (eof) ");
+                Println("              zzAtBOL = false;");
+                Println("            else ");
+                Println("              zzAtBOL = zzBufferL[zzMarkedPosL] != '\\n';");
+                Println("          }");
+                Println("          break;");
+                Println("        default:");
+                Println("          zzAtBOL = false;");
+                if (Options.EmitCsharp)
+                    Println("          break;");
+                Println("        }");
+                Println("      }");
+            }
+
+            skel.EmitNext();
+
+            if (scanner.bolUsed)
+            {
+                Println("      if (zzAtBOL)");
+                Println("        zzState = ZZ_LEXSTATE[zzLexicalState+1];");
+                Println("      else");
+                Println("        zzState = ZZ_LEXSTATE[zzLexicalState];");
+                Println();
+            }
+            else
+            {
+                Println("      zzState = zzLexicalState;");
+                Println();
+            }
+
+            if (scanner.lookAheadUsed)
+                Println("      zzWasPushback = false;");
+
+            skel.EmitNext();
+        }
+
+
+        private void emitGetRowMapNext()
+        {
+            Println("          int zzNext = zzTransL[ zzRowMapL[zzState] + zzCMapL[zzInput] ];");
+            if (Options.EmitCsharp)
+                Println("          if (zzNext == " + DFA.NO_TARGET + ") goto zzForAction;");
+            else
+                Println("          if (zzNext == " + DFA.NO_TARGET + ") break zzForAction;");
+            Println("          zzState = zzNext;");
+            Println();
+
+            Println("          int zzAttributes = zzAttrL[zzState];");
+
+            if (scanner.lookAheadUsed)
+            {
+                Println("          if ( (zzAttributes & " + PUSHBACK + ") == " + PUSHBACK + " )");
+                Println("            zzPushbackPosL = zzCurrentPosL;");
+                Println();
+            }
+
+            Println("          if ( (zzAttributes & " + FINAL + ") == " + FINAL + " ) {");
+            if (scanner.lookAheadUsed)
+                Println("            zzWasPushback = (zzAttributes & " + LOOKEND + ") == " + LOOKEND + ";");
+
+            skel.EmitNext();
+
+            if (Options.EmitCsharp)
+                Println("            if ( (zzAttributes & " + NOLOOK + ") == " + NOLOOK + " ) goto zzForAction;");
+            else
+                Println("            if ( (zzAttributes & " + NOLOOK + ") == " + NOLOOK + " ) break zzForAction;");
+
+            skel.EmitNext();
+        }
+
+        private void emitTransitionTable()
+        {
+            transformTransitionTable();
+
+            Println("          zzInput = zzCMapL[zzInput];");
+            Println();
+
+            if (Options.EmitCsharp)
+            {
+                if (scanner.lookAheadUsed)
+                    Println("          bool zzPushback = false;");
+
+                Println("          bool zzIsFinal = false;");
+                Println("          bool zzNoLookAhead = false;");
+                Println();
+            }
+            else
+            {
+                if (scanner.lookAheadUsed)
+                    Println("          boolean zzPushback = false;");
+
+                Println("          boolean zzIsFinal = false;");
+                Println("          boolean zzNoLookAhead = false;");
+                Println();
+            }
+
+            if (Options.EmitCsharp)
+            {
+                Println("          switch (zzState) {");
+                Println("            case 2147483647:");
+                Println("              zzForNext: break;");
+                Println("            case 2147483646:");
+                Println("              goto zzForNext;");
+            }
+            else
+                Println("          zzForNext: { switch (zzState) {");
+
+            for (int state = 0; state < dfa.NumStates; state++)
+                if (isTransition[state]) emitState(state);
+
+            Println("            default:");
+            Println("              // if this is ever reached, there is a serious bug in JFlex/C# Flex");
+            Println("              zzScanError(ZZ_UNKNOWN_ERROR);");
+            Println("              break;");
+            if (Options.EmitCsharp)
+                Println("          }");
+            else
+                Println("          } }");
+            Println();
+
+            Println("          if ( zzIsFinal ) {");
+
+            if (scanner.lookAheadUsed)
+                Println("            zzWasPushback = zzPushback;");
+
+            skel.EmitNext();
+
+            if (Options.EmitCsharp)
+                Println("            if ( zzNoLookAhead ) goto zzForAction;");
+            else
+                Println("            if ( zzNoLookAhead ) break zzForAction;");
+
+            skel.EmitNext();
+        }
+
+
+        /**
+         * Escapes all " ' \ tabs and newlines
+         */
+        private string escapify(string s)
+        {
+            StringBuilder result = new StringBuilder(s.Length * 2);
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                char c = s[i];
+                switch (c)
+                {
+                    case '\'': result.Append("\\\'"); break;
+                    case '\"': result.Append("\\\""); break;
+                    case '\\': result.Append("\\\\"); break;
+                    case '\t': result.Append("\\t"); break;
+                    case '\r':
+                        if (i + 1 == s.Length || s[i + 1] != '\n') result.Append("\"+ZZ_NL+\"");
+                        break;
+                    case '\n': result.Append("\"+ZZ_NL+\""); break;
+                    default: result.Append(c); break;
+                }
+            }
+
+            return result.ToString();
+        }
+
+        public void emitActionTable()
+        {
+            int lastAction = 1;
+            int count = 0;
+            int value = 0;
+
+            Println("  /** ");
+            Println("   * Translates DFA states to action switch labels.");
+            Println("   */");
+            CountEmitter e = new CountEmitter("Action");
+            e.EmitInit();
+
+            for (int i = 0; i < dfa.NumStates; i++)
+            {
+                int newVal;
+                if (dfa.IsFinal[i])
+                {
+                    Action action = dfa.Action[i];
+                    Integer stored = (Integer)actionTable[action];
+                    if (stored == null)
+                    {
+                        stored = new Integer(lastAction++);
+                        actionTable[action] = stored;
+                    }
+                    newVal = stored.intValue();
+                }
+                else
+                {
+                    newVal = 0;
+                }
+
+                if (value == newVal)
+                {
+                    count++;
+                }
+                else
+                {
+                    if (count > 0) e.Emit(count, value);
+                    count = 1;
+                    value = newVal;
+                }
+            }
+
+            if (count > 0) e.Emit(count, value);
+
+            e.EmitUnpack();
+            Println(e.ToString());
+        }
+
+        private void emitActions()
+        {
+            Println("      switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {");
+
+            int i = actionTable.Count + 1;
+            IEnumerator actions = actionTable.Keys.GetEnumerator();
+            while (actions.MoveNext())
+            {
+                Action action = (Action)actions.Current;
+                int label = ((Integer)actionTable[action]).intValue();
+
+                Println("        case " + label + ": ");
+
+                if (Options.EmitCsharp)
+                {
+                    Println("          if (ZZ_SPURIOUS_WARNINGS_SUCK)");
+                    Println("          {");
+
+                    if (scanner.debugOption)
+                    {
+                        int @base = 0;
+
+                        Print("            Console.WriteLine(\"");
+                        if (scanner.lineCount) { Print("line: {" + @base + "} "); @base++; }
+                        if (scanner.columnCount) { Print("col: {" + @base + "} "); @base++; }
+                        Println("match: --{" + @base + "}--\",");
+                        Print("              ");
+                        if (scanner.lineCount) Print("yyline+1, ");
+                        if (scanner.columnCount) Print("yycolumn+1, ");
+                        Println("yytext());");
+
+                        Print("            Console.WriteLine(\"action [" + action.Priority + "] { ");
+                        Print(escapify(action.Content));
+                        Println(" }\");");
+                    }
+
+                    Println("#line " + action.Priority + " \"" + escapify(scanner.file) + "\"");
+                    Println(action.Content);
+                    Println("#line default");
+                    Println("          }");
+                    Println("          break;");
+                }
+                else
+                {
+                    if (scanner.debugOption)
+                    {
+                        Print("          System.out.println(");
+                        if (scanner.lineCount)
+                            Print("\"line: \"+(yyline+1)+\" \"+");
+                        if (scanner.columnCount)
+                            Print("\"col: \"+(yycolumn+1)+\" \"+");
+                        Println("\"match: --\"+yytext()+\"--\");");
+                        Print("          System.out.println(\"action [" + action.Priority + "] { ");
+                        Print(escapify(action.Content));
+                        Println(" }\");");
+                    }
+
+                    Println("          { " + action.Content);
+                    Println("          }");
+                    Println("        case " + (i++) + ": break;");
+                }
+            }
+        }
+
+        private void emitEOFVal()
+        {
+            EOFActions eofActions = parser.EOFActions;
+
+            if (scanner.eofCode != null)
+                Println("            zzDoEOF();");
+
+            if (eofActions.NumActions> 0)
+            {
+                Println("            switch (zzLexicalState) {");
+
+                IEnumerator stateNames = scanner.states.Names;
+
+                // record lex states already emitted:
+                var used = new PrettyHashtable<int,string>();
+
+                // pick a start value for break case labels. 
+                // must be larger than any value of a lex state:
+                int last = dfa.NumStates;
+
+                while (stateNames.MoveNext())
+                {
+                    string name = (string)stateNames.Current;
+                    int num = scanner.states.GetNumber(name);
+                    Action action = eofActions.GetAction(num);
+
+                    // only emit code if the lex state is not redundant, so
+                    // that case labels don't overlap
+                    // (redundant = points to the same dfa state as another one).
+                    // applies only to scanners that don't use BOL, because
+                    // in BOL scanners lex states get mapped at runtime, so
+                    // case labels will always be unique.
+                    bool unused = true;
+                    if (!scanner.bolUsed)
+                    {
+                        var key = (dfa.LexState[2 * num]);
+                        unused = used[key] == null;
+
+                        if (!unused)
+                            OutputWriter.Warning("Lexical states <" + name + "> and <" + used[key] + "> are equivalent.");
+                        else
+                            used[key] = name;
+                    }
+
+                    if (action != null && unused)
+                    {
+                        if (Options.EmitCsharp)
+                        {
+                            Println("            case " + name + ":");
+                            Println("              if (ZZ_SPURIOUS_WARNINGS_SUCK)");
+                            Println("              {");
+                            Println("#line " + action.Priority + " \"" + scanner.file + "\"");
+                            Println(action.Content);
+                            Println("#line default");
+                            Println("              }");
+                            Println("              break;");
+                        }
+                        else
+                        {
+                            Println("            case " + name + ":");
+                            Println("              { " + action.Content + " }");
+                            Println("            case " + (++last) + ": break;");
+                        }
+                    }
+                }
+
+                Println("            default:");
+            }
+
+            if (eofActions.Default != null)
+            {
+                if (Options.EmitCsharp)
+                {
+                    Action dfl = eofActions.Default;
+
+                    Println("              if (ZZ_SPURIOUS_WARNINGS_SUCK)");
+                    Println("              {");
+                    Println("#line " + dfl.Priority + " \"" + scanner.file + "\"");
+                    Println(dfl.Content);
+                    Println("#line default");
+                    Println("              }");
+                }
+                else
+                {
+                    Println("              if (ZZ_SPURIOUS_WARNINGS_SUCK)");
+                    Println("              { " + eofActions.Default.Content + " }");
+                }
+                Println("              break;");
+            }
+            else if (scanner.eofVal != null)
+            {
+                Println("              if (ZZ_SPURIOUS_WARNINGS_SUCK)");
+                Println("              { " + scanner.eofVal + " }");
+                Println("              break;");
+            }
+            else if (scanner.isInteger)
+                Println("            return YYEOF;");
+            else
+                Println("            return null;");
+
+            if (eofActions.NumActions> 0)
+                Println("            }");
+        }
+
+        private void emitState(int state)
+        {
+
+            Println("            case " + state + ":");
+            Println("              switch (zzInput) {");
+
+            int defaultTransition = getDefaultTransition(state);
+
+            for (int next = 0; next < dfa.NumStates; next++)
+            {
+
+                if (next != defaultTransition && table[state][next] != null)
+                {
+                    emitTransition(state, next);
+                }
+            }
+
+            if (defaultTransition != DFA.NO_TARGET && noTarget[state] != null)
+            {
+                emitTransition(state, DFA.NO_TARGET);
+            }
+
+            emitDefaultTransition(state, defaultTransition);
+
+            Println("              }");
+            Println("");
+        }
+
+        private void emitTransition(int state, int nextState)
+        {
+
+            CharSetEnumerator chars;
+
+            if (nextState != DFA.NO_TARGET)
+                chars = table[state][nextState].GetCharacters();
+            else
+                chars = noTarget[state].GetCharacters();
+
+            Print("                case ");
+            Print((int)chars.NextElement());
+            Print(": ");
+
+            while (chars.HasMoreElements)
+            {
+                Println();
+                Print("                case ");
+                Print((int)chars.NextElement());
+                Print(": ");
+            }
+
+            if (nextState != DFA.NO_TARGET)
+            {
+                if (dfa.IsFinal[nextState])
+                    Print("zzIsFinal = true; ");
+
+                if (dfa.IsPushback[nextState])
+                    Print("zzPushbackPosL = zzCurrentPosL; ");
+
+                if (dfa.IsLookEnd[nextState])
+                    Print("zzPushback = true; ");
+
+                if (!isTransition[nextState])
+                    Print("zzNoLookAhead = true; ");
+
+                if (Options.EmitCsharp)
+                    Println("zzState = " + nextState + "; goto zzForNext;");
+                else
+                    Println("zzState = " + nextState + "; break zzForNext;");
+            }
+            else
+            {
+                if (Options.EmitCsharp)
+                    Println("goto zzForAction;");
+                else
+                    Println("break zzForAction;");
+            }
+        }
+
+        private void emitDefaultTransition(int state, int nextState)
+        {
+            Print("                default: ");
+
+            if (nextState != DFA.NO_TARGET)
+            {
+                if (dfa.IsFinal[nextState])
+                    Print("zzIsFinal = true; ");
+
+                if (dfa.IsPushback[nextState])
+                    Print("zzPushbackPosL = zzCurrentPosL; ");
+
+                if (dfa.IsLookEnd[nextState])
+                    Print("zzPushback = true; ");
+
+                if (!isTransition[nextState])
+                    Print("zzNoLookAhead = true; ");
+
+                if (Options.EmitCsharp)
+                    Println("zzState = " + nextState + "; goto zzForNext;");
+                else
+                    Println("zzState = " + nextState + "; break zzForNext;");
+            }
+            else
+            {
+                if (Options.EmitCsharp)
+                    Println("goto zzForAction;");
+                else
+                    Println("break zzForAction;");
+            }
+        }
+
+        private void emitPushback()
+        {
+            Println("      if (zzWasPushback)");
+            Println("        zzMarkedPos = zzPushbackPosL;");
+        }
+
+        private int getDefaultTransition(int state)
+        {
+            int max = 0;
+
+            for (int i = 0; i < dfa.NumStates; i++)
+            {
+                if (table[state][max] == null)
+                    max = i;
+                else
+                if (table[state][i] != null && table[state][max].Size < table[state][i].Size)
+                    max = i;
+            }
+
+            if (table[state][max] == null) return DFA.NO_TARGET;
+            if (noTarget[state] == null) return max;
+
+            if (table[state][max].Size < noTarget[state].Size)
+                max = DFA.NO_TARGET;
+
+            return max;
+        }
+
+        // for switch statement:
+        private void transformTransitionTable()
+        {
+
+            int numInput = parser.CharClasses.NumClasses + 1;
+
+            int i;
+            char j;
+
+            table = new CharSet[dfa.NumStates][];
+            for (i = 0; i < table.Length; i++)
+                table[i] = new CharSet[dfa.NumStates];
+            noTarget = new CharSet[dfa.NumStates];
+
+            for (i = 0; i < dfa.NumStates; i++)
+                for (j = (char)0; j < dfa.NumInput; j++)
+                {
+
+                    int nextState = dfa.Table[i][j];
+
+                    if (nextState == DFA.NO_TARGET)
+                    {
+                        if (noTarget[i] == null)
+                            noTarget[i] = new CharSet(numInput, colMap[j]);
+                        else
+                            noTarget[i].Add(colMap[j]);
+                    }
+                    else
+                    {
+                        if (table[i][nextState] == null)
+                            table[i][nextState] = new CharSet(numInput, colMap[j]);
+                        else
+                            table[i][nextState].Add(colMap[j]);
+                    }
+                }
+        }
+
+        private void findActionStates()
+        {
+            isTransition = new bool[dfa.NumStates];
+
+            for (int i = 0; i < dfa.NumStates; i++)
+            {
+                char j = (char)0;
+                while (!isTransition[i] && j < dfa.NumInput)
+                    isTransition[i] = dfa.Table[i][j++] != DFA.NO_TARGET;
+            }
+        }
+
+
+        private void reduceColumns()
+        {
+            colMap = new int[dfa.NumInput];
+            colKilled = new bool[dfa.NumInput];
+
+            int i, j, k;
+            int translate = 0;
+            bool equal;
+
+            numCols = dfa.NumInput;
+
+            for (i = 0; i < dfa.NumInput; i++)
+            {
+
+                colMap[i] = i - translate;
+
+                for (j = 0; j < i; j++)
+                {
+
+                    // test for equality:
+                    k = -1;
+                    equal = true;
+                    while (equal && ++k < dfa.NumStates)
+                        equal = dfa.Table[k][i] == dfa.Table[k][j];
+
+                    if (equal)
+                    {
+                        translate++;
+                        colMap[i] = colMap[j];
+                        colKilled[i] = true;
+                        numCols--;
+                        break;
+                    } // if
+                } // for j
+            } // for i
+        }
+
+        private void reduceRows()
+        {
+            rowMap = new int[dfa.NumStates];
+            rowKilled = new bool[dfa.NumStates];
+
+            int i, j, k;
+            int translate = 0;
+            bool equal;
+
+            numRows = dfa.NumStates;
+
+            // i is the state to add to the new table
+            for (i = 0; i < dfa.NumStates; i++)
+            {
+                rowMap[i] = i - translate;
+
+                // check if state i can be removed (i.e. already
+                // exists in entries 0..i-1)
+                for (j = 0; j < i; j++)
+                {
+
+                    // test for equality:
+                    k = -1;
+                    equal = true;
+                    while (equal && ++k < dfa.NumInput)
+                        equal = dfa.Table[i][k] == dfa.Table[j][k];
+
+                    if (equal)
+                    {
+                        translate++;
+                        rowMap[i] = rowMap[j];
+                        rowKilled[i] = true;
+                        numRows--;
+                        break;
+                    } // if
+                } // for j
+            } // for i
+
+        }
+
+
+        /**
+         * Set up EOF code sectioin according to scanner.eofcode 
+         */
+        private void setupEOFCode()
+        {
+            if (scanner.eofclose)
+            {
+                scanner.eofCode = LexScan.conc(scanner.eofCode, "  yyclose();");
+                scanner.eofThrow = LexScan.concExc(scanner.eofThrow, "java.io.IOException");
+            }
+        }
+
+
+        /**
+         * Main Emitter method.  
+         */
+        public void emit()
+        {
+
+            setupEOFCode();
+
+            if (scanner.functionName == null)
+                scanner.functionName = "yylex";
+
+            reduceColumns();
+            findActionStates();
+
+            emitHeader();
+            emitUserCode();
+            emitClassName();
+
+            skel.EmitNext();
+
+            if (Options.EmitCsharp)
+            {
+                Println("  private const int ZZ_BUFFERSIZE = " + scanner.bufferSize + ";");
+
+                if (scanner.debugOption)
+                {
+                    Println("  private static readonly string ZZ_NL = Environment.NewLine;");
+                }
+
+                Println("  /**");
+                Println("   * This is used in 'if' statements to eliminate dead code");
+                Println("   * warnings for 'break;' after the end of a user action");
+                Println("   * block of code. The Java version does this by emitting");
+                Println("   * a second 'case' which is impossible to reach. Since this");
+                Println("   * is impossible for the compiler to deduce during semantic");
+                Println("   * analysis, the warning is stifled. However, C# does not");
+                Println("   * permit 'case' blocks to flow into each other, so the C#");
+                Println("   * output mode needs a different approach. In this case,");
+                Println("   * the entire user code is wrapped up in an 'if' statement");
+                Println("   * whose condition is always true. No warning is emitted");
+                Println("   * because the compiler doesn't strictly propagate the value");
+                Println("   * of 'static readonly' fields, and thus does not semantically");
+                Println("   * detect the fact that the 'if' will always be true.");
+                Println("   */");
+                Println("   public static readonly bool ZZ_SPURIOUS_WARNINGS_SUCK = true;");
+            }
+            else
+            {
+                Println("  private static final int ZZ_BUFFERSIZE = " + scanner.bufferSize + ";");
+
+                if (scanner.debugOption)
+                {
+                    Println("  private static final string ZZ_NL = System.getProperty(\"line.separator\");");
+                }
+            }
+
+            skel.EmitNext();
+
+            emitLexicalStates();
+
+            emitCharMapArray();
+
+            emitActionTable();
+
+            if (scanner.useRowMap)
+            {
+                reduceRows();
+
+                emitRowMapArray();
+
+                if (scanner.packed)
+                    emitDynamicInit();
+                else
+                    emitZZTrans();
+            }
+
+            skel.EmitNext();
+
+            if (scanner.useRowMap)
+                emitAttributes();
+
+            skel.EmitNext();
+
+            emitClassCode();
+
+            skel.EmitNext();
+
+            emitConstructorDecl();
+
+            emitCharMapInitFunction();
+
+            skel.EmitNext();
+
+            EmitScanError();
+
+            skel.EmitNext();
+
+            emitDoEOF();
+
+            skel.EmitNext();
+
+            emitLexFunctHeader();
+
+            emitNextInput();
+
+            if (scanner.useRowMap)
+                emitGetRowMapNext();
+            else
+                emitTransitionTable();
+
+            if (scanner.lookAheadUsed)
+                emitPushback();
+
+            skel.EmitNext();
+
+            emitActions();
+
+            skel.EmitNext();
+
+            emitEOFVal();
+
+            skel.EmitNext();
+
+            emitNoMatch();
+
+            skel.EmitNext();
+
+            emitMain();
+
+            skel.EmitNext();
+
+            emitEpilogue();
+
+            output.Close();
+        }
+
     }
-  }
-
-  
-  private void reduceColumns() {
-    colMap = new int [dfa.numInput];
-    colKilled = new bool [dfa.numInput];
-
-    int i,j,k;
-    int translate = 0;
-    bool equal;
-
-    numCols = dfa.numInput;
-
-    for (i = 0; i < dfa.numInput; i++) {
-      
-      colMap[i] = i-translate;
-      
-      for (j = 0; j < i; j++) {
-        
-        // test for equality:
-        k = -1;
-        equal = true;        
-        while (equal && ++k < dfa.numStates) 
-          equal = dfa.table[k][i] == dfa.table[k][j];
-        
-        if (equal) {
-          translate++;
-          colMap[i] = colMap[j];
-          colKilled[i] = true;
-          numCols--;
-          break;
-        } // if
-      } // for j
-    } // for i
-  }
-  
-  private void reduceRows() {
-    rowMap = new int [dfa.numStates];
-    rowKilled = new bool [dfa.numStates];
-    
-    int i,j,k;
-    int translate = 0;
-    bool equal;
-
-    numRows = dfa.numStates;
-
-    // i is the state to add to the new table
-    for (i = 0; i < dfa.numStates; i++) {
-      
-      rowMap[i] = i-translate;
-      
-      // check if state i can be removed (i.e. already
-      // exists in entries 0..i-1)
-      for (j = 0; j < i; j++) {
-        
-        // test for equality:
-        k = -1;
-        equal = true;
-        while (equal && ++k < dfa.numInput) 
-          equal = dfa.table[i][k] == dfa.table[j][k];
-        
-        if (equal) {
-          translate++;
-          rowMap[i] = rowMap[j];
-          rowKilled[i] = true;
-          numRows--;
-          break;
-        } // if
-      } // for j
-    } // for i
-    
-  } 
-
-
-  /**
-   * Set up EOF code sectioin according to scanner.eofcode 
-   */
-  private void setupEOFCode() {
-    if (scanner.eofclose) {
-      scanner.eofCode = LexScan.conc(scanner.eofCode, "  yyclose();");
-      scanner.eofThrow = LexScan.concExc(scanner.eofThrow, "java.io.IOException");
-    }    
-  } 
-
-
-  /**
-   * Main Emitter method.  
-   */
-  public void emit() {    
-
-    setupEOFCode();
-
-    if (scanner.functionName == null) 
-      scanner.functionName = "yylex";
-
-    reduceColumns();
-    findActionStates();
-
-    emitHeader();
-    emitUserCode();
-    emitClassName();
-    
-    skel.emitNext();
-    
-    if (Options.emit_csharp)
-    {
-      println("  private const int ZZ_BUFFERSIZE = "+scanner.bufferSize+";");
-
-      if (scanner.debugOption) 
-      {
-        println("  private static readonly String ZZ_NL = Environment.NewLine;");
-      }
-
-      println("  /**");
-      println("   * This is used in 'if' statements to eliminate dead code");
-      println("   * warnings for 'break;' after the end of a user action");
-      println("   * block of code. The Java version does this by emitting");
-      println("   * a second 'case' which is impossible to reach. Since this");
-      println("   * is impossible for the compiler to deduce during semantic");
-      println("   * analysis, the warning is stifled. However, C# does not");
-      println("   * permit 'case' blocks to flow into each other, so the C#");
-      println("   * output mode needs a different approach. In this case,");
-      println("   * the entire user code is wrapped up in an 'if' statement");
-      println("   * whose condition is always true. No warning is emitted");
-      println("   * because the compiler doesn't strictly propagate the value");
-      println("   * of 'static readonly' fields, and thus does not semantically");
-      println("   * detect the fact that the 'if' will always be true.");
-      println("   */");
-      println("   public static readonly bool ZZ_SPURIOUS_WARNINGS_SUCK = true;");
-    }
-    else
-    {
-      println("  private static final int ZZ_BUFFERSIZE = "+scanner.bufferSize+";");
-
-      if (scanner.debugOption) 
-      {
-        println("  private static final String ZZ_NL = System.getProperty(\"line.separator\");");
-      }
-    }
-
-    skel.emitNext();
-
-    emitLexicalStates();
-   
-    emitCharMapArray();
-    
-    emitActionTable();
-    
-    if (scanner.useRowMap) {
-     reduceRows();
-    
-      emitRowMapArray();
-
-      if (scanner.packed)
-        emitDynamicInit();
-      else
-        emitZZTrans();
-    }
-    
-    skel.emitNext();
-    
-    if (scanner.useRowMap) 
-      emitAttributes();    
-
-    skel.emitNext();
-    
-    emitClassCode();
-    
-    skel.emitNext();
-    
-    emitConstructorDecl();
-        
-    emitCharMapInitFunction();
-
-    skel.emitNext();
-    
-    emitScanError();
-
-    skel.emitNext();        
-
-    emitDoEOF();
-    
-    skel.emitNext();
-    
-    emitLexFunctHeader();
-    
-    emitNextInput();
-
-    if (scanner.useRowMap)
-      emitGetRowMapNext();
-    else
-      emitTransitionTable();
-        
-    if (scanner.lookAheadUsed) 
-      emitPushback();
-        
-    skel.emitNext();
-
-    emitActions();
-        
-    skel.emitNext();
-
-    emitEOFVal();
-    
-    skel.emitNext();
-    
-    emitNoMatch();
-
-    skel.emitNext();
-    
-    emitMain();
-    
-    skel.emitNext();
-
-    emitEpilogue();
-
-    @out.Close();
-  }
-
-}
 }

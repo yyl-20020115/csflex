@@ -26,42 +26,33 @@ using System;
 
 namespace CSFlex
 {
+    /**
+     * Simple pair of integers.
+     *
+     * Used in NFA to represent a partial NFA by its start and end state.
+     *
+     * @author Gerwin Klein
+     * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:48 $
+     * @author Jonathan Gilbert
+     * @version CSFlex 1.4
+     */
+    public sealed class IntPair
+    {
+        private int start;
+        private int end;
+        public int Start => start;
+        public int End => end;
 
+        public IntPair(int start, int end)
+        {
+            this.start = start;
+            this.end = end;
+        }
 
-/**
- * Simple pair of integers.
- *
- * Used in NFA to represent a partial NFA by its start and end state.
- *
- * @author Gerwin Klein
- * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:48 $
- * @author Jonathan Gilbert
- * @version CSFlex 1.4
- */
-public sealed class IntPair {
+        public override int GetHashCode() => end + (start << 8);
 
-  internal int start;
-  internal int end;
-  
-  internal IntPair(int start, int end) {
-    this.start = start;
-    this.end = end;
-  }
+        public override bool Equals(object o) => o is IntPair p && start == p.start && end == p.end;
 
-  public override int GetHashCode() {
-    return end + (start << 8);
-  }  
-  
-  public override bool Equals(Object o) {
-    if ( o is IntPair ) {
-      IntPair p = (IntPair) o;
-      return start == p.start && end == p.end;
+        public override string ToString() => $"({start},{end})";
     }
-    return false;
-  }
-  
-  public override String ToString() {
-    return "("+start+","+end+")";
-  }
-} 
 }

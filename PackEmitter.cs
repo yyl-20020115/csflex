@@ -29,268 +29,276 @@ namespace CSFlex
 {
 
 
-/**
- * Encodes <code>int</code> arrays as strings.
- * 
- * Also splits up strings when longer than 64K in UTF8 encoding.
- * Subclasses emit unpacking code.
- * 
- * Usage protocol:
- * <code>p.emitInit();</code><br>
- * <code>for each data: p.emitData(data);</code><br>
- * <code>p.emitUnpack();</code> 
- * 
- * @author Gerwin Klein
- * @version $Revision: 1.6 $, $Date: 2004/04/12 10:07:47 $
- */
-public abstract class PackEmitter {
-
-  /** name of the generated array (mixed case, no yy prefix) */
-  protected String name;
-    
-  /** current UTF8 length of generated string in current chunk */
-  private int _UTF8Length;
-
-  /** position in the current line */
-  private int linepos;
-  
-  /** max number of entries per line */
-  private const int maxEntries = 16;
-  
-  /** output buffer */
-  protected StringBuilder @out = new StringBuilder();
-
-  /** number of existing string chunks */ 
-  protected int chunks;
-    
-  /** maximum size of chunks */
-  // String constants are stored as UTF8 with 2 bytes length
-  // field in class files. One Unicode char can be up to 3 
-  // UTF8 bytes. 64K max and two chars safety. 
-  private const int maxSize = 0xFFFF-6;
-  
-  /** indent for string lines */
-  private const String indent = "    ";
-  private const String csharp_indent = "   ";
-  
-  /**
-   * Create new emitter for an array.
-   * 
-   * @param name  the name of the generated array
-   */
-  public PackEmitter(String name) {
-    this.name = name;
-  }
-  
-  /**
-   * Convert array name into all uppercase internal scanner 
-   * constant name.
-   * 
-   * @return <code>name</code> as a internal constant name.
-   * @see PackEmitter#name
-   */
-  protected String constName() {
-    return "ZZ_" + name.ToUpper();
-  }
-  
-  /**
-   * Return current output buffer.
-   */
-  public override String ToString() {
-    return @out.ToString();
-  }
-
-  /**
-   * Emit declaration of decoded member and open first chunk.
-   */  
-  public void emitInit() {
-    if (Options.emit_csharp)
+    /**
+     * Encodes <code>int</code> arrays as strings.
+     * 
+     * Also splits up strings when longer than 64K in UTF8 encoding.
+     * Subclasses emit unpacking code.
+     * 
+     * Usage protocol:
+     * <code>p.emitInit();</code><br>
+     * <code>for each data: p.emitData(data);</code><br>
+     * <code>p.emitUnpack();</code> 
+     * 
+     * @author Gerwin Klein
+     * @version $Revision: 1.6 $, $Date: 2004/04/12 10:07:47 $
+     */
+    public abstract class PackEmitter
     {
-      @out.Append("  private static readonly int [] ");
-      @out.Append(constName());
-      @out.Append(";");
-    }
-    else
-    {
-      @out.Append("  private static final int [] ");
-      @out.Append(constName());
-      @out.Append(" = zzUnpack");
-      @out.Append(name);
-      @out.Append("();");
-    }
-    nl();
-    nextChunk();
-  }
+        /** name of the generated array (mixed case, no yy prefix) */
+        protected string name ="";
 
-  /**
-   * Emit single unicode character. 
-   * 
-   * Updates length, position, etc.
-   *
-   * @param i  the character to emit.
-   * @prec  0 <= i <= 0xFFFF 
-   */   
-  public void emitUC(int i) {     
-    if (i < 0 || i > 0xFFFF) 
-      throw new ArgumentException("character value expected", "i");
-  
-    // cast ok because of prec  
-    char c = (char) i;    
+        /** current UTF8 length of generated string in current chunk */
+        private int _UTF8Length = 0;
 
-    printUC(c);
-    _UTF8Length += UTF8Length(c);
-    linepos++;   
-  }
+        /** position in the current line */
+        private int linepos = 0;
 
-  /**
-   * Execute line/chunk break if necessary. 
-   * Leave space for at least two chars.
-   */  
-  public void breaks() {
-    if (_UTF8Length >= maxSize) {
-      // close current chunk
-      if (Options.emit_csharp)
-        @out.Append("0 };");
-      else
-        @out.Append("\";");
-      nl();
-      
-      nextChunk();
-    }
-    else {
-      if (linepos >= maxEntries) {
-        // line break
-        if (Options.emit_csharp)
+        /** max number of entries per line */
+        private const int maxEntries = 16;
+
+        /** output buffer */
+        protected StringBuilder builder = new ();
+
+        /** number of existing string chunks */
+        protected int chunks = 0;
+
+        /** maximum size of chunks */
+        // string constants are stored as UTF8 with 2 bytes length
+        // field in class files. One Unicode char can be up to 3 
+        // UTF8 bytes. 64K max and two chars safety. 
+        private const int maxSize = 0xFFFF - 6;
+
+        /** indent for string lines */
+        private const string indent = "    ";
+        private const string csharp_indent = "   ";
+
+        /**
+         * Create new emitter for an array.
+         * 
+         * @param name  the name of the generated array
+         */
+        public PackEmitter(string name)
         {
-          nl();
-          @out.Append(csharp_indent);
+            this.name = name;
         }
-        else
+
+        /**
+         * Convert array name into all uppercase internal scanner 
+         * constant name.
+         * 
+         * @return <code>name</code> as a internal constant name.
+         * @see PackEmitter#name
+         */
+        protected string ConstName => "ZZ_" + name.ToUpper();
+
+        /**
+         * Return current output buffer.
+         */
+        public override string ToString() => builder.ToString();
+
+        /**
+         * Emit declaration of decoded member and open first chunk.
+         */
+        public void EmitInit()
         {
-          @out.Append("\"+");
-          nl();
-          @out.Append(indent);
-          @out.Append("\"");
+            if (Options.EmitCsharp)
+            {
+                builder.Append("  private static readonly int [] ");
+                builder.Append(ConstName);
+                builder.Append(";");
+            }
+            else
+            {
+                builder.Append("  private static final int [] ");
+                builder.Append(ConstName);
+                builder.Append(" = zzUnpack");
+                builder.Append(name);
+                builder.Append("();");
+            }
+            EmitNewLine();
+            NextChunk();
         }
-        linepos = 0;      
-      }
+
+        /**
+         * Emit single unicode character. 
+         * 
+         * Updates length, position, etc.
+         *
+         * @param i  the character to emit.
+         * @prec  0 <= i <= 0xFFFF 
+         */
+        public void EmitUnicodeChar(int i)
+        {
+            if (i < 0 || i > 0xFFFF)
+                throw new ArgumentException("character value expected", "i");
+
+            // cast ok because of prec  
+            char c = (char)i;
+
+            PrintUnicodeChar(c);
+            _UTF8Length += GetUTF8Length(c);
+            linepos++;
+        }
+
+        /**
+         * Execute line/chunk break if necessary. 
+         * Leave space for at least two chars.
+         */
+        public void Breaks()
+        {
+            if (_UTF8Length >= maxSize)
+            {
+                // close current chunk
+                if (Options.EmitCsharp)
+                    builder.Append("0 };");
+                else
+                    builder.Append("\";");
+                EmitNewLine();
+
+                NextChunk();
+            }
+            else
+            {
+                if (linepos >= maxEntries)
+                {
+                    // line break
+                    if (Options.EmitCsharp)
+                    {
+                        EmitNewLine();
+                        builder.Append(csharp_indent);
+                    }
+                    else
+                    {
+                        builder.Append("\"+");
+                        EmitNewLine();
+                        builder.Append(indent);
+                        builder.Append("\"");
+                    }
+                    linepos = 0;
+                }
+            }
+        }
+
+        /**
+         * Emit the unpacking code. 
+         */
+        public abstract void EmitUnpack();
+
+        /**
+         *  emit next chunk 
+         */
+        private void NextChunk()
+        {
+            if (Options.EmitCsharp)
+            {
+                EmitNewLine();
+                builder.Append("  private static readonly ushort[] ");
+                builder.Append(ConstName);
+                builder.Append("_PACKED_");
+                builder.Append(chunks);
+                builder.Append(" = new ushort[] {");
+                EmitNewLine();
+                builder.Append(csharp_indent);
+            }
+            else
+            {
+                EmitNewLine();
+                builder.Append("  private static final string ");
+                builder.Append(ConstName);
+                builder.Append("_PACKED_");
+                builder.Append(chunks);
+                builder.Append(" =");
+                EmitNewLine();
+                builder.Append(indent);
+                builder.Append("\"");
+            }
+
+            _UTF8Length = 0;
+            linepos = 0;
+            chunks++;
+        }
+
+        /**
+         *  emit newline 
+         */
+        protected void EmitNewLine()
+        {
+            builder.Append(OutputWriter.NewLine);
+        }
+
+        /**
+         * Append a unicode/octal escaped character 
+         * to <code>out</code> buffer.
+         * 
+         * @param c the character to append
+         */
+        private void PrintUnicodeChar(char c)
+        {
+            if (Options.EmitCsharp)
+                builder.Append(" ");
+
+            if (c > 255)
+            {
+                if (Options.EmitCsharp)
+                {
+                    builder.Append("0x");
+                    if (c < 0x1000) builder.Append("0");
+                    builder.Append(Integer.ToHexString(c));
+                }
+                else
+                {
+                    builder.Append("\\u");
+                    if (c < 0x1000) builder.Append("0");
+                    builder.Append(Integer.ToHexString(c));
+                }
+            }
+            else
+            {
+                if (Options.EmitCsharp)
+                    builder.Append(((int)c).ToString());
+                else
+                {
+                    builder.Append("\\");
+                    builder.Append(Integer.ToOctalString(c));
+                }
+            }
+
+            if (Options.EmitCsharp)
+                builder.Append(",");
+        }
+
+        /**
+         * Calculates the number of bytes a Unicode character
+         * would have in UTF8 representation in a class file.
+         *
+         * @param value  the char code of the Unicode character
+         * @prec  0 <= value <= 0xFFFF
+         *
+         * @return length of UTF8 representation.
+         */
+        private int GetUTF8Length(char value)
+        {
+            // if (value < 0 || value > 0xFFFF) throw new Error("not a char value ("+value+")");
+
+            // see JVM spec ?.4.7, p 111
+            if (value == 0) return 2;
+            if (value <= 0x7F) return 1;
+
+            // workaround for javac bug (up to jdk 1.3):
+            if (value < 0x0400) return 2;
+            if (value <= 0x07FF) return 3;
+
+            // correct would be:
+            // if (value <= 0x7FF) return 2;
+            return 3;
+        }
+
+        // convenience
+        protected void Println(string s)
+        {
+            builder.Append(s);
+            EmitNewLine();
+        }
     }
-  }
-  
-  /**
-   * Emit the unpacking code. 
-   */
-  public abstract void emitUnpack();
-
-  /**
-   *  emit next chunk 
-   */
-  private void nextChunk() {
-    if (Options.emit_csharp)
-    {
-      nl();
-      @out.Append("  private static readonly ushort[] ");
-      @out.Append(constName());
-      @out.Append("_PACKED_");
-      @out.Append(chunks);
-      @out.Append(" = new ushort[] {");
-      nl();
-      @out.Append(csharp_indent);
-    }
-    else
-    {
-      nl();
-      @out.Append("  private static final String ");
-      @out.Append(constName());
-      @out.Append("_PACKED_");
-      @out.Append(chunks);
-      @out.Append(" =");
-      nl();
-      @out.Append(indent);
-      @out.Append("\"");
-    }
-
-    _UTF8Length = 0;
-    linepos = 0;
-    chunks++;
-  }
-  
-  /**
-   *  emit newline 
-   */
-  protected void nl() {
-    @out.Append(Out.NL);
-  }
-  
-  /**
-   * Append a unicode/octal escaped character 
-   * to <code>out</code> buffer.
-   * 
-   * @param c the character to append
-   */
-  private void printUC(char c) {
-    if (Options.emit_csharp)
-      @out.Append(" ");
-
-    if (c > 255) 
-    {
-      if (Options.emit_csharp)
-      {
-        @out.Append("0x");
-        if (c < 0x1000) @out.Append("0");
-        @out.Append(Integer.toHexString(c));
-      }
-      else
-      {
-        @out.Append("\\u");
-        if (c < 0x1000) @out.Append("0");
-        @out.Append(Integer.toHexString(c));
-      }
-    }
-    else 
-    {
-      if (Options.emit_csharp)
-        @out.Append(((int)c).ToString());
-      else
-      {
-        @out.Append("\\");
-        @out.Append(Integer.toOctalString(c));
-      }
-    }    
-
-    if (Options.emit_csharp)
-      @out.Append(",");
-  } 
-
-  /**
-   * Calculates the number of bytes a Unicode character
-   * would have in UTF8 representation in a class file.
-   *
-   * @param value  the char code of the Unicode character
-   * @prec  0 <= value <= 0xFFFF
-   *
-   * @return length of UTF8 representation.
-   */
-  private int UTF8Length(char value) {
-    // if (value < 0 || value > 0xFFFF) throw new Error("not a char value ("+value+")");
-
-    // see JVM spec §4.4.7, p 111
-    if (value == 0) return 2;
-    if (value <= 0x7F) return 1;
-
-    // workaround for javac bug (up to jdk 1.3):
-    if (value <  0x0400) return 2;
-    if (value <= 0x07FF) return 3;
-
-    // correct would be:
-    // if (value <= 0x7FF) return 2;
-    return 3;
-  }
-
-  // convenience
-  protected void println(String s) {
-    @out.Append(s);
-    nl();
-  }
-}
 }

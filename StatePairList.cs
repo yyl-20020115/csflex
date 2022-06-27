@@ -27,67 +27,74 @@ using System;
 namespace CSFlex
 {
 
-/**
- * A list of pairs of states. Used in DFA minimization.
- *
- * @author Gerwin Klein
- * @version JFlex 1.4, $Revision: 2.3 $, $Date: 2004/04/12 10:07:47 $
- * @author Jonathan Gilbert
- * @version CSFlex 1.4
- */
-public sealed class StatePairList {
+    /**
+     * A list of pairs of states. Used in DFA minimization.
+     *
+     * @author Gerwin Klein
+     * @version JFlex 1.4, $Revision: 2.3 $, $Date: 2004/04/12 10:07:47 $
+     * @author Jonathan Gilbert
+     * @version CSFlex 1.4
+     */
+    public sealed class StatePairList
+    {
 
-  // implemented as two arrays of integers.
-  // java.util classes proved too inefficient.
+        // implemented as two arrays of integers.
+        // java.util classes proved too inefficient.
 
-  int[] p;
-  int[] q;
-  
-  int num;
+        private int[] p;
+        private int[] q;
 
-  public StatePairList() {
-    p = new int [8];
-    q = new int [8];
-    num = 0;
-  }
+        private int num;
 
-  public void addPair(int i, int j) {
-    for (int x = 0; x < num; x++)
-      if (p[x] == i && q[x] == j) return;
+        public StatePairList()
+        {
+            p = new int[8];
+            q = new int[8];
+            num = 0;
+        }
 
-    if (num >= p.Length) increaseSize(num);
+        public void AddPair(int i, int j)
+        {
+            for (int x = 0; x < num; x++)
+                if (p[x] == i && q[x] == j) return;
 
-    p[num] = i;
-    q[num] = j;
-    
-    num++;
-  }
+            if (num >= p.Length) IncreaseSize(num);
 
-  public void markAll(StatePairList [] [] list, bool [] [] equiv) {
-    for (int x = 0; x < num; x++) {
-      int i = p[x];
-      int j = q[x];
-      
-      if (equiv[i][j]) {
-        equiv[i][j] = false;
-        if (list[i][j] != null) 
-          list[i][j].markAll(list, equiv);
-      }
+            p[num] = i;
+            q[num] = j;
+
+            num++;
+        }
+
+        public void MarkAll(StatePairList[][] list, bool[][] equiv)
+        {
+            for (int x = 0; x < num; x++)
+            {
+                int i = p[x];
+                int j = q[x];
+
+                if (equiv[i][j])
+                {
+                    equiv[i][j] = false;
+                    if (list[i][j] != null)
+                        list[i][j].MarkAll(list, equiv);
+                }
+            }
+        }
+
+        private void IncreaseSize(int length)
+        {
+            length = Math.Max(length + 1, 4 * p.Length);
+            OutputWriter.Debug("increasing length to " + length); //$NON-NLS-1$
+
+            int[] pn = new int[length];
+            int[] qn = new int[length];
+
+            Array.Copy(p, 0, pn, 0, p.Length);
+            Array.Copy(q, 0, qn, 0, q.Length);
+
+            p = pn;
+            q = qn;
+        }
     }
-  }
-
-  private void increaseSize(int length) {
-    length = Math.Max(length+1, 4*p.Length);
-    Out.debug("increasing length to "+length); //$NON-NLS-1$
-                               
-    int[] pn = new int[length];
-    int[] qn = new int[length];
-
-    Array.Copy(p, 0, pn, 0, p.Length);
-    Array.Copy(q, 0, qn, 0, q.Length);
-
-    p = pn; 
-    q = qn;
-  } 
-}
 }

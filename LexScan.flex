@@ -78,15 +78,15 @@ namespace CSFlex
   internal int epilogue_line = 0;
   private bool epilogue_sent = false;
   
-  internal String classCode;
-  internal String initCode;   
-  internal String initThrow;
-  internal String eofCode;
-  internal String eofThrow;
-  internal String lexThrow;
-  internal String eofVal;
-  internal String scanErrorException;
-  internal String cupSymbol = "sym";
+  internal string classCode;
+  internal string initCode;   
+  internal string initThrow;
+  internal string eofCode;
+  internal string eofThrow;
+  internal string lexThrow;
+  internal string eofVal;
+  internal string scanErrorException;
+  internal string cupSymbol = "sym";
 
   internal StringBuilder actionText = new StringBuilder();
   internal StringBuilder @string    = new StringBuilder();
@@ -113,12 +113,12 @@ namespace CSFlex
   internal bool inclusive_states;
   internal bool eofclose;
     
-  internal String isImplementing;
-  internal String isExtending;
-  internal String className = "Yylex";
-  internal String functionName;
-  internal String tokenType;
-  internal String visibility = "public";
+  internal string isImplementing;
+  internal string isExtending;
+  internal string className = "Yylex";
+  internal string functionName;
+  internal string tokenType;
+  internal string visibility = "public";
     
   internal LexicalStates states = new LexicalStates();
 
@@ -153,7 +153,7 @@ namespace CSFlex
   private Symbol symbol_countUpdate(int type, Object value) {
      int lc = yyline;
      int cc = yycolumn;
-     String text = yytext();
+     string text = yytext();
 
      for (int i=0; i < text.Length; i++) {
       char c = text[i];
@@ -174,7 +174,7 @@ namespace CSFlex
 
   int yyline_copy, yycolumn_copy;
 
-  private void updateCopyOfLineCount(String text) {
+  private void updateCopyOfLineCount(string text) {
 
     yyline_copy = yyline;
     yycolumn_copy = yycolumn;
@@ -192,12 +192,12 @@ namespace CSFlex
 
   }
 
-  private String makeMacroIdent() {
-    String matched = yytext().Trim();
+  private string makeMacroIdent() {
+    string matched = yytext().Trim();
     return matched.Substring(1, matched.Length-2).Trim();
   }
 
-  public static String conc(Object a, Object b) {
+  public static string conc(Object a, Object b) {
     if (a == null && b == null) return null;
     if (a == null) return b.ToString();
     if (b == null) return a.ToString();
@@ -205,7 +205,7 @@ namespace CSFlex
     return a.ToString()+b.ToString();
   }
 
-  public static String concExc(Object a, Object b) {
+  public static string concExc(Object a, Object b) {
     if (a == null && b == null) return null;
     if (a == null) return b.ToString();
     if (b == null) return a.ToString();

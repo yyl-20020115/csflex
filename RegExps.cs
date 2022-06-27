@@ -23,144 +23,137 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace CSFlex
 {
 
-/**
- * Stores all rules of the specification for later access in RegExp -> NFA
- *
- * @author Gerwin Klein
- * @version JFlex 1.4, $Revision: 2.3 $, $Date: 2004/04/12 10:07:48 $
- * @author Jonathan Gilbert
- * @version CSFlex 1.4
- */
-public class RegExps {
-  
-  /** the spec line in which a regexp is used */
-  ArrayList /* of Integer */ lines;
+    /**
+     * Stores all rules of the specification for later access in RegExp -> NFA
+     *
+     * @author Gerwin Klein
+     * @version JFlex 1.4, $Revision: 2.3 $, $Date: 2004/04/12 10:07:48 $
+     * @author Jonathan Gilbert
+     * @version CSFlex 1.4
+     */
+    public class RegExps
+    {
 
-  /** the lexical states in wich the regexp is used */
-  ArrayList /* of ArrayList of Integer */ states;
+        /** the spec line in which a regexp is used */
+        private readonly PrettyArrayList<int> /* of Integer */ lines = new();
 
-  /** the regexp */
-  ArrayList /* of RegExp */ regExps;
+        /** the lexical states in wich the regexp is used */
+        private readonly PrettyArrayList<List<int>> /* of ArrayList of Integer */ states = new();
 
-  /** the action of a regexp */
-  ArrayList /* of Action */ actions;
-  
-  /** flag if it is a BOL regexp */
-  ArrayList /* of Boolean */ BOL;
+        /** the regexp */
+        private readonly PrettyArrayList<RegExp> /* of RegExp */ regExps = new();
 
-  /** the lookahead expression */
-  ArrayList /* of RegExp */ look;
+        /** the action of a regexp */
+        private readonly PrettyArrayList<Action> /* of Action */ actions = new();
 
-  public RegExps() {
-    states = new PrettyArrayList();
-    regExps = new PrettyArrayList();
-    actions = new PrettyArrayList();
-    BOL = new PrettyArrayList();
-    look = new PrettyArrayList();
-    lines = new PrettyArrayList();
-  }
+        /** flag if it is a BOL regexp */
+        private readonly PrettyArrayList<bool> /* of Boolean */ BOL = new();
 
-  public int insert(int line, ArrayList stateList, RegExp regExp, Action action, 
-                     Boolean isBOL, RegExp lookAhead) {      
-    if (Options.DEBUG) {
-      Out.debug("Inserting regular expression with statelist :"+Out.NL+stateList);  //$NON-NLS-1$
-      Out.debug("and action code :"+Out.NL+action.content+Out.NL);     //$NON-NLS-1$
-      Out.debug("expression :"+Out.NL+regExp);  //$NON-NLS-1$
+        /** the lookahead expression */
+        private readonly PrettyArrayList<RegExp> /* of RegExp */ look = new();
+
+        public RegExps()
+        {
+        }
+
+        public int Insert(int line, List<int> stateList, RegExp regExp, Action action,
+                           bool isBOL, RegExp lookAhead)
+        {
+            if (Options.DEBUG)
+            {
+                OutputWriter.Debug("Inserting regular expression with statelist :" + OutputWriter.NewLine + stateList);  //$NON-NLS-1$
+                OutputWriter.Debug("and action code :" + OutputWriter.NewLine + action.Content + OutputWriter.NewLine);     //$NON-NLS-1$
+                OutputWriter.Debug("expression :" + OutputWriter.NewLine + regExp);  //$NON-NLS-1$
+            }
+
+            states.Add(stateList);
+            regExps.Add(regExp);
+            actions.Add(action);
+            BOL.Add(isBOL);
+            look.Add(lookAhead);
+            lines.Add(line);
+
+            return states.Count - 1;
+        }
+
+        public int Insert(List<int> stateList, Action action)
+        {
+            if (Options.DEBUG)
+            {
+                OutputWriter.Debug("Inserting eofrule with statelist :" + OutputWriter.NewLine + stateList);   //$NON-NLS-1$
+                OutputWriter.Debug("and action code :" + OutputWriter.NewLine + action.Content + OutputWriter.NewLine);      //$NON-NLS-1$
+            }
+
+            states.Add(stateList);
+            regExps.Add(null);
+            actions.Add(action);
+            BOL.Add(false);
+            look.Add(null);
+            lines.Add(0);
+
+            return states.Count - 1;
+        }
+
+        public void AddStates(int regNum, List<int> newStates)
+        {
+            var s = newStates.GetEnumerator();
+
+            while (s.MoveNext())
+                (states[regNum]).Add(s.Current);
+        }
+
+        public int Num => states.Count;
+
+        public bool IsBOL(int num) => BOL[num];
+
+        public RegExp GetLookAhead(int num) => look[num];
+
+        public bool IsEOF(int num) => num == 0;// && num < BOL.Count;// BOL[num] == null;
+
+        public List<int> GetStates(int num) => states[num];
+
+        public RegExp GetRegExp(int num) => regExps[num];
+
+        public int GetLine(int num) => lines[num];
+
+        public void CheckActions()
+        {
+            if (actions[actions.Count - 1] == null)
+            {
+                OutputWriter.Error(ErrorMessages.NO_LAST_ACTION);
+                throw new GeneratorException();
+            }
+        }
+
+        public Action GetAction(int num)
+        {
+            while (num < actions.Count && actions[num] == null)
+                num++;
+
+            return actions[num];
+        }
+
+        public int NFASize(Macros macros)
+        {
+            int size = 0;
+            var e = regExps.GetEnumerator();
+            while (e.MoveNext())
+            {
+                var r = e.Current;
+                if (r != null) size += r.Size(macros);
+            }
+            e = look.GetEnumerator();
+            while (e.MoveNext())
+            {
+                var r = e.Current;
+                if (r != null) size += r.Size(macros);
+            }
+            return size;
+        }
     }
-
-    states.Add(stateList);
-    regExps.Add(regExp);
-    actions.Add(action);
-    BOL.Add(isBOL);
-    look.Add(lookAhead);
-    lines.Add(line);
-    
-    return states.Count-1;
-  }
-
-  public int insert(ArrayList stateList, Action action) {
-
-    if (Options.DEBUG) {
-      Out.debug("Inserting eofrule with statelist :"+Out.NL+stateList);   //$NON-NLS-1$
-      Out.debug("and action code :"+Out.NL+action.content+Out.NL);      //$NON-NLS-1$
-    }
-
-    states.Add(stateList);
-    regExps.Add(null);
-    actions.Add(action);
-    BOL.Add(null);
-    look.Add(null);
-    lines.Add(null);
-    
-    return states.Count-1;
-  }
-
-  public void addStates(int regNum, ArrayList newStates) {
-    IEnumerator s = newStates.GetEnumerator();
-    
-    while (s.MoveNext()) 
-      ((ArrayList)states[regNum]).Add(s.Current);      
-  }
-
-  public int getNum() {
-    return states.Count;
-  }
-
-  public bool isBOL(int num) {
-    return ((Boolean) BOL[num]).booleanValue();
-  }
-  
-  public RegExp getLookAhead(int num) {
-    return (RegExp) look[num];
-  }
-
-  public bool isEOF(int num) {
-    return BOL[num] == null;
-  }
-
-  public ArrayList getStates(int num) {
-    return (ArrayList) states[num];
-  }
-
-  public RegExp getRegExp(int num) {
-    return (RegExp) regExps[num];
-  }
-
-  public int getLine(int num) {
-    return ((Integer) lines[num]).intValue();
-  }
-
-  public void checkActions() {
-    if ( actions[actions.Count-1] == null ) {
-      Out.error(ErrorMessages.NO_LAST_ACTION);
-      throw new GeneratorException();
-    }
-  }
-
-  public Action getAction(int num) {
-    while ( num < actions.Count && actions[num] == null )
-      num++;
-
-    return (Action) actions[num];
-  }
-
-  public int NFASize(Macros macros) {
-    int size = 0;
-    IEnumerator e = regExps.GetEnumerator();
-    while (e.MoveNext()) {
-      RegExp r = (RegExp) e.Current;
-      if (r != null) size += r.size(macros);
-    }
-    e = look.GetEnumerator();
-    while (e.MoveNext()) {
-      RegExp r = (RegExp) e.Current;
-      if (r != null) size += r.size(macros);
-    }
-    return size;
-  }
-}
 }

@@ -831,7 +831,7 @@ parser code {:
      return action_obj.eofActions;
    }
        
-   public override void report_error(String message, Object info) {     
+   public override void report_error(string message, Object info) {     
      if ( info is java_cup.runtime.Symbol ) {
        java_cup.runtime.Symbol s = (java_cup.runtime.Symbol) info;
   
@@ -844,7 +844,7 @@ parser code {:
        Out.error(ErrorMessages.UNKNOWN_SYNTAX);
    }
    
-   public override void report_fatal_error(String message, Object info) {
+   public override void report_fatal_error(string message, Object info) {
      // report_error(message, info);
      throw new GeneratorException();
    }
@@ -865,14 +865,14 @@ terminal JLETTERCLASS, JLETTERDIGITCLASS, LETTERCLASS, DIGITCLASS,
          UPPERCLASS, LOWERCLASS, EOFRULE, NOACTION, LOOKAHEAD;
          
 terminal Action ACTION;
-terminal String IDENT, USERCODE, EPILOGUE;
+terminal string IDENT, USERCODE, EPILOGUE;
 terminal int REPEAT;
 
 /* tokens used in RegExp parse tree */
 terminal STAR, PLUS, BAR, QUESTION, POINT, BANG, TILDE;
 
 terminal char CHAR;
-terminal String STRING, MACROUSE;
+terminal string STRING, MACROUSE;
 
 /* symbols *only* used in the parse tree (not in the grammar) */
 terminal CCLASS, CCLASSNOT, CONCAT;

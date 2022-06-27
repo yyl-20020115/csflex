@@ -27,97 +27,90 @@ using System.Text;
 
 namespace CSFlex
 {
+    /**
+     * 
+     * @author Gerwin Klein 
+     * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:47 $ 
+     * @author Jonathan Gilbert
+     * @version CSFlex 1.4
+     */
+    public sealed class CharSet
+    {
+
+        public const int BITS = 6;           // the number of bits to shift (2^6 = 64)
+        public const int MOD = (1 << BITS) - 1;  // modulus
+
+        private long[] bits;
+
+        private int numElements;
+
+        public long[] Bits => bits;
+        public int NumElements => numElements;
+
+        public CharSet()
+        {
+            this.bits = new long[1];
+        }
 
 
-/**
- * 
- * @author Gerwin Klein 
- * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:47 $ 
- * @author Jonathan Gilbert
- * @version CSFlex 1.4
- */
-public sealed class CharSet {
-
-  internal const int BITS = 6;           // the number of bits to shift (2^6 = 64)
-  internal const int MOD = (1<<BITS)-1;  // modulus
-  
-  internal long[] bits;
-
-  private int numElements;
-  
-  
-  public CharSet() {
-    bits = new long[1];
-  }
+        public CharSet(int initialSize, int character)
+        {
+            this.bits = new long[(initialSize >> BITS) + 1];
+            this.Add(character);
+        }
 
 
-  public CharSet(int initialSize, int character) {
-    bits = new long[(initialSize >> BITS)+1];
-    add(character);
-  }
+        public void Add(int character)
+        {
+            this.Resize(character);
+
+            if ((bits[character >> BITS] & (1L << (character & MOD))) == 0) numElements++;
+
+            this.bits[character >> BITS] |= (1L << (character & MOD));
+        }
+
+        private int NBitsToSize(int nbits) => ((nbits >> BITS) + 1);
+
+        private void Resize(int nbits)
+        {
+            var needed = NBitsToSize(nbits);
+
+            if (needed < bits.Length) return;
+
+            var newbits = new long[Math.Max(bits.Length * 2, needed)];
+            Array.Copy(bits, 0, newbits, 0, bits.Length);
+            this.bits = newbits;
+        }
 
 
-  public void add(int character) {
-    resize(character);
+        public bool IsElement(int character)
+        {
+            int index = character >> BITS;
+            if (index >= bits.Length) return false;
+            return (bits[index] & (1L << (character & MOD))) != 0;
+        }
+        public CharSetEnumerator GetCharacters() => new (this);
+        public bool ContainsElements => numElements > 0;
 
-    if ( (bits[character >> BITS] & (1L << (character & MOD))) == 0) numElements++;
+        public int Size => this.numElements;
 
-    bits[character >> BITS] |= (1L << (character & MOD));    
-  }
+        public override string ToString()
+        {
+            var e = GetCharacters();
 
+            var result = new StringBuilder("{");
 
-  private int nbits2size (int nbits) {
-    return ((nbits >> BITS) + 1);
-  }
+            if (e.HasMoreElements) result.Append(e.NextElement());
 
+            while (e.HasMoreElements)
+            {
+                var i = e.NextElement();
+                result.Append(", ").Append(i);
+            }
 
-  private void resize(int nbits) {
-    int needed = nbits2size(nbits);
+            result.Append("}");
 
-    if (needed < bits.Length) return;
-         
-    long[] newbits = new long[Math.Max(bits.Length*2,needed)];
-    Array.Copy(bits, 0, newbits, 0, bits.Length);
-    
-    bits = newbits;
-  }
-
-
-  public bool isElement(int character) {
-    int index = character >> BITS;
-    if (index >= bits.Length)  return false;
-    return (bits[index] & (1L << (character & MOD))) != 0;
-  }
-
-
-  public CharSetEnumerator characters() {
-    return new CharSetEnumerator(this);
-  }
-
-
-  public bool containsElements() {
-    return numElements > 0;
-  }
-
-  public int size() {
-    return numElements;
-  }
-  
-  public override String ToString() {
-    CharSetEnumerator @enum = characters();
-
-    StringBuilder result = new StringBuilder("{");
-
-    if ( @enum.hasMoreElements() ) result.Append(@enum.nextElement());
-
-    while ( @enum.hasMoreElements() ) {
-      int i = @enum.nextElement();
-      result.Append(", ").Append(i);
+            return result.ToString();
+        }
     }
-
-    result.Append("}");
-
-    return result.ToString();
-  }
-}
 }

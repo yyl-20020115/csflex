@@ -23,31 +23,34 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 using System.Windows.Forms;
 
-namespace CSFlex.gui
+namespace CSFlex.GUI
 {
-  /**
-   * Constraints for layout elements of GridLayout
-   *
-   * @author Gerwin Klein
-   * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:48 $
-   * @author Jonathan Gilbert
-   * @version CSFlex 1.4
-   */
-  public class GridPanelConstraint 
-  {
-    public int x, y, width, height;
-    public Handles handle;
-    public Control component;
-
-    public GridPanelConstraint(int x, int y, int width, int height, 
-      Handles handle, Control component) 
+    /**
+     * Constraints for layout elements of GridLayout
+     *
+     * @author Gerwin Klein
+     * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:48 $
+     * @author Jonathan Gilbert
+     * @version CSFlex 1.4
+     */
+    public class GridPanelConstraint
     {
-      this.x         = x;
-      this.y         = y;
-      this.width     = width;
-      this.height    = height;
-      this.handle    = handle;
-      this.component = component;
+        public int X;
+        public int Y;
+        public int Width;
+        public int Height;
+        public Handles Handle;
+        public Control Component;
+
+        public GridPanelConstraint(int X, int Y, int Width, int Height,
+          Handles Handle, Control Component)
+        {
+            this.X = X;
+            this.Y = Y;
+            this.Width = Width;
+            this.Height = Height;
+            this.Handle = Handle;
+            this.Component = Component;
+        }
     }
-  }
 }

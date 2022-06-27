@@ -27,91 +27,95 @@ using System;
 namespace CSFlex
 {
 
-/**
- * HiLowEmitter
- * 
- * @author Gerwin Klein
- * @version $Revision: 1.5 $, $Date: 2004/04/12 10:07:48 $
- * @author Jonathan Gilbert
- * @version CSFlex 1.4
- */
-public class HiLowEmitter: PackEmitter {
-
-  /** number of entries in expanded array */
-  private int numEntries;
-
-  /**
-   * Create new emitter for values in [0, 0xFFFFFFFF] using hi/low encoding.
-   * 
-   * @param name   the name of the generated array
-   */
-  public HiLowEmitter(String name): base(name)
-  {
-  }
-
-  /**
-   * Emits hi/low pair unpacking code for the generated array. 
-   * 
-   * @see CSFlex.PackEmitter#emitUnPack()
-   */
-  public override void emitUnpack() {
-    
-    if (Options.emit_csharp)
-      println(" 0 };"); // close array
-    else
-      println("\";"); // close last string chunk:
-    nl();
-    println("  private static int [] zzUnpack"+name+"() {");
-    println("    int [] result = new int["+numEntries+"];");
-    println("    int offset = 0;");
-
-    for (int i = 0; i < chunks; i++) {
-      println("    offset = zzUnpack"+name+"("+constName()+"_PACKED_"+i+", offset, result);");
-    }
-
-    println("    return result;");
-    println("  }");
-
-    nl();
-    if (Options.emit_csharp)
+    /**
+     * HiLowEmitter
+     * 
+     * @author Gerwin Klein
+     * @version $Revision: 1.5 $, $Date: 2004/04/12 10:07:48 $
+     * @author Jonathan Gilbert
+     * @version CSFlex 1.4
+     */
+    public class HiLowEmitter : PackEmitter
     {
-      println("  private static int zzUnpack"+name+"(ushort[] packed, int offset, int [] result) {");
-      println("    int i = 0;  /* index in packed string  */");
-      println("    int j = offset;  /* index in unpacked array */");
-      println("    int l = packed.Length;");
-      println("    while (i + 1 < l) {");
-      println("      int high = packed[i++] << 16;");
-      println("      result[j++] = high | packed[i++];");
-      println("    }");
-      println("    return j;");
-      println("  }");
-    }
-    else
-    {
-      println("  private static int zzUnpack"+name+"(String packed, int offset, int [] result) {");
-      println("    int i = 0;  /* index in packed string  */");
-      println("    int j = offset;  /* index in unpacked array */");
-      println("    int l = packed.length();");
-      println("    while (i < l) {");
-      println("      int high = packed.charAt(i++) << 16;");
-      println("      result[j++] = high | packed.charAt(i++);");
-      println("    }");
-      println("    return j;");
-      println("  }");
-    }
-  }
 
-  /**
-   * Emit one value using two characters. 
-   *
-   * @param val  the value to emit
-   * @prec  0 <= val <= 0xFFFFFFFF 
-   */
-  public void emit(int val) {
-    numEntries+= 1;
-    breaks();
-    emitUC(val >> 16);
-    emitUC(val & 0xFFFF);        
-  }
-}
+        /** number of entries in expanded array */
+        private int numEntries;
+
+        /**
+         * Create new emitter for values in [0, 0xFFFFFFFF] using hi/low encoding.
+         * 
+         * @param name   the name of the generated array
+         */
+        public HiLowEmitter(string name) : base(name)
+        {
+        }
+
+        /**
+         * Emits hi/low pair unpacking code for the generated array. 
+         * 
+         * @see CSFlex.PackEmitter#emitUnPack()
+         */
+        public override void EmitUnpack()
+        {
+
+            if (Options.EmitCsharp)
+                Println(" 0 };"); // close array
+            else
+                Println("\";"); // close last string chunk:
+            EmitNewLine();
+            Println("  private static int [] zzUnpack" + name + "() {");
+            Println("    int [] result = new int[" + numEntries + "];");
+            Println("    int offset = 0;");
+
+            for (int i = 0; i < chunks; i++)
+            {
+                Println("    offset = zzUnpack" + name + "(" + ConstName+ "_PACKED_" + i + ", offset, result);");
+            }
+
+            Println("    return result;");
+            Println("  }");
+
+            EmitNewLine();
+            if (Options.EmitCsharp)
+            {
+                Println("  private static int zzUnpack" + name + "(ushort[] packed, int offset, int [] result) {");
+                Println("    int i = 0;  /* index in packed string  */");
+                Println("    int j = offset;  /* index in unpacked array */");
+                Println("    int l = packed.Length;");
+                Println("    while (i + 1 < l) {");
+                Println("      int high = packed[i++] << 16;");
+                Println("      result[j++] = high | packed[i++];");
+                Println("    }");
+                Println("    return j;");
+                Println("  }");
+            }
+            else
+            {
+                Println("  private static int zzUnpack" + name + "(string packed, int offset, int [] result) {");
+                Println("    int i = 0;  /* index in packed string  */");
+                Println("    int j = offset;  /* index in unpacked array */");
+                Println("    int l = packed.length();");
+                Println("    while (i < l) {");
+                Println("      int high = packed.charAt(i++) << 16;");
+                Println("      result[j++] = high | packed.charAt(i++);");
+                Println("    }");
+                Println("    return j;");
+                Println("  }");
+            }
+        }
+
+        /**
+         * Emit one value using two characters. 
+         *
+         * @param val  the value to emit
+         * @prec  0 <= val <= 0xFFFFFFFF 
+         */
+        public void Emit(int val)
+        {
+            numEntries += 1;
+            Breaks();
+            EmitUnicodeChar(val >> 16);
+            EmitUnicodeChar(val & 0xFFFF);
+        }
+    }
 }

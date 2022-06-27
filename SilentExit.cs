@@ -27,13 +27,14 @@ using System;
 namespace CSFlex
 {
 
-/**
- * Signals a silent exit (no statistics printout).
- * 
- * @author Gerwin Klein
- * @version $Revision: 2.2 $, $Date: 2004/04/12 10:07:48 $
- */
-public class SilentExit: Exception {
+    /**
+     * Signals a silent exit (no statistics printout).
+     * 
+     * @author Gerwin Klein
+     * @version $Revision: 2.2 $, $Date: 2004/04/12 10:07:48 $
+     */
+    public class SilentExit : Exception
+    {
 
-}
+    }
 }

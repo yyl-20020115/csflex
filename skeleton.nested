@@ -23,7 +23,7 @@
   private static final int ZZ_PUSHBACK_2BIG = 2;
 
   /* error messages for the codes above */
-  private static final String ZZ_ERROR_MSG[] = {
+  private static final string ZZ_ERROR_MSG[] = {
     "Unkown internal scanner error",
     "Error: could not match input",
     "Error: pushback value was too large"
@@ -37,7 +37,7 @@
   private const int ZZ_PUSHBACK_2BIG = 2;
 
   /* error messages for the codes above */
-  private static readonly String[] ZZ_ERROR_MSG = new string[] {
+  private static readonly string[] ZZ_ERROR_MSG = new string[] {
     "Unkown internal scanner error",
     "Error: could not match input",
     "Error: pushback value was too large"
@@ -402,8 +402,8 @@
   /**
    * Returns the text matched by the current regular expression.
    */
-  public final String yytext() {
-    return new String( zzBuffer, zzStartRead, zzMarkedPos-zzStartRead );
+  public final string yytext() {
+    return new string( zzBuffer, zzStartRead, zzMarkedPos-zzStartRead );
   }
 
 
@@ -614,8 +614,8 @@
   /**
    * Returns the text matched by the current regular expression.
    */
-  public String yytext() {
-    return new String( zzBuffer, zzStartRead, zzMarkedPos-zzStartRead );
+  public string yytext() {
+    return new string( zzBuffer, zzStartRead, zzMarkedPos-zzStartRead );
   }
 
 
@@ -658,7 +658,7 @@
    * @param   errorCode  the code of the errormessage to display
    */
 --- zzScanError declaration
-    String message;
+    string message;
     try {
       message = ZZ_ERROR_MSG[errorCode];
     }
@@ -667,7 +667,7 @@
     }
 
 --- C# version
-    String message;
+    string message;
     try {
       message = ZZ_ERROR_MSG[errorCode];
     }
