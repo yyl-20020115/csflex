@@ -234,21 +234,15 @@ namespace CSFlex
             return value;
         }
 
-        public override int GetHashCode()
-        {
-            return v.GetHashCode();
-        }
+        public override int GetHashCode() => v.GetHashCode();
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj) => obj switch
         {
-            return obj switch
-            {
-                null => false,
-                int i => v == i,
-                Integer n => v == n.v,
-                _ => false,
-            };
-        }
+            null => false,
+            int i => v == i,
+            Integer n => v == n.v,
+            _ => false,
+        };
 
         public override string ToString() => v.ToString();
     }
@@ -300,7 +294,7 @@ namespace CSFlex
         }
     }
 
-    public class PrettyHashtable<T,V> : Dictionary<T,V>
+    public class PrettyHashtable<T,V> : Dictionary<T,V> where T :notnull
     {
         public PrettyHashtable(IDictionary<T,V> d)
           : base(d)

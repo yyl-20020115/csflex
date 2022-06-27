@@ -1,18 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net48</TargetFramework>
-    <LangVersion>9</LangVersion>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>10</LangVersion>
     <PackageVersion>1.4.0.2</PackageVersion>
     <Copyright>2021</Copyright>
-    <PackageLicenseUrl>https://github.com/chklauser/csflex/blob/main/COPYRIGHT</PackageLicenseUrl>
-    <RepositoryUrl>https://github.com/chklauser/csflex</RepositoryUrl>
     <NeutralLanguage>en</NeutralLanguage>
     <StartupObject>CSFlex.MainClass</StartupObject>
-    <Nullable>warnings</Nullable>
+    <Nullable>enable</Nullable>
+    <RootNamespace>CSFlex.GUI</RootNamespace>
     <AssemblyVersion>$(PackageVersion)</AssemblyVersion>
     <FileVersion>$(AssemblyVersion)</FileVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>

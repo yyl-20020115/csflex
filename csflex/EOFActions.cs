@@ -87,7 +87,7 @@ namespace CSFlex
             }
         }
 
-        public bool IsEOFAction(Object a)
+        public bool IsEOFAction(object a)
         {
             if (a == defaultAction) return true;
 

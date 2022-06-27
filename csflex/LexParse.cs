@@ -1786,7 +1786,7 @@ namespace CSFlex
                         if (!scanner.macroDefinition)
                         {
                             if (!macros.MarkUsed(ident))
-                                throw new ScannerException(scanner.file, ErrorMessages.MACRO_UNDECL,
+                                throw new ScannerException(scanner.file!, ErrorMessages.MACRO_UNDECL,
                                                            identleft, identright);
                         }
                         RESULT = new RegExp1(Symbols.MACROUSE, ident);

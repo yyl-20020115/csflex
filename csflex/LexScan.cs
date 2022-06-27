@@ -1577,11 +1577,11 @@ namespace CSFlex
         internal int action_line = 0;
         internal int bufferSize = 16384;
 
-        internal File file;
-        internal Stack files = new Stack();
+        internal File? file = null;
+        internal Stack<File?> files = new ();
 
-        internal StringBuilder userCode = new StringBuilder();
-        internal StringBuilder epilogue = new StringBuilder();
+        internal StringBuilder userCode = new ();
+        internal StringBuilder epilogue = new ();
         internal int epilogue_line = 0;
         private bool epilogue_sent = false;
 
@@ -2258,7 +2258,7 @@ namespace CSFlex
                             // check for cycle
                             // FIXME: this is an extremely ugly hack for the C# version
                             if (new ArrayList(files.ToArray()).Contains(f))
-                                throw new ScannerException(file, ErrorMessages.FILE_CYCLE, yyline);
+                                throw new ScannerException(file!, ErrorMessages.FILE_CYCLE, yyline);
                             try
                             {
                                 yypushStream(new StreamReader(f));
@@ -2268,7 +2268,7 @@ namespace CSFlex
                             }
                             catch (FileNotFoundException)
                             {
-                                throw new ScannerException(file, ErrorMessages.NOT_READABLE, yyline);
+                                throw new ScannerException(file!, ErrorMessages.NOT_READABLE, yyline);
                             }
 
                         }
@@ -2395,7 +2395,7 @@ namespace CSFlex
                     case 124:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            throw new ScannerException(file, ErrorMessages.QUIL_CUPSYM, yyline);
+                            throw new ScannerException(file!, ErrorMessages.QUIL_CUPSYM, yyline);
                         }
                         break;
                     case 156:
@@ -2549,13 +2549,13 @@ namespace CSFlex
                     case 62:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            throw new ScannerException(file, ErrorMessages.UNKNOWN_OPTION, yyline, yycolumn);
+                            throw new ScannerException(file!, ErrorMessages.UNKNOWN_OPTION, yyline, yycolumn);
                         }
                         break;
                     case 126:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            throw new ScannerException(file, ErrorMessages.NO_BUFFER_SIZE, yyline);
+                            throw new ScannerException(file!, ErrorMessages.NO_BUFFER_SIZE, yyline);
                         }
                         break;
                     case 37:
@@ -2601,7 +2601,7 @@ namespace CSFlex
                     case 142:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            throw new ScannerException(file, ErrorMessages.QUIL_INITTHROW, yyline);
+                            throw new ScannerException(file!, ErrorMessages.QUIL_INITTHROW, yyline);
                         }
                         break;
                     case 24:
@@ -2697,7 +2697,7 @@ namespace CSFlex
                     case 46:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            throw new ScannerException(file, ErrorMessages.EOL_IN_CHARCLASS, yyline, yycolumn);
+                            throw new ScannerException(file!, ErrorMessages.EOL_IN_CHARCLASS, yyline, yycolumn);
                         }
                         break;
                     case 125:
@@ -2847,7 +2847,7 @@ namespace CSFlex
                     case 147:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            throw new ScannerException(file, ErrorMessages.QUIL_SCANERROR, yyline);
+                            throw new ScannerException(file!, ErrorMessages.QUIL_SCANERROR, yyline);
                         }
                         break;
                     case 82:
@@ -2859,7 +2859,7 @@ namespace CSFlex
                     case 152:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            throw new ScannerException(file, ErrorMessages.QUIL_YYLEXTHROW, yyline);
+                            throw new ScannerException(file!, ErrorMessages.QUIL_YYLEXTHROW, yyline);
                         }
                         break;
                     case 67:
@@ -2977,7 +2977,7 @@ namespace CSFlex
                     case 119:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            throw new ScannerException(file, ErrorMessages.EOF_WO_ACTION);
+                            throw new ScannerException(file!, ErrorMessages.EOF_WO_ACTION);
                         }
                         break;
                     case 38:
@@ -3093,7 +3093,7 @@ namespace CSFlex
                     case 123:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            throw new ScannerException(file, ErrorMessages.QUIL_THROW, yyline);
+                            throw new ScannerException(file!, ErrorMessages.QUIL_THROW, yyline);
                         }
                         break;
                     case 99:
@@ -3186,7 +3186,7 @@ namespace CSFlex
                     case 43:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            throw new ScannerException(file, ErrorMessages.UNTERMINATED_STR, yyline, yycolumn);
+                            throw new ScannerException(file!, ErrorMessages.UNTERMINATED_STR, yyline, yycolumn);
                         }
                         break;
                     case 7:
@@ -3250,7 +3250,7 @@ namespace CSFlex
                     case 5:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            throw new ScannerException(file, ErrorMessages.UNEXPECTED_CHAR, yyline, yycolumn);
+                            throw new ScannerException(file!, ErrorMessages.UNEXPECTED_CHAR, yyline, yycolumn);
                         }
                         break;
                     case 141:
@@ -3262,7 +3262,7 @@ namespace CSFlex
                     case 12:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            throw new ScannerException(file, ErrorMessages.UNKNOWN_OPTION, yyline, yycolumn);
+                            throw new ScannerException(file!, ErrorMessages.UNKNOWN_OPTION, yyline, yycolumn);
                         }
                         break;
                     case 31:
@@ -3287,13 +3287,13 @@ namespace CSFlex
                                 case JAVA_CODE:
                                     if (ZZ_SPURIOUS_WARNINGS_SUCK)
                                     {
-                                        throw new ScannerException(file, ErrorMessages.EOF_IN_ACTION, action_line - 1);
+                                        throw new ScannerException(file!, ErrorMessages.EOF_IN_ACTION, action_line - 1);
                                     }
                                     break;
                                 case STATES:
                                     if (ZZ_SPURIOUS_WARNINGS_SUCK)
                                     {
-                                        throw new ScannerException(file, ErrorMessages.EOF_IN_STATES);
+                                        throw new ScannerException(file!, ErrorMessages.EOF_IN_STATES);
                                     }
                                     break;
                                 case USEREPILOGUE:
@@ -3301,7 +3301,7 @@ namespace CSFlex
                                     {
                                         if (yymoreStreams())
                                         {
-                                            file = (File)files.Pop();
+                                            file = files.Pop();
                                             yypopStream();
                                         }
                                         else if (epilogue_sent)
@@ -3319,48 +3319,48 @@ namespace CSFlex
                                     {
                                         if (yymoreStreams())
                                         {
-                                            file = (File)files.Pop();
+                                            file = files.Pop();
                                             yypopStream();
                                         }
                                         else
-                                            throw new ScannerException(file, ErrorMessages.EOF_IN_MACROS);
+                                            throw new ScannerException(file!, ErrorMessages.EOF_IN_MACROS);
 
                                     }
                                     break;
                                 case STATELIST:
                                     if (ZZ_SPURIOUS_WARNINGS_SUCK)
                                     {
-                                        throw new ScannerException(file, ErrorMessages.EOF_IN_MACROS);
+                                        throw new ScannerException(file!, ErrorMessages.EOF_IN_MACROS);
                                     }
                                     break;
                                 case REPEATEXP:
                                     if (ZZ_SPURIOUS_WARNINGS_SUCK)
                                     {
-                                        throw new ScannerException(file, ErrorMessages.EOF_IN_REGEXP);
+                                        throw new ScannerException(file!, ErrorMessages.EOF_IN_REGEXP);
                                     }
                                     break;
                                 case COPY:
                                     if (ZZ_SPURIOUS_WARNINGS_SUCK)
                                     {
-                                        throw new ScannerException(file, ErrorMessages.EOF_IN_MACROS);
+                                        throw new ScannerException(file!, ErrorMessages.EOF_IN_MACROS);
                                     }
                                     break;
                                 case COMMENT:
                                     if (ZZ_SPURIOUS_WARNINGS_SUCK)
                                     {
-                                        throw new ScannerException(file, ErrorMessages.EOF_IN_COMMENT);
+                                        throw new ScannerException(file!, ErrorMessages.EOF_IN_COMMENT);
                                     }
                                     break;
                                 case CHARCLASS:
                                     if (ZZ_SPURIOUS_WARNINGS_SUCK)
                                     {
-                                        throw new ScannerException(file, ErrorMessages.EOF_IN_REGEXP);
+                                        throw new ScannerException(file!, ErrorMessages.EOF_IN_REGEXP);
                                     }
                                     break;
                                 case STRING_CONTENT:
                                     if (ZZ_SPURIOUS_WARNINGS_SUCK)
                                     {
-                                        throw new ScannerException(file, ErrorMessages.EOF_IN_STRING);
+                                        throw new ScannerException(file!, ErrorMessages.EOF_IN_STRING);
                                     }
                                     break;
                                 default:
@@ -3368,7 +3368,7 @@ namespace CSFlex
                                     {
                                         if (yymoreStreams())
                                         {
-                                            file = (File)files.Pop();
+                                            file = files.Pop();
                                             yypopStream();
                                         }
                                         else
@@ -3399,7 +3399,7 @@ namespace CSFlex
                 System.Reflection.FieldInfo[] classFields = typeof(Symbols).GetFields();
                 for (int i = 0; i < classFields.Length; i++)
                 {
-                    if (((int)classFields[i].GetValue(null)) == token)
+                    if (classFields[i].GetValue(null) is int v && v == token)
                     {
                         return classFields[i].Name;
                     }
@@ -3448,7 +3448,7 @@ namespace CSFlex
             {
                 for (int i = 0; i < argv.Length; i++)
                 {
-                    LexScan scanner = null;
+                    LexScan? scanner = null;
                     try
                     {
                         scanner = new LexScan(new StreamReader(argv[i]));

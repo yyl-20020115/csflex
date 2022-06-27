@@ -51,7 +51,7 @@ namespace CSFlex
 
         public override int GetHashCode() => end + (start << 8);
 
-        public override bool Equals(object o) => o is IntPair p && start == p.start && end == p.end;
+        public override bool Equals(object? o) => o is IntPair p && start == p.start && end == p.end;
 
         public override string ToString() => $"({start},{end})";
     }

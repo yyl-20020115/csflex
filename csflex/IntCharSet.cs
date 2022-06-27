@@ -260,10 +260,10 @@ namespace CSFlex
         /**
          * o instanceof Interval
          */
-        public override bool Equals(Object o)
+        public override bool Equals(object? o)
         {
-            IntCharSet set = (IntCharSet)o;
-            if (intervalls.Count != set.intervalls.Count) return false;
+            //IntCharSet set = (IntCharSet)o;
+            if (!(o is IntCharSet set)|| intervalls.Count != set.intervalls.Count) return false;
 
             for (int i = 0; i < intervalls.Count; i++)
             {

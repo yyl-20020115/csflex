@@ -52,27 +52,27 @@ namespace CSFlex
 
 
         /** output directory */
-        private static File directory;
+        private static File directory = new (".");
         /** strict JLex compatibility */
-        public static bool JLex;
+        public static bool JLex = false;
         /** don't run minimization algorithm if this is true */
-        public static bool NoMinimize;
+        public static bool NoMinimize = true;
         /** don't write backup files if this is true */
-        public static bool NoBackup;
+        public static bool NoBackup = true;
         /** default code generation method */
-        public static int GenMethod;
+        public static int GenMethod = 0;
         /** If false, only error/warning output will be generated */
-        public static bool Verbose;
+        public static bool Verbose = false;
         /** If true, progress dots will be printed */
-        public static bool progress;
+        public static bool progress = false;
         /** If true, C# Flex will print time statistics about the generation process */
-        public static bool Time;
+        public static bool Time = false;
         /** If true, C# Flex will write graphviz .dot files for generated automata */
-        public static bool Dot;
+        public static bool Dot = false;
         /** If true, you will be flooded with information (e.g. dfa tables).  */
-        public static bool Dump;
+        public static bool Dump = false;
         /** If true, the output will be C# code instead of Java.  */
-        public static bool EmitCsharp;
+        public static bool EmitCsharp = false;
 
         static Options() { SetDefaults(); }
 

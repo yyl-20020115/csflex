@@ -242,12 +242,11 @@ namespace CSFlex
          * @throws ClassCastException if b is not a StateSet
          * @throws NullPointerException if b is null
          */
-        public override bool Equals(Object b)
+        public override bool Equals(object? b)
         {
             int i = 0;
             int l1, l2;
-            var set = b as StateSet;
-            if(set == null) return false;   
+            if(b is not StateSet set) return false;   
             if (DEBUG) OutputWriter.Dump("StateSet.equals(" + set + "), this=" + this); //$NON-NLS-1$ //$NON-NLS-2$
 
             l1 = bits.Length;

@@ -94,7 +94,7 @@ namespace CSFlex
          *
          * @param o  the object to check equality with
          */
-        public override bool Equals(object o) => o == this || o is Interval other && other.start == this.start && other.end == this.end;
+        public override bool Equals(object? o) => o == this || o is Interval other && other.start == this.start && other.end == this.end;
 
         public override int GetHashCode() => unchecked((end << 16) | (ushort)start);
 

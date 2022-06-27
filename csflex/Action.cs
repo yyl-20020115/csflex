@@ -122,7 +122,7 @@ namespace CSFlex
          * 
          * @see Action#isEquiv(Action)
          */
-        public override bool Equals(object o) => o is Action a && IsEquiv(a);
+        public override bool Equals(object? o) => o is Action a && IsEquiv(a);
 
     }
 }

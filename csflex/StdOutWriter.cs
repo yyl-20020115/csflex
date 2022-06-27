@@ -74,7 +74,7 @@ namespace CSFlex
         }
 
         /** A StdOutWrite, attached to the specified output stream, no gui mode */
-        public StdOutWriter(Stream stream,Encoding encoding = null)
+        public StdOutWriter(Stream stream,Encoding? encoding = null)
         {
             encoding ??= Encoding.Default;
             writer = new StreamWriter(stream, this.encoding = encoding);
@@ -86,14 +86,14 @@ namespace CSFlex
          *
          * @param text  the RichTextBox to write to
          */
-        public void SetGUIMode(RichTextBox text)
+        public void SetGUIMode(RichTextBox? text)
         {
             this.text = text;
         }
 
         public delegate void SimpleDelegate();
 
-        private object SyncRoot = new ();
+        private readonly object SyncRoot = new ();
 
 
         private void AppendStringInGUIMode(string str)
@@ -186,9 +186,12 @@ namespace CSFlex
             }
         }
 
-        public override void WriteLine(string str)
+        public override void WriteLine(string? str)
         {
-            Write(str, 0, str.Length);
+            if(str!= null)
+            {
+                Write(str, 0, str.Length);
+            }
             WriteLine();
         }
     }
