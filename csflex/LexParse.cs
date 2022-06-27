@@ -4,7 +4,7 @@
 // 23/09/2004 4:14:16 AM
 //----------------------------------------------------
 
-using java_cup.runtime;
+using JavaCup.Runtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace CSFlex
     /** CUP v0.10l generated parser.
       * @version 23/09/2004 4:14:16 AM
       */
-    public class LexParse : lr_parser
+    public class LexParse : LRParser
     {
         public LexParse() { }
 
@@ -387,8 +387,8 @@ namespace CSFlex
         /** Invoke a user supplied parse action. */
         public override Symbol do_action(
           int act_num,
-          lr_parser parser,
-          java_cup.Stack stack,
+          LRParser parser,
+          JavaCup.JCStack<Symbol> stack,
           int top) =>
             /* call code in generated class */
             action_obj.CUP_LexParse_do_action(act_num, parser, stack, top);
@@ -1251,12 +1251,12 @@ namespace CSFlex
         /** Method with the actual generated action code. */
         public Symbol CUP_LexParse_do_action(
           int CUP_LexParse_act_num,
-          java_cup.runtime.lr_parser CUP_LexParse_parser,
-          java_cup.Stack CUP_LexParse_stack,
+          JavaCup.Runtime.LRParser CUP_LexParse_parser,
+          JavaCup.JCStack<Symbol> CUP_LexParse_stack,
           int CUP_LexParse_top)
         {
             /* Symbol object for return from actions */
-            java_cup.runtime.Symbol CUP_LexParse_result;
+            JavaCup.Runtime.Symbol CUP_LexParse_result;
 
             /* select the action based on the action number */
             switch (CUP_LexParse_act_num)
@@ -1268,7 +1268,7 @@ namespace CSFlex
 
                         RESULT = MakePreClass(Symbols.LOWERCLASS);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(15/*preclass*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(15/*preclass*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1279,7 +1279,7 @@ namespace CSFlex
 
                         RESULT = MakePreClass(Symbols.UPPERCLASS);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(15/*preclass*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(15/*preclass*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1290,7 +1290,7 @@ namespace CSFlex
 
                         RESULT = MakePreClass(Symbols.DIGITCLASS);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(15/*preclass*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(15/*preclass*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1301,7 +1301,7 @@ namespace CSFlex
 
                         RESULT = MakePreClass(Symbols.LETTERCLASS);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(15/*preclass*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(15/*preclass*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1312,7 +1312,7 @@ namespace CSFlex
 
                         RESULT = MakePreClass(Symbols.JLETTERDIGITCLASS);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(15/*preclass*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(15/*preclass*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1323,7 +1323,7 @@ namespace CSFlex
 
                         RESULT = MakePreClass(Symbols.JLETTERCLASS);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(15/*preclass*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(15/*preclass*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1331,13 +1331,13 @@ namespace CSFlex
                 case 66: // classcontentelem ::= CHAR 
                     {
                         Interval RESULT = null;
-                        int cleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int cright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        char c = (char)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int cleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int cright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        char c = (char)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = new Interval(c, c);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(11/*classcontentelem*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(11/*classcontentelem*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1345,16 +1345,16 @@ namespace CSFlex
                 case 65: // classcontentelem ::= CHAR DASH CHAR 
                     {
                         Interval RESULT = null;
-                        int c1left = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left;
-                        int c1right = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).right;
-                        char c1 = (char)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).value;
-                        int c2left = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int c2right = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        char c2 = (char)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int c1left = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left;
+                        int c1right = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).right;
+                        char c1 = (char)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).value;
+                        int c2left = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int c2right = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        char c2 = (char)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = new Interval(c1, c2);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(11/*classcontentelem*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(11/*classcontentelem*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1362,15 +1362,15 @@ namespace CSFlex
                 case 64: // classcontent ::= MACROUSE 
                     {
                         ArrayList RESULT = null;
-                        int identleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int identright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        string ident = (string)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int identleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int identright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        string ident = (string)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         SyntaxError(ErrorMessages.CHARCLASS_MACRO, identleft, identright);
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(14/*classcontent*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(14/*classcontent*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1378,18 +1378,18 @@ namespace CSFlex
                 case 63: // classcontent ::= classcontent MACROUSE 
                     {
                         ArrayList RESULT = null;
-                        int listleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int listright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        ArrayList list = (ArrayList)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
-                        int identleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int identright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        string ident = (string)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int listleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int listright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        ArrayList list = (ArrayList)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
+                        int identleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int identright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        string ident = (string)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         SyntaxError(ErrorMessages.CHARCLASS_MACRO, identleft, identright);
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(14/*classcontent*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(14/*classcontent*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1397,9 +1397,9 @@ namespace CSFlex
                 case 62: // classcontent ::= STRING 
                     {
                         PrettyArrayList<Interval> RESULT = null;
-                        int sleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int sright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        string s = (string)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int sleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int sright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        string s = (string)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         RESULT = new ();
@@ -1407,7 +1407,7 @@ namespace CSFlex
                             RESULT.Add(new Interval(s[i], s[i]));
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(14/*classcontent*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(14/*classcontent*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1415,12 +1415,12 @@ namespace CSFlex
                 case 61: // classcontent ::= classcontent STRING 
                     {
                         ArrayList RESULT = null;
-                        int listleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int listright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        ArrayList list = (ArrayList)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
-                        int sleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int sright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        string s = (string)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int listleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int listright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        ArrayList list = (ArrayList)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
+                        int sleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int sright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        string s = (string)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         for (int i = 0; i < s.Length; i++)
@@ -1428,7 +1428,7 @@ namespace CSFlex
                         RESULT = list;
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(14/*classcontent*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(14/*classcontent*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1436,13 +1436,13 @@ namespace CSFlex
                 case 60: // classcontent ::= preclass 
                     {
                         ArrayList RESULT = null;
-                        int listleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int listright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        ArrayList list = (ArrayList)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int listleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int listright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        ArrayList list = (ArrayList)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = list;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(14/*classcontent*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(14/*classcontent*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1450,12 +1450,12 @@ namespace CSFlex
                 case 59: // classcontent ::= classcontent preclass 
                     {
                         ArrayList RESULT = null;
-                        int listleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int listright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        ArrayList list = (ArrayList)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
-                        int plistleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int plistright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        ArrayList plist = (ArrayList)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int listleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int listright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        ArrayList list = (ArrayList)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
+                        int plistleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int plistright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        ArrayList plist = (ArrayList)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         for (IEnumerator e = plist.GetEnumerator(); e.MoveNext();)
@@ -1463,7 +1463,7 @@ namespace CSFlex
                         RESULT = list;
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(14/*classcontent*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(14/*classcontent*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1471,16 +1471,16 @@ namespace CSFlex
                 case 58: // classcontent ::= classcontentelem 
                     {
                         PrettyArrayList<Interval> RESULT = null;
-                        int elemleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int elemright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Interval elem = (Interval)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int elemleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int elemright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Interval elem = (Interval)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
                        
                         var list = new PrettyArrayList<Interval>();
                         list.Add(elem);
                         RESULT = list;
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(14/*classcontent*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(14/*classcontent*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1488,19 +1488,19 @@ namespace CSFlex
                 case 57: // classcontent ::= classcontent classcontentelem 
                     {
                         ArrayList RESULT = null;
-                        int listleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int listright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        ArrayList list = (ArrayList)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
-                        int elemleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int elemright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Interval elem = (Interval)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int listleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int listright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        ArrayList list = (ArrayList)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
+                        int elemleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int elemright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Interval elem = (Interval)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         list.Add(elem);
                         RESULT = list;
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(14/*classcontent*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(14/*classcontent*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1508,12 +1508,12 @@ namespace CSFlex
                 case 56: // charclass ::= OPENCLASS HAT DASH classcontent CLOSECLASS 
                     {
                         RegExp RESULT = null;
-                        int listleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int listright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        var list = (List<Interval>)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
-                        int closeleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int closeright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Object close = (Object)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int listleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int listright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        var list = (List<Interval>)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
+                        int closeleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int closeright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Object close = (Object)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         try
@@ -1528,7 +1528,7 @@ namespace CSFlex
                         RESULT = new RegExp1(Symbols.CCLASSNOT, list);
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(9/*charclass*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 4)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(9/*charclass*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1536,12 +1536,12 @@ namespace CSFlex
                 case 55: // charclass ::= OPENCLASS DASH classcontent CLOSECLASS 
                     {
                         RegExp RESULT = null;
-                        int listleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int listright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        var list = (List<Interval>)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
-                        int closeleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int closeright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Object close = (Object)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int listleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int listright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        var list = (List<Interval>)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
+                        int closeleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int closeright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Object close = (Object)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         try
@@ -1556,7 +1556,7 @@ namespace CSFlex
                         RESULT = new RegExp1(Symbols.CCLASS, list);
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(9/*charclass*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 3)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(9/*charclass*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1564,12 +1564,12 @@ namespace CSFlex
                 case 54: // charclass ::= OPENCLASS HAT classcontent CLOSECLASS 
                     {
                         RegExp RESULT = null;
-                        int listleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int listright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        var list = (List<Interval>)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
-                        int closeleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int closeright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Object close = (Object)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int listleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int listright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        var list = (List<Interval>)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
+                        int closeleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int closeright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Object close = (Object)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         try
@@ -1583,7 +1583,7 @@ namespace CSFlex
                         RESULT = new RegExp1(Symbols.CCLASSNOT, list);
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(9/*charclass*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 3)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(9/*charclass*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1591,9 +1591,9 @@ namespace CSFlex
                 case 53: // charclass ::= OPENCLASS HAT CLOSECLASS 
                     {
                         RegExp RESULT = null;
-                        int closeleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int closeright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Object close = (Object)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int closeleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int closeright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Object close = (Object)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         var list = new PrettyArrayList<Interval>();
@@ -1609,7 +1609,7 @@ namespace CSFlex
                         RESULT = new RegExp1(Symbols.CCLASS, list);
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(9/*charclass*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(9/*charclass*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1617,12 +1617,12 @@ namespace CSFlex
                 case 52: // charclass ::= OPENCLASS classcontent CLOSECLASS 
                     {
                         RegExp RESULT = null;
-                        int listleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int listright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        var list = (List<Interval>)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
-                        int closeleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int closeright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Object close = (Object)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int listleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int listright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        var list = (List<Interval>)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
+                        int closeleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int closeright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Object close = (Object)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         try
@@ -1636,7 +1636,7 @@ namespace CSFlex
                         RESULT = new RegExp1(Symbols.CCLASS, list);
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(9/*charclass*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(9/*charclass*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1649,7 +1649,7 @@ namespace CSFlex
                         RESULT = new RegExp1(Symbols.CCLASS, null);
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(9/*charclass*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(9/*charclass*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1657,9 +1657,9 @@ namespace CSFlex
                 case 50: // regexp ::= CHAR 
                     {
                         RegExp RESULT = null;
-                        int cleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int cright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        char c = (char)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int cleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int cright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        char c = (char)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         try
@@ -1681,7 +1681,7 @@ namespace CSFlex
                         }
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(8/*regexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(8/*regexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1698,7 +1698,7 @@ namespace CSFlex
                         RESULT = new RegExp1(Symbols.CCLASSNOT, any);
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(8/*regexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(8/*regexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1706,9 +1706,9 @@ namespace CSFlex
                 case 48: // regexp ::= STRING 
                     {
                         RegExp RESULT = null;
-                        int strleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int strright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        string str = (string)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int strleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int strright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        string str = (string)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         try
@@ -1731,7 +1731,7 @@ namespace CSFlex
 
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(8/*regexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(8/*regexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1739,9 +1739,9 @@ namespace CSFlex
                 case 47: // regexp ::= preclass 
                     {
                         RegExp RESULT = null;
-                        int listleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int listright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        var list = (List<Interval>)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int listleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int listright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        var list = (List<Interval>)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         try
@@ -1756,7 +1756,7 @@ namespace CSFlex
                         RESULT = new RegExp1(Symbols.CCLASS, list);
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(8/*regexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(8/*regexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1764,13 +1764,13 @@ namespace CSFlex
                 case 46: // regexp ::= charclass 
                     {
                         RegExp RESULT = null;
-                        int cleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int cright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        RegExp c = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int cleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int cright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        RegExp c = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = c;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(8/*regexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(8/*regexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1778,9 +1778,9 @@ namespace CSFlex
                 case 45: // regexp ::= MACROUSE 
                     {
                         RegExp RESULT = null;
-                        int identleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int identright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        string ident = (string)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int identleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int identright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        string ident = (string)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         if (!scanner.macroDefinition)
@@ -1792,7 +1792,7 @@ namespace CSFlex
                         RESULT = new RegExp1(Symbols.MACROUSE, ident);
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(8/*regexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(8/*regexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1800,13 +1800,13 @@ namespace CSFlex
                 case 44: // regexp ::= OPENBRACKET series CLOSEBRACKET 
                     {
                         RegExp RESULT = null;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        RegExp r = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        RegExp r = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
 
                         RESULT = r;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(8/*regexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(8/*regexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1814,19 +1814,19 @@ namespace CSFlex
                 case 43: // regexp ::= regexp REPEAT REPEAT RBRACE 
                     {
                         RegExp RESULT = null;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 3)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 3)).right;
-                        RegExp r = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 3)).value;
-                        int n1left = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left;
-                        int n1right = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).right;
-                        int n1 = (int)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).value;
-                        int n2left = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int n2right = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        int n2 = (int)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).right;
+                        RegExp r = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).value;
+                        int n1left = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left;
+                        int n1right = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).right;
+                        int n1 = (int)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).value;
+                        int n2left = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int n2right = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        int n2 = (int)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
 
                         RESULT = MakeRepeat(r, n1, n2, n1left, n2right);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(8/*regexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 3)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(8/*regexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1834,19 +1834,19 @@ namespace CSFlex
                 case 42: // regexp ::= regexp REPEAT RBRACE 
                     {
                         RegExp RESULT = null;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).right;
-                        RegExp r = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).value;
-                        int nleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int nright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        int n = (int)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
-                        int bleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int bright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Object b = (Object)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).right;
+                        RegExp r = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).value;
+                        int nleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int nright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        int n = (int)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
+                        int bleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int bright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Object b = (Object)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = MakeRepeat(r, n, n, bleft, bright);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(8/*regexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(8/*regexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1854,13 +1854,13 @@ namespace CSFlex
                 case 41: // regexp ::= regexp QUESTION 
                     {
                         RegExp RESULT = null;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        RegExp r = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        RegExp r = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
 
                         RESULT = new RegExp1(Symbols.QUESTION, r);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(8/*regexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(8/*regexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1868,13 +1868,13 @@ namespace CSFlex
                 case 40: // regexp ::= regexp PLUS 
                     {
                         RegExp RESULT = null;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        RegExp r = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        RegExp r = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
 
                         RESULT = new RegExp1(Symbols.PLUS, r);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(8/*regexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(8/*regexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1882,13 +1882,13 @@ namespace CSFlex
                 case 39: // regexp ::= regexp STAR 
                     {
                         RegExp RESULT = null;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        RegExp r = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        RegExp r = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
 
                         RESULT = new RegExp1(Symbols.STAR, r);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(8/*regexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(8/*regexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1896,13 +1896,13 @@ namespace CSFlex
                 case 38: // nregexp ::= TILDE nregexp 
                     {
                         RegExp RESULT = null;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        RegExp r = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        RegExp r = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = new RegExp1(Symbols.TILDE, r);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(7/*nregexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(7/*nregexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1910,13 +1910,13 @@ namespace CSFlex
                 case 37: // nregexp ::= BANG nregexp 
                     {
                         RegExp RESULT = null;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        RegExp r = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        RegExp r = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = new RegExp1(Symbols.BANG, r);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(7/*nregexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(7/*nregexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1924,13 +1924,13 @@ namespace CSFlex
                 case 36: // nregexp ::= regexp 
                     {
                         RegExp RESULT = null;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        RegExp r = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        RegExp r = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = r;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(7/*nregexp*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(7/*nregexp*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1938,13 +1938,13 @@ namespace CSFlex
                 case 35: // concs ::= nregexp 
                     {
                         RegExp RESULT = null;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        RegExp r = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        RegExp r = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = r;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(6/*concs*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(6/*concs*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1952,16 +1952,16 @@ namespace CSFlex
                 case 34: // concs ::= concs nregexp 
                     {
                         RegExp RESULT = null;
-                        int r1left = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int r1right = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        RegExp r1 = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
-                        int r2left = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int r2right = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        RegExp r2 = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int r1left = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int r1right = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        RegExp r1 = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
+                        int r2left = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int r2right = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        RegExp r2 = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = new RegExp2(Symbols.CONCAT, r1, r2);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(6/*concs*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(6/*concs*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1969,13 +1969,13 @@ namespace CSFlex
                 case 33: // series ::= BAR 
                     {
                         RegExp RESULT = null;
-                        int bleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int bright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Object b = (Object)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int bleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int bright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Object b = (Object)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         SyntaxError(ErrorMessages.REGEXP_EXPECTED, bleft, bright);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(5/*series*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(5/*series*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1983,13 +1983,13 @@ namespace CSFlex
                 case 32: // series ::= concs 
                     {
                         RegExp RESULT = null;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        RegExp r = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        RegExp r = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = r;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(5/*series*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(5/*series*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -1997,16 +1997,16 @@ namespace CSFlex
                 case 31: // series ::= series BAR concs 
                     {
                         RegExp RESULT = null;
-                        int r1left = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left;
-                        int r1right = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).right;
-                        RegExp r1 = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).value;
-                        int r2left = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int r2right = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        RegExp r2 = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int r1left = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left;
+                        int r1right = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).right;
+                        RegExp r1 = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).value;
+                        int r2left = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int r2right = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        RegExp r2 = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = new RegExp2(Symbols.BAR, r1, r2);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(5/*series*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(5/*series*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2017,7 +2017,7 @@ namespace CSFlex
 
                         RESULT = new Boolean(false);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(17/*hatOPT*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(17/*hatOPT*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2030,7 +2030,7 @@ namespace CSFlex
                         charClasses.MakeClass('\n', false);
                         RESULT = new Boolean(true);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(17/*hatOPT*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(17/*hatOPT*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2038,13 +2038,13 @@ namespace CSFlex
                 case 28: // states ::= IDENT COMMA 
                     {
                         ArrayList RESULT = null;
-                        int cleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int cright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Object c = (Object)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int cleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int cright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Object c = (Object)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         SyntaxError(ErrorMessages.REGEXP_EXPECTED, cleft, cright + 1);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(12/*states*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(12/*states*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2052,9 +2052,9 @@ namespace CSFlex
                 case 27: // states ::= IDENT 
                     {
                         List<int> RESULT = null;
-                        int idleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int idright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        string id = (string)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int idleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int idright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        string id = (string)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         var list = new PrettyArrayList<int>();
@@ -2069,7 +2069,7 @@ namespace CSFlex
                         RESULT = list;
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(12/*states*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(12/*states*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2077,12 +2077,12 @@ namespace CSFlex
                 case 26: // states ::= IDENT COMMA states 
                     {
                         ArrayList RESULT = null;
-                        int idleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left;
-                        int idright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).right;
-                        string id = (string)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).value;
-                        int listleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int listright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        ArrayList list = (ArrayList)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int idleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left;
+                        int idright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).right;
+                        string id = (string)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).value;
+                        int listleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int listright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        ArrayList list = (ArrayList)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
 
                         stateNumber = scanner.states.GetNumber(id);
@@ -2096,7 +2096,7 @@ namespace CSFlex
                         RESULT = list;
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(12/*states*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(12/*states*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2107,7 +2107,7 @@ namespace CSFlex
 
                         var RESULT = new PrettyArrayList<int>();
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(13/*statesOPT*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(13/*statesOPT*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2115,13 +2115,13 @@ namespace CSFlex
                 case 24: // statesOPT ::= LESSTHAN states MORETHAN 
                     {
                         ArrayList RESULT = null;
-                        int listleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int listright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        ArrayList list = (ArrayList)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
+                        int listleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int listright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        ArrayList list = (ArrayList)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
 
                         RESULT = list;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(13/*statesOPT*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(13/*statesOPT*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2132,7 +2132,7 @@ namespace CSFlex
 
                         RESULT = null;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(18/*actions*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(18/*actions*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2140,13 +2140,13 @@ namespace CSFlex
                 case 22: // actions ::= REGEXPEND ACTION 
                     {
                         Action RESULT = null;
-                        int aleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int aright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Action a = (Action)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int aleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int aright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Action a = (Action)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = a;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(18/*actions*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(18/*actions*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2154,13 +2154,13 @@ namespace CSFlex
                 case 21: // lookaheadOPT ::= LOOKAHEAD series DOLLAR 
                     {
                         RegExp RESULT = null;
-                        int sleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int sright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        RegExp s = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
+                        int sleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int sright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        RegExp s = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
 
                         RESULT = new RegExp2(Symbols.CONCAT, s, MakeNewLine());
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(10/*lookaheadOPT*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(10/*lookaheadOPT*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2171,7 +2171,7 @@ namespace CSFlex
 
                         RESULT = null;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(10/*lookaheadOPT*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(10/*lookaheadOPT*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2179,13 +2179,13 @@ namespace CSFlex
                 case 19: // lookaheadOPT ::= LOOKAHEAD series 
                     {
                         RegExp RESULT = null;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        RegExp r = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        RegExp r = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = r;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(10/*lookaheadOPT*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(10/*lookaheadOPT*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2196,7 +2196,7 @@ namespace CSFlex
 
                         RESULT = MakeNewLine();
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(10/*lookaheadOPT*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(10/*lookaheadOPT*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2205,7 +2205,7 @@ namespace CSFlex
                     {
                         Integer RESULT = null;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(3/*rule*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(3/*rule*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2213,16 +2213,16 @@ namespace CSFlex
                 case 16: // rule ::= statesOPT EOFRULE ACTION 
                     {
                         int RESULT = 0;
-                        int sleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left;
-                        int sright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).right;
-                        var s = (List<int>)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).value;
-                        int aleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int aright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Action a = (Action)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int sleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left;
+                        int sright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).right;
+                        var s = (List<int>)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).value;
+                        int aleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int aright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Action a = (Action)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = (regExps.Insert(s, a));
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(3/*rule*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(3/*rule*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2230,25 +2230,25 @@ namespace CSFlex
                 case 15: // rule ::= statesOPT hatOPT series lookaheadOPT actions 
                     {
                         int RESULT = 0;
-                        int sleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 4)).left;
-                        int sright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 4)).right;
-                        var s = (List<int>)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 4)).value;
-                        int bolleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 3)).left;
-                        int bolright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 3)).right;
-                        bool bol = (bool)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 3)).value;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).right;
-                        RegExp r = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 2)).value;
-                        int lleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int lright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        RegExp l = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
-                        int aleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int aright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Action a = (Action)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int sleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).left;
+                        int sright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).right;
+                        var s = (List<int>)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).value;
+                        int bolleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).left;
+                        int bolright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).right;
+                        bool bol = (bool)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).right;
+                        RegExp r = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).value;
+                        int lleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int lright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        RegExp l = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
+                        int aleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int aright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Action a = (Action)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = (regExps.Insert(rleft, s, r, a, bol, l));
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(3/*rule*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 4)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(3/*rule*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2256,13 +2256,13 @@ namespace CSFlex
                 case 14: // rules ::= rule 
                     {
                         PrettyArrayList<int> RESULT = null;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        int r = (int)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        int r = (int)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         RESULT = new PrettyArrayList<int>(); RESULT.Add(r);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(16/*rules*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(16/*rules*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2270,12 +2270,12 @@ namespace CSFlex
                 case 13: // rules ::= LESSTHAN states MORETHAN LBRACE rules RBRACE 
                     {
                         ArrayList RESULT = null;
-                        int statesleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 4)).left;
-                        int statesright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 4)).right;
-                        var states = (List<int>)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 4)).value;
-                        int rlistleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int rlistright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        ArrayList rlist = (ArrayList)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
+                        int statesleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).left;
+                        int statesright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).right;
+                        var states = (List<int>)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).value;
+                        int rlistleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int rlistright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        ArrayList rlist = (ArrayList)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
 
 
                         var rs = rlist.GetEnumerator();
@@ -2287,7 +2287,7 @@ namespace CSFlex
                         RESULT = rlist;
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(16/*rules*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 5)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(16/*rules*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 5)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2295,15 +2295,15 @@ namespace CSFlex
                 case 12: // rules ::= rules LESSTHAN states MORETHAN LBRACE rules RBRACE 
                     {
                         ArrayList RESULT = null;
-                        int rlist1left = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 6)).left;
-                        int rlist1right = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 6)).right;
-                        ArrayList rlist1 = (ArrayList)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 6)).value;
-                        int statesleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 4)).left;
-                        int statesright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 4)).right;
-                        List<int> states = (List<int>)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 4)).value;
-                        int rlist2left = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int rlist2right = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        ArrayList rlist2 = (ArrayList)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
+                        int rlist1left = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 6)).left;
+                        int rlist1right = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 6)).right;
+                        ArrayList rlist1 = (ArrayList)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 6)).value;
+                        int statesleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).left;
+                        int statesright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).right;
+                        List<int> states = (List<int>)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).value;
+                        int rlist2left = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int rlist2right = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        ArrayList rlist2 = (ArrayList)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
 
 
                         IEnumerator rs = rlist2.GetEnumerator();
@@ -2316,7 +2316,7 @@ namespace CSFlex
                         RESULT = rlist1;
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(16/*rules*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 6)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(16/*rules*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 6)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2324,16 +2324,16 @@ namespace CSFlex
                 case 11: // rules ::= rules rule 
                     {
                         ArrayList RESULT = null;
-                        int rlistleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int rlistright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        ArrayList rlist = (ArrayList)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
-                        int rleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int rright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Integer r = (Integer)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int rlistleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int rlistright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        ArrayList rlist = (ArrayList)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
+                        int rleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int rright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Integer r = (Integer)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         rlist.Add(r.intValue()); RESULT = rlist;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(16/*rules*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(16/*rules*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2341,13 +2341,13 @@ namespace CSFlex
                 case 10: // macro ::= IDENT EQUALS 
                     {
                         Object RESULT = null;
-                        int eleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left;
-                        int eright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right;
-                        Object e = (Object)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).value;
+                        int eleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left;
+                        int eright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right;
+                        Object e = (Object)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).value;
 
                         SyntaxError(ErrorMessages.REGEXP_EXPECTED, eleft, eright);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(2/*macro*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(2/*macro*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2355,16 +2355,16 @@ namespace CSFlex
                 case 9: // macro ::= IDENT EQUALS series REGEXPEND 
                     {
                         Object RESULT = null;
-                        int nameleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 3)).left;
-                        int nameright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 3)).right;
-                        string name = (string)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 3)).value;
-                        int definitionleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int definitionright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        RegExp definition = (RegExp)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
+                        int nameleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).left;
+                        int nameright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).right;
+                        string name = (string)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).value;
+                        int definitionleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int definitionright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        RegExp definition = (RegExp)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
 
                         macros.Insert(name, definition);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(2/*macro*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 3)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(2/*macro*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2375,7 +2375,7 @@ namespace CSFlex
 
                         charClasses.SetMaxCharCode(0xFFFF);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(2/*macro*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(2/*macro*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2386,7 +2386,7 @@ namespace CSFlex
 
                         charClasses.SetMaxCharCode(255);
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(2/*macro*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(2/*macro*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2395,7 +2395,7 @@ namespace CSFlex
                     {
                         Object RESULT = null;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(1/*macros*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(1/*macros*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2404,7 +2404,7 @@ namespace CSFlex
                     {
                         Object RESULT = null;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(1/*macros*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(1/*macros*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2413,7 +2413,7 @@ namespace CSFlex
                     {
                         Object RESULT = null;
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(1/*macros*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(1/*macros*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2426,7 +2426,7 @@ namespace CSFlex
                         fatalError(ErrorMessages.NO_LEX_SPEC);
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(4/*specification*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(4/*specification*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2481,7 +2481,7 @@ namespace CSFlex
 
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(4/*specification*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 5)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(4/*specification*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 5)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2536,7 +2536,7 @@ namespace CSFlex
 
 
 
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(4/*specification*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 3)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(4/*specification*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     return CUP_LexParse_result;
 
@@ -2544,11 +2544,11 @@ namespace CSFlex
                 case 0: // $START ::= specification EOF 
                     {
                         Object RESULT = null;
-                        int start_valleft = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left;
-                        int start_valright = ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).right;
-                        NFA start_val = (NFA)((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).value;
+                        int start_valleft = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left;
+                        int start_valright = ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).right;
+                        NFA start_val = (NFA)((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).value;
                         RESULT = start_val;
-                        CUP_LexParse_result = new java_cup.runtime.Symbol(0/*$START*/, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 1)).left, ((java_cup.runtime.Symbol)CUP_LexParse_stack.elementAt(CUP_LexParse_top - 0)).right, RESULT);
+                        CUP_LexParse_result = new JavaCup.Runtime.Symbol(0/*$START*/, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).left, ((JavaCup.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).right, RESULT);
                     }
                     /* ACCEPT */
                     CUP_LexParse_parser.done_parsing();

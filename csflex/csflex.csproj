@@ -28,16 +28,14 @@
   <ItemGroup>
     <PackageReference Include="System.Windows.Forms" Version="4.0.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="runtime, Version=1.0.1730.21173, Culture=neutral, PublicKeyToken=null">
-      <HintPath>runtime.dll</HintPath>
-    </Reference>
-  </ItemGroup>
   
   <ItemGroup>
     <EmbeddedResource Include="skeleton.default" />
     <EmbeddedResource Include="skeleton.nested" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\JavaCup\JavaCup.csproj" />
   </ItemGroup>
 
 </Project>
