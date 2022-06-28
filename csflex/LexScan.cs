@@ -1582,12 +1582,12 @@ namespace CSFlex
         internal int epilogue_line = 0;
         private bool epilogue_sent = false;
 
-        internal string classCode = "";
-        internal string initCode = "";
-        internal string initThrow = "";
-        internal string eofCode = "";
-        internal string eofThrow = "";
-        internal string lexThrow = "";
+        internal string? classCode = "";
+        internal string? initCode = "";
+        internal string? initThrow = "";
+        internal string? eofCode = "";
+        internal string? eofThrow = "";
+        internal string? lexThrow = "";
         internal string eofVal = "";
         internal string scanErrorException = "";
         internal string cupSymbol = "sym";
@@ -1617,11 +1617,11 @@ namespace CSFlex
         internal bool inclusive_states;
         internal bool eofclose;
 
-        internal string IsImplementing;
-        internal string IsExtending;
+        internal string? IsImplementing = null;
+        internal string IsExtending ="";
         internal string ClassName = "Yylex";
-        internal string functionName;
-        internal string tokenType;
+        internal string functionName = "";
+        internal string tokenType = "";
         internal string visibility = "public";
 
         internal LexicalStates states = new LexicalStates();
@@ -2221,13 +2221,13 @@ namespace CSFlex
                     case 140:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            throw new ScannerException(file, ErrorMessages.QUIL_EOFTHROW, yyline);
+                            throw new ScannerException(file!, ErrorMessages.QUIL_EOFTHROW, yyline);
                         }
                         break;
                     case 54:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            throw new ScannerException(file, ErrorMessages.UNEXPECTED_NL, yyline, yycolumn);
+                            throw new ScannerException(file!, ErrorMessages.UNEXPECTED_NL, yyline, yycolumn);
                         }
                         break;
                     case 128:
@@ -2235,7 +2235,7 @@ namespace CSFlex
                         {
                             File f = new File(YYText().Substring(9).Trim());
                             if (!f.CanRead)
-                                throw new ScannerException(file, ErrorMessages.NOT_READABLE, yyline);
+                                throw new ScannerException(file!, ErrorMessages.NOT_READABLE, yyline);
                             // check for cycle
                             // FIXME: this is an extremely ugly hack for the C# version
                             if (new ArrayList(files.ToArray()).Contains(f))
@@ -2300,7 +2300,7 @@ namespace CSFlex
                     case 143:
                         if (ZZ_SPURIOUS_WARNINGS_SUCK)
                         {
-                            eofThrow = ConcExc(eofThrow, YYText().Substring(10).Trim());
+                            eofThrow = ConcExc(eofThrow, YYText()?.Substring(10)?.Trim());
                         }
                         break;
                     case 81:

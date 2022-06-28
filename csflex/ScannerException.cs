@@ -38,9 +38,9 @@ namespace CSFlex
         public int line;
         public int column;
         public ErrorMessages message;
-        public File file;
+        public File? file;
 
-        private ScannerException(File file, string text, ErrorMessages message, int line, int column)
+        private ScannerException(File? file, string text, ErrorMessages message, int line, int column)
           : base(text)
         {
             this.file = file;
@@ -66,7 +66,7 @@ namespace CSFlex
          * @param file      the file in which the error occured
          * @param message   the code for the error description presented to the user.
          */
-        public ScannerException(File file, ErrorMessages message)
+        public ScannerException(File? file, ErrorMessages message)
           : this(file, ErrorMessages.Get(message), message, -1, -1)
         {
         }

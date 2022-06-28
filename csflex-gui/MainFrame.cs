@@ -192,16 +192,16 @@ namespace CSFlex.GUI
             this.MessagesTextBox.ReadOnly = true;
             this.MessagesTextBox.MaxLength = int.MaxValue;
 
-            this.GenerateButton.Click += new EventHandler(Generate_Click);
-            this.OptionsButton.Click += new EventHandler(Options_Click);
-            this.QuitButton.Click += new EventHandler(Quit_Click);
-            this.StopButton.Click += new EventHandler(Stop_Click);
-            this.SpecChooseButton.Click += new EventHandler(SpecChoose_Click);
-            this.DirChooseButton.Click += new EventHandler(DirChoose_Click);
-            this.SpecTextBox.KeyPress += new KeyPressEventHandler(Spec_KeyPress);
-            this.SpecTextBox.TextChanged += new EventHandler(Spec_TextChanged);
-            this.DirTextBox.KeyPress += new KeyPressEventHandler(Dir_KeyPress);
-            this.DirTextBox.TextChanged += new EventHandler(Dir_TextChanged);
+            this.GenerateButton.Click += new EventHandler(Generate_Click!);
+            this.OptionsButton.Click += new EventHandler(Options_Click!);
+            this.QuitButton.Click += new EventHandler(Quit_Click!);
+            this.StopButton.Click += new EventHandler(Stop_Click!);
+            this.SpecChooseButton.Click += new EventHandler(SpecChoose_Click!);
+            this.DirChooseButton.Click += new EventHandler(DirChoose_Click!);
+            this.SpecTextBox.KeyPress += new KeyPressEventHandler(Spec_KeyPress!);
+            this.SpecTextBox.TextChanged += new EventHandler(Spec_TextChanged!);
+            this.DirTextBox.KeyPress += new KeyPressEventHandler(Dir_KeyPress!);
+            this.DirTextBox.TextChanged += new EventHandler(Dir_TextChanged!);
 
             var north = new GridPanel(5, 4, 10, 10);
             north.SetInsets(new Insets(10, 5, 5, 10));

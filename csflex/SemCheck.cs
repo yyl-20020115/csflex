@@ -88,22 +88,23 @@ namespace CSFlex
          *
          * @return true iff C# Flex can generate code for the lookahead expression
          */
-        private static bool CheckLookAhead(RegExp r1, RegExp r2) => r2 == null || Length(r1) > 0 || !(Last(r1).And(First(r2)).ContainsElements());
+        private static bool CheckLookAhead(RegExp? r1, RegExp? r2) 
+            => r2 == null || Length(r1) > 0 || !(Last(r1).And(First(r2)).ContainsElements());
 
 
         /**
          * Returns length if expression has fixed length, -1 otherwise.   
          */
-        private static int Length(RegExp re)
+        private static int Length(RegExp? re)
         {
-            RegExp2 r;
+            if(re == null) return 0;
 
             switch (re.type)
             {
 
                 case Symbols.BAR:
                     {
-                        r = (RegExp2)re;
+                        var r = (re as RegExp2)!;
                         int l1 = Length(r.r1);
                         if (l1 < 0) return -1;
                         int l2 = Length(r.r2);
@@ -116,7 +117,7 @@ namespace CSFlex
 
                 case Symbols.CONCAT:
                     {
-                        r = (RegExp2)re;
+                        var r = (re as RegExp2)!;
                         int l1 = Length(r.r1);
                         if (l1 < 0) return -1;
                         int l2 = Length(r.r2);
@@ -252,25 +253,24 @@ namespace CSFlex
          *
          * (the last-charater-projection of the language)
          */
-        private static IntCharSet Last(RegExp re)
+        private static IntCharSet Last(RegExp? re)
         {
-
-            RegExp2 r;
-
-            switch (re.type)
+            switch (re!.type)
             {
 
                 case Symbols.BAR:
-                    r = (RegExp2)re;
-                    return Last(r.r1).Add(Last(r.r2));
-
-                case Symbols.CONCAT:
-                    r = (RegExp2)re;
-                    if (ContainsEpsilon(r.r2))
+                    {
+                        var r = (re as RegExp2)!;
                         return Last(r.r1).Add(Last(r.r2));
-                    else
-                        return Last(r.r2);
-
+                    }
+                case Symbols.CONCAT:
+                    {
+                        var r = (re as RegExp2)!;
+                        if (ContainsEpsilon(r.r2))
+                            return Last(r.r1).Add(Last(r.r2));
+                        else
+                            return Last(r.r2);
+                    }
                 case Symbols.STAR:
                 case Symbols.PLUS:
                 case Symbols.QUESTION:

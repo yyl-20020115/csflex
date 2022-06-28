@@ -172,13 +172,13 @@ namespace CSFlex
             table = newTable;
         }
 
-        public void SetAction(int state, Action stateAction)
+        public void SetAction(int state, Action? stateAction)
         {
 #if DEBUG_TRACE
     log.WriteLine("setAction(int state = {0}, Action stateAction = {1})", state, stateAction);
 #endif // DEBUG_TRACE
 
-            action[state] = stateAction;
+            action[state] = stateAction!;
             if (stateAction != null)
             {
                 isLookEnd[state] = stateAction.LookAction;
@@ -229,8 +229,9 @@ namespace CSFlex
 
             return result.ToString();
         }
-        public void WriteDot(File file)
+        public void WriteDot(File? file)
         {
+            if (file == null) return;
             try
             {
                 var writer = new StreamWriter(file);
@@ -276,16 +277,16 @@ namespace CSFlex
         }
 
         // check if all actions can actually be matched in this DFA
-        public void CheckActions(LexScan scanner, LexParse parser)
+        public void CheckActions(LexScan scanner, LexParse? parser)
         {
-            var eofActions = parser.EOFActions;
+            var eofActions = parser?.EOFActions;
             var l = scanner.actions.GetEnumerator();
 
             while (l.MoveNext())
             {
                 var next = l.Current;
-                if (!next.Equals(usedActions[next]) && !eofActions.IsEOFAction(next))
-                    OutputWriter.Warning(scanner.file, ErrorMessages.NEVER_MATCH, ((Action)next).Priority - 1, -1);
+                if (!next.Equals(usedActions[next]) && !eofActions!.IsEOFAction(next))
+                    OutputWriter.Warning(scanner.file!, ErrorMessages.NEVER_MATCH, ((Action)next).Priority - 1, -1);
             }
         }
 
@@ -863,7 +864,7 @@ namespace CSFlex
         }
 
 
-        public bool[][] Old_minimize()
+        public bool[][]? Old_minimize()
         {
             int i, j;
             char c;

@@ -56,7 +56,7 @@ namespace CSFlex
             }
             else
             {
-                defaultAction = action.GetHigherPriority(defaultAction);
+                defaultAction = action.GetHigherPriority(defaultAction!);
 
                 for (int i = 0; i < numLexStates; i++)
                 {

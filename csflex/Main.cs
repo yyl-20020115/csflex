@@ -39,7 +39,7 @@ namespace CSFlex
     public class MainClass
     {
         /** C# Flex version */
-        public static readonly string version = typeof(MainClass).Assembly.GetName().Version.ToString(); //$NON-NLS-1$
+        public static readonly string version = typeof(MainClass).Assembly.GetName().Version!.ToString(); //$NON-NLS-1$
 
         /**
          * Generates a scanner for the specified input file.
@@ -76,7 +76,7 @@ namespace CSFlex
 
             try
             {
-                NFA? nfa = parser?.Parse()?.Value as NFA;
+                var nfa = (parser?.Parse()?.Value as NFA)!;
 
                 OutputWriter.CheckErrors();
 
@@ -118,7 +118,7 @@ namespace CSFlex
 
                 time.Start();
 
-                var emitter = new Emitter(inputFile, parser, dfa);
+                var emitter = new Emitter(inputFile, parser!, dfa);
                 emitter.Emit();
 
                 time.Stop();

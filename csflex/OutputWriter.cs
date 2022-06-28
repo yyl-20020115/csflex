@@ -297,9 +297,9 @@ namespace CSFlex
             if (line >= 0)
             {
                 if (column >= 0)
-                    ShowPosition(file, line, column);
+                    ShowPosition(file!, line, column);
                 else
-                    ShowPosition(file, line);
+                    ShowPosition(file!, line);
             }
         }
 
@@ -367,9 +367,9 @@ namespace CSFlex
          * @param line     the line number of error position
          * @param column   the column of error position
          */
-        public static void Error(File file, ErrorMessages message, int line, int column)
+        public static void Error(File? file, ErrorMessages message, int line, int column)
         {
-
+            if (file == null) return;
             string msg = NewLine + "Error";
             if (file != null) msg += " in file \"" + file + "\"";
             if (line >= 0) msg = msg + " (line " + (line + 1) + ")";
@@ -402,7 +402,7 @@ namespace CSFlex
          * @param line    the line to show
          * @param column  the column in which to show the marker
          */
-        public static void ShowPosition(File file, int line, int column)
+        public static void ShowPosition(File? file, int line, int column)
         {
             try
             {
@@ -432,7 +432,7 @@ namespace CSFlex
          * @param file  the file to show
          * @param line  the line number 
          */
-        public static void ShowPosition(File file, int line)
+        public static void ShowPosition(File? file, int line)
         {
             try
             {
@@ -454,18 +454,20 @@ namespace CSFlex
          *
          * @throw IOException  if any error occurs
          */
-        private static string GetLine(File file, int line)
+        private static string GetLine(File? file, int line)
         {
-            var reader = new StreamReader(file);
+            string? msg = null;
+            if (file != null)
+            {
+                var reader = new StreamReader(file);
 
-            string msg = "";
+                for (int i = 0; i <= line; i++)
+                    msg = reader.ReadLine();
 
-            for (int i = 0; i <= line; i++)
-                msg = reader.ReadLine();
+                reader.Close();
+            }
 
-            reader.Close();
-
-            return msg;
+            return msg ??"";
         }
 
 

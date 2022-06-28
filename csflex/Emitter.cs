@@ -88,8 +88,7 @@ namespace CSFlex
         public Emitter(File inputFile, LexParse parser, DFA dfa)
         {
             var name = Options.EmitCSharp ? parser.scanner.ClassName + ".cs" : parser.scanner.ClassName + ".java";
-            var outputFile = Normalize(name, inputFile);
-
+            var outputFile = Normalize(name, inputFile)!;
             OutputWriter.Println("Writing code to \"" + outputFile + "\"");
 
             this.output = new StreamWriter(outputFile);
@@ -111,11 +110,12 @@ namespace CSFlex
          * @param input fallback location if path = <tt>null</tt>
          *              (expected to be a file in the directory to write to)   
          */
-        public static File Normalize(string name, File input)
+        public static File? Normalize(string name, File? input)
         {
+            if (input == null) return null;
             File outputFile;
 
-            switch (Options.Dir)
+            switch (Options.Dir as object)
             {
                 case null:
                     if (input == null || input.Parent == null)
@@ -496,7 +496,7 @@ namespace CSFlex
             {
                 if (Options.EmitCSharp)
                 {
-                    Println("#line 1 \"" + scanner.file + "\"");
+                    Println("#line 1 \"" + scanner!.file?.ToString()??"" + "\"");
                     Println(scanner.userCode.ToString());
                     Println("#line default");
                 }
@@ -611,7 +611,7 @@ namespace CSFlex
             {
                 string name = (string)stateNames.Current;
 
-                int num = scanner.states.GetNumber(name);
+                int num = scanner.states.GetNumber(name).GetValueOrDefault();
 
                 if (scanner.bolUsed)
                     Println("  " + visibility + " " + _const + " int " + name + " = " + 2 * num + ";");
@@ -671,11 +671,11 @@ namespace CSFlex
 
             for (int i = 0; i < dfa.NumStates; i++)
             {
-                if (!rowKilled[i])
+                if (!rowKilled![i])
                 {
                     for (int c = 0; c < dfa.NumInput; c++)
                     {
-                        if (!colKilled[c])
+                        if (!colKilled![c])
                         {
                             if (dfa.Table[i][c] == value)
                             {
@@ -762,11 +762,11 @@ namespace CSFlex
             for (i = 0; i < dfa.NumStates; i++)
             {
 
-                if (!rowKilled[i])
+                if (!rowKilled![i])
                 {
                     for (c = 0; c < dfa.NumInput; c++)
                     {
-                        if (!colKilled[c])
+                        if (!colKilled![c])
                         {
                             if (n >= 10)
                             {
@@ -816,7 +816,7 @@ namespace CSFlex
 
                     if (Options.EmitCSharp)
                         Print("(char)");
-                    Print(colMap[intervals[i].CharClass], 2);
+                    Print(colMap![intervals[i].CharClass], 2);
 
                     if (c < max)
                     {
@@ -891,7 +891,7 @@ namespace CSFlex
             while (i < intervals.Length - 1)
             {
                 int count = intervals[i].End - intervals[i].Start + 1;
-                int value = colMap[intervals[i].CharClass];
+                int value = colMap![intervals[i].CharClass];
 
                 PrintUnicode(count);
                 PrintUnicode(value);
@@ -915,7 +915,7 @@ namespace CSFlex
             }
 
             PrintUnicode(intervals[i].End - intervals[i].Start + 1);
-            PrintUnicode(colMap[intervals[i].CharClass]);
+            PrintUnicode(colMap![intervals[i].CharClass]);
 
             if (Options.EmitCSharp)
                 Println(" 0 };"); // the extraneous 0 can't be avoided without restructuring printUC()
@@ -987,7 +987,7 @@ namespace CSFlex
             e.EmitInit();
             for (int i = 0; i < dfa.NumStates; i++)
             {
-                e.Emit(rowMap[i] * numCols);
+                e.Emit(rowMap![i] * numCols);
             }
             e.EmitUnpack();
             Println(e.ToString());
@@ -1008,7 +1008,7 @@ namespace CSFlex
             if (dfa.IsFinal[0]) value = FINAL;
             if (dfa.IsPushback[0]) value |= PUSHBACK;
             if (dfa.IsLookEnd[0]) value |= LOOKEND;
-            if (!isTransition[0]) value |= NOLOOK;
+            if (!isTransition![0]) value |= NOLOOK;
 
             for (int i = 1; i < dfa.NumStates; i++)
             {
@@ -1016,7 +1016,7 @@ namespace CSFlex
                 if (dfa.IsFinal[i]) attribute = FINAL;
                 if (dfa.IsPushback[i]) attribute |= PUSHBACK;
                 if (dfa.IsLookEnd[i]) attribute |= LOOKEND;
-                if (!isTransition[i]) attribute |= NOLOOK;
+                if (!isTransition![i]) attribute |= NOLOOK;
 
                 if (value == attribute)
                 {
@@ -1463,7 +1463,7 @@ namespace CSFlex
                 Println("          zzForNext: { switch (zzState) {");
 
             for (int state = 0; state < dfa.NumStates; state++)
-                if (isTransition[state]) EmitState(state);
+                if (isTransition![state]) EmitState(state);
 
             Println("            default:");
             Println("              // if this is ever reached, there is a serious bug in JFlex/C# Flex");
@@ -1602,7 +1602,7 @@ namespace CSFlex
                         Println(" }\");");
                     }
 
-                    Println("#line " + action.Priority + " \"" + Escapify(scanner.file) + "\"");
+                    Println("#line " + action.Priority + " \"" + Escapify(scanner!.file!) + "\"");
                     Println(action.Content);
                     Println("#line default");
                     Println("          }");
@@ -1653,7 +1653,7 @@ namespace CSFlex
                 while (stateNames.MoveNext())
                 {
                     string name = (string)stateNames.Current;
-                    int num = scanner.states.GetNumber(name);
+                    int num = scanner.states.GetNumber(name).GetValueOrDefault();
                     Action action = eofActions.GetAction(num);
 
                     // only emit code if the lex state is not redundant, so
@@ -1681,7 +1681,7 @@ namespace CSFlex
                             Println("            case " + name + ":");
                             Println("              if (ZZ_SPURIOUS_WARNINGS_SUCK)");
                             Println("              {");
-                            Println("#line " + action.Priority + " \"" + scanner.file + "\"");
+                            Println("#line " + action.Priority + " \"" + scanner.file! + "\"");
                             Println(action.Content);
                             Println("#line default");
                             Println("              }");
@@ -1707,7 +1707,7 @@ namespace CSFlex
 
                     Println("              if (ZZ_SPURIOUS_WARNINGS_SUCK)");
                     Println("              {");
-                    Println("#line " + dfl.Priority + " \"" + scanner.file + "\"");
+                    Println("#line " + dfl.Priority + " \"" + scanner.file! + "\"");
                     Println(dfl.Content);
                     Println("#line default");
                     Println("              }");
@@ -1745,13 +1745,13 @@ namespace CSFlex
             for (int next = 0; next < dfa.NumStates; next++)
             {
 
-                if (next != defaultTransition && table[state][next] != null)
+                if (next != defaultTransition && table![state][next] != null)
                 {
                     EmitTransition(state, next);
                 }
             }
 
-            if (defaultTransition != DFA.NO_TARGET && noTarget[state] != null)
+            if (defaultTransition != DFA.NO_TARGET && noTarget![state] != null)
             {
                 EmitTransition(state, DFA.NO_TARGET);
             }
@@ -1765,7 +1765,7 @@ namespace CSFlex
         private void EmitTransition(int state, int nextState)
         {
 
-            var chars = nextState != DFA.NO_TARGET ? table[state][nextState].GetCharacters() : noTarget[state].GetCharacters();
+            var chars = nextState != DFA.NO_TARGET ? table![state][nextState].GetCharacters() : noTarget![state].GetCharacters();
             Print("                case ");
             Print((int)chars.NextElement());
             Print(": ");
@@ -1789,7 +1789,7 @@ namespace CSFlex
                 if (dfa.IsLookEnd[nextState])
                     Print("zzPushback = true; ");
 
-                if (!isTransition[nextState])
+                if (!isTransition![nextState])
                     Print("zzNoLookAhead = true; ");
 
                 if (Options.EmitCSharp)
@@ -1821,7 +1821,7 @@ namespace CSFlex
                 if (dfa.IsLookEnd[nextState])
                     Print("zzPushback = true; ");
 
-                if (!isTransition[nextState])
+                if (!isTransition![nextState])
                     Print("zzNoLookAhead = true; ");
 
                 if (Options.EmitCSharp)
@@ -1850,17 +1850,17 @@ namespace CSFlex
 
             for (int i = 0; i < dfa.NumStates; i++)
             {
-                if (table[state][max] == null)
+                if (table![state][max] == null)
                     max = i;
                 else
-                if (table[state][i] != null && table[state][max].Size < table[state][i].Size)
+                if (table![state][i] != null && table![state][max].Size < table![state][i].Size)
                     max = i;
             }
 
-            if (table[state][max] == null) return DFA.NO_TARGET;
-            if (noTarget[state] == null) return max;
+            if (table![state][max] == null) return DFA.NO_TARGET;
+            if (noTarget![state] == null) return max;
 
-            if (table[state][max].Size < noTarget[state].Size)
+            if (table![state][max].Size < noTarget![state].Size)
                 max = DFA.NO_TARGET;
 
             return max;
@@ -1887,16 +1887,16 @@ namespace CSFlex
                     if (nextState == DFA.NO_TARGET)
                     {
                         if (noTarget[i] == null)
-                            noTarget[i] = new CharSet(numInput, colMap[j]);
+                            noTarget[i] = new CharSet(numInput, colMap![j]);
                         else
-                            noTarget[i].Add(colMap[j]);
+                            noTarget[i].Add(colMap![j]);
                     }
                     else
                     {
                         if (table[i][nextState] == null)
-                            table[i][nextState] = new CharSet(numInput, colMap[j]);
+                            table[i][nextState] = new CharSet(numInput, colMap![j]);
                         else
-                            table[i][nextState].Add(colMap[j]);
+                            table[i][nextState].Add(colMap![j]);
                     }
                 }
         }
@@ -1999,8 +1999,8 @@ namespace CSFlex
         {
             if (scanner.eofclose)
             {
-                scanner.eofCode = LexScan.Conc(scanner.eofCode, "  yyclose();");
-                scanner.eofThrow = LexScan.ConcExc(scanner.eofThrow, "java.io.IOException");
+                scanner.eofCode = LexScan.Conc(scanner.eofCode, "  yyclose();")!;
+                scanner.eofThrow = LexScan.ConcExc(scanner.eofThrow, "java.io.IOException")!;
             }
         }
 

@@ -43,7 +43,7 @@
             Console.Error.WriteLine(mess);
         }
 
-        public Symbol DebugParse()
+        public Symbol? DebugParse()
         {
             Symbol? item = null;
             this.production_tab = this.ProductionTable;
@@ -226,7 +226,7 @@
             {
                 if (debug)
                 {
-                    this.DebugMessage("# Pop stack by one, state was # " + ( this.stack.Peek()).ParseState);
+                    this.DebugMessage("# Pop stack by one, state was # " + this.stack!.Peek()!.ParseState);
                 }
                 left = this.stack.Pop()!.Left;
                 this.tos--;
@@ -336,7 +336,7 @@
                 {
                     throw new Exception("Symbol recycling detected (fix your scanner).");
                 }
-                int num = this.GetAction( this.stack.Peek().ParseState, this.cur_token.Sym);
+                int num = this.GetAction(this.stack!.Peek()!.ParseState, this.cur_token.Sym);
                 if (num > 0)
                 {
                     this.cur_token.ParseState = num - 1;
@@ -357,7 +357,7 @@
                             this.stack.Pop();
                             this.tos--;
                         }
-                        num = this.GetReduce(((Symbol) this.stack.Peek()).ParseState, sym);
+                        num = this.GetReduce(this.stack!.Peek()!.ParseState, sym);
                         item.ParseState = num;
                         item.UsedByParser = true;
                         this.stack.Push(item);
@@ -382,7 +382,7 @@
 
         protected void ParseLookAhead(bool debug)
         {
-            Symbol item = null;
+            Symbol? item = null;
             this.lookahead_pos = 0;
             if (debug)
             {
@@ -445,7 +445,7 @@
                     }
                     if (num == 0)
                     {
-                        this.ReportFatalError("Syntax error", item);
+                        this.ReportFatalError("Syntax error", item!);
                         break;
                     }
                 }
@@ -507,8 +507,8 @@
 
         public virtual Symbol Scan()
         {
-            var symbol = this.Scanner.NextToken();
-            return ((symbol != null) ? symbol : new Symbol(this.EOF_Symbol));
+            var symbol = this.Scanner!.NextToken();
+            return symbol ?? new Symbol(this.EOF_Symbol);
         }
 
         public void SetScanner(Scanner s)

@@ -32,7 +32,7 @@
         {
         }
 
-        public Symbol(int id, int l, int r, object o) : this(id)
+        public Symbol(int id, int l, int r, object? o) : this(id)
         {
             this.Left = l;
             this.Right = r;

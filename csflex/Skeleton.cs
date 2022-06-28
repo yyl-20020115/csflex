@@ -54,7 +54,7 @@ namespace CSFlex
         private static readonly string NL = Environment.NewLine;  //$NON-NLS-1$
 
         /** The skeleton */
-        public static string[] line;
+        public static string[] line = Array.Empty<string>();
 
         /** Whether the skeleton is C#-capable */
         private static bool IsCSharpSkeleton;
@@ -151,7 +151,7 @@ namespace CSFlex
 
             OutputWriter.Println(ErrorMessages.READING_SKEL, skeletonFile.ToString());
 
-            StreamReader reader = null;
+            StreamReader? reader = null;
             try
             {
                 reader = new StreamReader(skeletonFile, Encoding.UTF8, true);
@@ -239,6 +239,7 @@ namespace CSFlex
             {
                 var assembly = typeof(Skeleton).Assembly;
                 var stream = assembly.GetManifestResourceStream("csflex.skeleton.default");
+                if (stream == null) return;
                 ReadSkel(new StreamReader(stream));
             }
             catch
@@ -254,6 +255,7 @@ namespace CSFlex
             {
                 var assembly = typeof(Skeleton).Assembly;
                 var stream = assembly.GetManifestResourceStream("csflex.skeleton.nested");
+                if(stream == null) return;
                 OutputWriter.Println(ErrorMessages.READING_SKEL, "skeleton.nested");
                 ReadSkel(new StreamReader(stream));
             }

@@ -63,7 +63,7 @@ namespace CSFlex
          * returns the number (code) of a declared state, 
          * <code>null</code> if no such state has been declared.
          */
-        public int GetNumber(string name) => states[name];
+        public int? GetNumber(string? name) => name!=null && states.TryGetValue(name, out var n) ? n : null;// states[name];
 
         /**
          * returns the number of declared states

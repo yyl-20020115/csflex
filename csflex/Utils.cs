@@ -54,7 +54,7 @@ namespace CSFlex
 
         public static implicit operator string(File file) => file.name;
 
-        public string Parent => Path.GetDirectoryName(name) is string ret ?
+        public string? Parent => Path.GetDirectoryName(name) is string ret ?
                     (ret.Length == 0 ? null : ret) : null;
 
         public bool Exists => new FileInfo(name).Exists;
@@ -96,7 +96,7 @@ namespace CSFlex
         {
             get
             {
-                FileStream stream = null;
+                FileStream? stream = null;
 
                 try
                 {
@@ -129,7 +129,7 @@ namespace CSFlex
 
             try
             {
-                while (!parent.Exists)
+                while (!parent!.Exists)
                 {
                     needed.Push(parent);
                     parent = parent.Parent;

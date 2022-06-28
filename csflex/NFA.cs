@@ -43,7 +43,7 @@ namespace CSFlex
 
         // table[current_state][next_char] is the set of states that can be reached
         // from current_state with an input next_char
-        internal StateSet[][] table;
+        internal StateSet?[][] table;
 
         // epsilon[current_state] is the set of states that can be reached
         // from current_state via epsilon-edges
@@ -74,7 +74,7 @@ namespace CSFlex
         internal int estSize = 256;
 
         internal Macros macros = new();
-        internal CharClasses classes;
+        internal CharClasses? classes;
 
         internal LexScan? scanner = null;
         internal RegExps regExps = new();
@@ -120,7 +120,7 @@ namespace CSFlex
             int start = numStates;
             int end = numStates + 1;
 
-            for (int c = 0; c < classes.NumClasses; c++)
+            for (int c = 0; c < classes!.NumClasses; c++)
                 AddTransition(start, c, end);
 
             for (int i = 0; i < numLexStates * 2; i++)
@@ -137,12 +137,12 @@ namespace CSFlex
             if (Options.DEBUG)
                 OutputWriter.Debug("Adding nfa for regexp " + regExpNum + " :" + OutputWriter.NewLine + regExps.GetRegExp(regExpNum));
 
-            IntPair nfa = InsertNFA(regExps.GetRegExp(regExpNum));
+            var nfa = InsertNFA(regExps.GetRegExp(regExpNum));
 
             IEnumerator lexStates = regExps.GetStates(regExpNum).GetEnumerator();
 
             if (!lexStates.MoveNext())
-                lexStates = scanner.states.InclusiveStates;
+                lexStates = scanner!.states.InclusiveStates;
 
             lexStates.Reset();
 
@@ -159,11 +159,11 @@ namespace CSFlex
 
             if (regExps.GetLookAhead(regExpNum) != null)
             {
-                IntPair look = InsertNFA(regExps.GetLookAhead(regExpNum));
+                var look = InsertNFA(regExps?.GetLookAhead(regExpNum));
 
                 AddEpsilonTransition(nfa.End, look.Start);
 
-                Action a = regExps.GetAction(regExpNum);
+                var a = regExps?.GetAction(regExpNum)!;
                 a.LookAction = true;
 
                 isPushback[nfa.End] = true;
@@ -217,10 +217,10 @@ namespace CSFlex
 
             if (maxS > numStates) numStates = maxS;
 
-            if (table[start][input] != null)
-                table[start][input].AddState(dest);
+            if (table![start]![input]! != null)
+                table![start]![input]!.AddState(dest);
             else
-                table[start][input] = new StateSet(estSize, dest);
+                table![start]![input] = new StateSet(estSize, dest);
         }
 
         public void AddEpsilonTransition(int start, int dest)
@@ -276,19 +276,19 @@ namespace CSFlex
          *
          * @param set  the set of states for which to determine the action
          */
-        private Action GetAction(StateSet set)
+        private Action? GetAction(StateSet set)
         {
 
             states.Reset(set);
 
-            Action maxAction = null;
+            Action? maxAction = null;
 
             OutputWriter.Debug("Determining action of : " + set);
 
             while (states.HasMoreElements)
             {
 
-                Action currentAction = action[states.NextElement()];
+                Action? currentAction = action[states.NextElement()];
 
                 if (currentAction != null)
                 {
@@ -333,7 +333,7 @@ namespace CSFlex
                 int state = notvisited.GetAndRemoveElement();
                 // Out.debug("removed element "+state+" of "+notvisited);
                 // Out.debug("epsilon[states] = "+epsilon[state]);
-                notvisited.Add(closure.Complement(epsilon[state]));
+                notvisited.Add(closure.Complement(epsilon![state])!);
                 closure.Add(epsilon[state]);
             }
 
@@ -387,7 +387,7 @@ namespace CSFlex
 
             states.Reset(start);
             while (states.HasMoreElements)
-                tempStateSet.Add(table[states.NextElement()][input]);
+                tempStateSet.Add(table![states.NextElement()]![input]!);
 
             var result = new StateSet(tempStateSet);
 
@@ -468,7 +468,7 @@ namespace CSFlex
                     tempStateSet.Clear();
                     states.Reset(currentState);
                     while (states.HasMoreElements)
-                        tempStateSet.Add(table[states.NextElement()][input]);
+                        tempStateSet.Add(table![states.NextElement()]![input]!);
 
                     newState.Copy(tempStateSet);
 
@@ -485,9 +485,9 @@ namespace CSFlex
                         // Out.debug("DFAEdge for input "+(int)input+" and state set "+currentState+" is "+newState);
 
                         // Out.debug("Looking for state set "+newState);
-                        var nextDFAState = dfaStates[newState];
+                        //var nextDFAState = dfaStates[newState];
 
-                        if (nextDFAState != null)
+                        if (dfaStates.TryGetValue(newState,out var nextDFAState))
                         {
                             // Out.debug("FOUND!");
                             dfa.AddTransition(currentDFAState, input, nextDFAState);
@@ -540,7 +540,7 @@ namespace CSFlex
 
                 for (char input = (char)0; input < numInput; input++)
                 {
-                    if (table[i][input] != null && table[i][input].ContainsElements)
+                    if (table[i][input] != null && table![i]![input]!.ContainsElements)
                         result.AppendFormat("  with {0} in {1}{2}", (int)input, table[i][input], OutputWriter.NewLine);
                 }
 
@@ -551,8 +551,9 @@ namespace CSFlex
             return result.ToString();
         }
 
-        public void WriteDot(File file)
+        public void WriteDot(File? file)
         {
+            if (file == null) return;
             try
             {
                 var writer = new StreamWriter(file);
@@ -587,19 +588,19 @@ namespace CSFlex
                 {
                     if (table[i][input] != null)
                     {
-                        StateSetEnumerator states = table[i][input].States;
+                        var states = table![i]![input]!.States;
 
                         while (states.HasMoreElements)
                         {
                             int s = states.NextElement();
                             result.AppendFormat("{0} -> {1}", i, s);
-                            result.AppendFormat(" [label=\"{0}\"]{1}", classes.ToString(input), OutputWriter.NewLine);
+                            result.AppendFormat(" [label=\"{0}\"]{1}", classes!.ToString(input), OutputWriter.NewLine);
                         }
                     }
                 }
                 if (epsilon[i] != null)
                 {
-                    StateSetEnumerator states = epsilon[i].States;
+                    var states = epsilon[i].States;
                     while (states.HasMoreElements)
                     {
                         int s = states.NextElement();
@@ -621,14 +622,14 @@ namespace CSFlex
         {
             if (caseless)
             {
-                int lower = classes.GetClassCode(char.ToLower(letter));
-                int upper = classes.GetClassCode(char.ToUpper(letter));
+                int lower = classes!.GetClassCode(char.ToLower(letter));
+                int upper = classes!.GetClassCode(char.ToUpper(letter));
                 AddTransition(start, lower, end);
                 if (upper != lower) AddTransition(start, upper, end);
             }
             else
             {
-                AddTransition(start, classes.GetClassCode(letter), end);
+                AddTransition(start, classes!.GetClassCode(letter), end);
             }
         }
 
@@ -642,14 +643,14 @@ namespace CSFlex
                 if (caseless)
                 {
                     char c = letters[i];
-                    int lower = classes.GetClassCode(char.ToLower(c));
-                    int upper = classes.GetClassCode(char.ToUpper(c));
+                    int lower = classes!.GetClassCode(char.ToLower(c));
+                    int upper = classes!.GetClassCode(char.ToUpper(c));
                     AddTransition(i + start, lower, i + start + 1);
                     if (upper != lower) AddTransition(i + start, upper, i + start + 1);
                 }
                 else
                 {
-                    AddTransition(i + start, classes.GetClassCode(letters[i]), i + start + 1);
+                    AddTransition(i + start, classes!.GetClassCode(letters[i]), i + start + 1);
                 }
             }
 
@@ -662,14 +663,14 @@ namespace CSFlex
             // empty char class is ok:
             if (intervalls == null) return;
 
-            int[] cl = classes.GetClassCodes(intervalls);
+            int[] cl = classes!.GetClassCodes(intervalls);
             for (int i = 0; i < cl.Length; i++)
                 AddTransition(start, cl[i], end);
         }
 
         private void InsertNotClassNFA(List<Interval> intervalls, int start, int end)
         {
-            int[] cl = classes.GetNotClassCodes(intervalls);
+            int[] cl = classes!.GetNotClassCodes(intervalls);
 
             for (int i = 0; i < cl.Length; i++)
                 AddTransition(start, cl[i], end);
@@ -734,9 +735,8 @@ namespace CSFlex
                         // Out.debug("DFAEdge for input "+(int)input+" and state set "+currentState+" is "+newState);
 
                         // Out.debug("Looking for state set "+newState);
-                        var nextDFAState = dfaStates[newState];
 
-                        if (nextDFAState != null)
+                        if (dfaStates.TryGetValue(newState,out var nextDFAState))
                         {
                             // Out.debug("FOUND!");
                             AddTransition(dfaStart + currentDFAState, input, dfaStart + nextDFAState);
@@ -813,10 +813,10 @@ namespace CSFlex
 
         // "global" data for use in method removeDead only:
         // live[s] == false <=> no final state can be reached from s
-        private bool[] live;    // = new boolean [estSize];
-        private bool[] visited; // = new boolean [estSize];
+        private bool[] live = Array.Empty<bool>();    // = new boolean [estSize];
+        private bool[] visited = Array.Empty<bool>(); // = new boolean [estSize];
         private int _end; // final state of original nfa for dfa (nfa coordinates)
-        private List<StateSet> _dfaStates;
+        private List<StateSet> _dfaStates = new();
         private int _dfaStart; // in nfa coordinates
 
         private void RemoveDead(int start)
@@ -835,8 +835,8 @@ namespace CSFlex
 
             for (int i = 0; i < numInput; i++)
             {
-                StateSet nextState = Closure(table[start][i]);
-                StateSetEnumerator states = nextState.States;
+                var nextState = Closure(table![start]![i]!);
+                var states = nextState.States;
                 while (states.HasMoreElements)
                 {
                     int next = states.NextElement();
@@ -944,7 +944,7 @@ namespace CSFlex
          * @return a pair of integers denoting the index of start
          *         and end state of the NFA.
          */
-        public IntPair InsertNFA(RegExp regExp)
+        public IntPair InsertNFA(RegExp? regExp)
         {
 
             IntPair nfa1, nfa2;
@@ -952,9 +952,9 @@ namespace CSFlex
             RegExp2 r;
 
             if (Options.DEBUG)
-                OutputWriter.Debug("Inserting RegExp : " + regExp);
+                OutputWriter.Debug("Inserting RegExp : " + regExp!);
 
-            if (regExp.IsCharClass(macros))
+            if (regExp!.IsCharClass(macros))
             {
                 start = numStates;
                 end = numStates + 1;

@@ -50,7 +50,7 @@ namespace CSFlex
         private RichTextBox? text = null;
 
         /** text accumulated to be appended to the textbox */
-        private StringBuilder text_queue = new();
+        private StringBuilder? text_queue = new();
 
         /** timeout to actually append incoming text to the textbox */
         private System.Threading.Timer? timer_timeout = null;
@@ -103,29 +103,30 @@ namespace CSFlex
                 if (timer_timeout == null)
                 {
                     timer_timeout = new System.Threading.Timer(
-                        new TimerCallback(Timer_Timeout_Callback), null, 300, Timeout.Infinite);
+                        new TimerCallback(Timer_Timeout_Callback!), null, 300, Timeout.Infinite);
                 }
 
-                text_queue.Append(str);
+                text_queue?.Append(str);
             }
         }
 
         private void Timer_Timeout_Callback(object sender)
         {
             if (text_queue != null)
-                text.Invoke(new SimpleDelegate(AppendStringInGUIModeProxy));
+                text?.Invoke(new SimpleDelegate(AppendStringInGUIModeProxy));
         }
 
         void AppendStringInGUIModeProxy()
         {
+            if(text==null) return;
             lock (SyncRoot)
             {
-                text.AppendText(text_queue.ToString());
+                text.AppendText(text_queue?.ToString()??"");
                 text.SelectionStart = text.TextLength;
 
                 text_queue = null;
 
-                timer_timeout.Dispose();
+                timer_timeout?.Dispose();
                 timer_timeout = null;
             }
         }

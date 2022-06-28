@@ -52,7 +52,7 @@ namespace CSFlex
 
 
         /** output directory */
-        private static File directory = new (".");
+        private static File? directory = null;
         /** strict JLex compatibility */
         public static bool JLex = false;
         /** don't run minimization algorithm if this is true */
@@ -85,23 +85,25 @@ namespace CSFlex
          * 
          * @param d  the directory to write output files to
          */
-        public static File Dir
+        public static File? Dir
         {
             get => directory;
             set
             {
-                if (value.IsFile)
+                if (value != null)
                 {
-                    OutputWriter.Error_("Error: \"" + value + "\" is not a directory.");
-                    throw new GeneratorException();
-                }
+                    if (value.IsFile)
+                    {
+                        OutputWriter.Error_("Error: \"" + value + "\" is not a directory.");
+                        throw new GeneratorException();
+                    }
 
-                if (!value.IsDirectory && !value.Mkdirs())
-                {
-                    OutputWriter.Error_("Error: couldn't create directory \"" + value + "\"");
-                    throw new GeneratorException();
+                    if (!value.IsDirectory && !value.Mkdirs())
+                    {
+                        OutputWriter.Error_("Error: couldn't create directory \"" + value + "\"");
+                        throw new GeneratorException();
+                    }
                 }
-
                 directory = value;
             }
         }
