@@ -21,70 +21,69 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace CSFlex
+namespace CSFlex;
+
+/**
+ * Enumerator for the elements of a CharSet.
+ *
+ * Does not implement java.util.Enumeration, but supports the same protocol.
+ *  
+ * @author Gerwin Klein
+ * @version JFlex 1.4, $Revision: 2.2 $, $Date: 2004/04/12 10:07:47 $
+ * @author Jonathan Gilbert
+ * @version CSFlex 1.4
+ */
+public sealed class CharSetEnumerator
 {
-    /**
-     * Enumerator for the elements of a CharSet.
-     *
-     * Does not implement java.util.Enumeration, but supports the same protocol.
-     *  
-     * @author Gerwin Klein
-     * @version JFlex 1.4, $Revision: 2.2 $, $Date: 2004/04/12 10:07:47 $
-     * @author Jonathan Gilbert
-     * @version CSFlex 1.4
-     */
-    public sealed class CharSetEnumerator
+    private int index;
+    private int offset;
+    private long mask = 1;
+    private CharSet set;
+    public CharSetEnumerator(CharSet characters)
     {
-        private int index;
-        private int offset;
-        private long mask = 1;
-        private CharSet set;
-        public CharSetEnumerator(CharSet characters)
+        set = characters ?? new();
+
+        while (index < set.Bits.Length && set.Bits[index] == 0)
+            index++;
+
+        if (index >= set.Bits.Length) return;
+
+        while (offset <= CharSet.MOD && ((set.Bits[index] & mask) == 0))
         {
-            set = characters ?? new();
+            mask <<= 1;
+            offset++;
+        }
+    }
 
-            while (index < set.Bits.Length && set.Bits[index] == 0)
+    private void Advance()
+    {
+        do
+        {
+            offset++;
+            mask <<= 1;
+        } while (offset <= CharSet.MOD && ((set.Bits[index] & mask) == 0));
+
+        if (offset > CharSet.MOD)
+        {
+            do
                 index++;
-
+            while (index < set.Bits.Length && set.Bits[index] == 0);
             if (index >= set.Bits.Length) return;
-
+            offset = 0;
+            mask = 1;
             while (offset <= CharSet.MOD && ((set.Bits[index] & mask) == 0))
             {
                 mask <<= 1;
                 offset++;
             }
         }
+    }
 
-        private void Advance()
-        {
-            do
-            {
-                offset++;
-                mask <<= 1;
-            } while (offset <= CharSet.MOD && ((set.Bits[index] & mask) == 0));
-
-            if (offset > CharSet.MOD)
-            {
-                do
-                    index++;
-                while (index < set.Bits.Length && set.Bits[index] == 0);
-                if (index >= set.Bits.Length) return;
-                offset = 0;
-                mask = 1;
-                while (offset <= CharSet.MOD && ((set.Bits[index] & mask) == 0))
-                {
-                    mask <<= 1;
-                    offset++;
-                }
-            }
-        }
-
-        public bool HasMoreElements => index < set.Bits.Length;
-        public int NextElement()
-        {
-            int x = (index << CharSet.BITS) + offset;
-            Advance();
-            return x;
-        }
+    public bool HasMoreElements => index < set.Bits.Length;
+    public int NextElement()
+    {
+        int x = (index << CharSet.BITS) + offset;
+        Advance();
+        return x;
     }
 }

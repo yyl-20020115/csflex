@@ -21,63 +21,59 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace CSFlex
+namespace CSFlex;
+/**
+ * Simple symbol table, mapping lexical state names to integers. 
+ *
+ * @author Gerwin Klein
+ * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:48 $
+ * @author Jonathan Gilbert
+ * @version CSFlex 1.4
+ */
+public class LexicalStates
 {
-    using System.Collections;
+    /** maps state name to state number */
+    protected readonly PrettyHashtable<string, int> states = new();
+    /** codes of inclusive states (subset of states) */
+    protected readonly PrettyArrayList<int> inclusive = new();
+    /** number of declared states */
+    protected int numStates = 0;
+    /**
+     * constructs a new lexical state symbol table
+     */
+    public LexicalStates() { }
+    /**
+     * insert a new state declaration
+     */
+    public void Insert(string name, bool is_inclusive)
+    {
+        if (states.ContainsKey(name)) return;
+
+        var code = numStates++;
+        states[name] = code;
+
+        if (is_inclusive)
+            inclusive.Add(code);
+    }
 
     /**
-     * Simple symbol table, mapping lexical state names to integers. 
-     *
-     * @author Gerwin Klein
-     * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:48 $
-     * @author Jonathan Gilbert
-     * @version CSFlex 1.4
+     * returns the number (code) of a declared state, 
+     * <code>null</code> if no such state has been declared.
      */
-    public class LexicalStates
-    {
-        /** maps state name to state number */
-        protected readonly PrettyHashtable<string,int> states = new();
-        /** codes of inclusive states (subset of states) */
-        protected readonly PrettyArrayList<int> inclusive = new();
-        /** number of declared states */
-        protected int numStates = 0;
-        /**
-         * constructs a new lexical state symbol table
-         */
-        public LexicalStates() { }
-        /**
-         * insert a new state declaration
-         */
-        public void Insert(string name, bool is_inclusive)
-        {
-            if (states.ContainsKey(name)) return;
+    public int? GetNumber(string? name) => name != null && states.TryGetValue(name, out var n) ? n : null;// states[name];
 
-            var code = numStates++;
-            states[name] = code;
+    /**
+     * returns the number of declared states
+     */
+    public int CountOfDeclaredStates => numStates;
 
-            if (is_inclusive)
-                inclusive.Add(code);
-        }
+    /**
+     * returns the names of all states
+     */
+    public IEnumerable<string> Names => states.Keys;
 
-        /**
-         * returns the number (code) of a declared state, 
-         * <code>null</code> if no such state has been declared.
-         */
-        public int? GetNumber(string? name) => name!=null && states.TryGetValue(name, out var n) ? n : null;// states[name];
-
-        /**
-         * returns the number of declared states
-         */
-        public int CountOfDeclaredStates => numStates;
-
-        /**
-         * returns the names of all states
-         */
-        public IEnumerator Names => states.Keys.GetEnumerator();
-
-        /**
-         * returns the code of all inclusive states
-         */
-        public IEnumerator InclusiveStates => inclusive.GetEnumerator();
-    }
+    /**
+     * returns the code of all inclusive states
+     */
+    public IEnumerable<int> InclusiveStates => inclusive;
 }

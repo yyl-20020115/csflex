@@ -1,7 +1,6 @@
-﻿namespace CSFlex.Runtime
+﻿namespace CSFlex.Runtime;
+
+public interface Scanner
 {
-    public interface Scanner
-    {
-        Symbol NextToken();
-    }
+    Symbol NextToken();
 }

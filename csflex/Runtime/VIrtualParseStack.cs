@@ -1,58 +1,57 @@
-﻿namespace CSFlex.Runtime
+﻿namespace CSFlex.Runtime;
+
+using CSFlex;
+using System;
+
+public class VIrtualParseStack
 {
-    using CSFlex;
-    using System;
+    protected JCStack<Symbol> stack;
+    protected int next = 0;
+    protected JCStack<int> vstack = new();
 
-    public class VIrtualParseStack
+    public VIrtualParseStack(JCStack<Symbol> shadowing_stack)
     {
-        protected JCStack<Symbol> stack;
-        protected int next = 0;
-        protected JCStack<int> vstack = new();
+        this.stack = shadowing_stack ?? throw new Exception("Internal parser error: attempt to create null virtual stack");
+        this.LoadFromReal();
+    }
 
-        public VIrtualParseStack(JCStack<Symbol> shadowing_stack)
+    public bool IsEmpty => this.vstack.IsEmpty;
+
+    protected void LoadFromReal()
+    {
+        if (this.next < this.stack.Size)
         {
-            this.stack = shadowing_stack ?? throw new Exception("Internal parser error: attempt to create null virtual stack");
+            var symbol = this.stack.GetAt((this.stack.Size - 1) - this.next);
+            this.next++;
+            this.vstack.Push(symbol.ParseState);
+        }
+    }
+
+    public void Pop()
+    {
+        if (this.IsEmpty)
+        {
+            throw new Exception("Internal parser error: pop from empty virtual stack");
+        }
+        this.vstack.Pop();
+        if (this.IsEmpty)
+        {
             this.LoadFromReal();
         }
+    }
 
-        public bool IsEmpty => this.vstack.IsEmpty;
+    public void Push(int state_num)
+    {
+        this.vstack.Push(state_num);
+    }
 
-        protected void LoadFromReal()
+    public int Top()
+    {
+        if (this.IsEmpty)
         {
-            if (this.next < this.stack.Size)
-            {
-                var symbol = this.stack.GetAt((this.stack.Size - 1) - this.next);
-                this.next++;
-                this.vstack.Push(symbol.ParseState);
-            }
+            throw new Exception("Internal parser error: top() called on empty virtual stack");
         }
-
-        public void Pop()
-        {
-            if (this.IsEmpty)
-            {
-                throw new Exception("Internal parser error: pop from empty virtual stack");
-            }
-            this.vstack.Pop();
-            if (this.IsEmpty)
-            {
-                this.LoadFromReal();
-            }
-        }
-
-        public void Push(int state_num)
-        {
-            this.vstack.Push(state_num);
-        }
-
-        public int Top()
-        {
-            if (this.IsEmpty)
-            {
-                throw new Exception("Internal parser error: top() called on empty virtual stack");
-            }
-            return this.vstack.Peek();
-        }
+        return this.vstack.Peek();
     }
 }
 

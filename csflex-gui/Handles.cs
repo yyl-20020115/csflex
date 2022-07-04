@@ -21,34 +21,32 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+namespace CSFlex.GUI;
 
-namespace CSFlex.GUI
+/**
+ * Constants used for GridLayout
+ *
+ * @author Gerwin Klein
+ * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:48 $
+ * @author Jonathan Gilbert
+ * @version CSFlex 1.4
+ */
+public enum Handles : uint
 {
-    /**
-     * Constants used for GridLayout
-     *
-     * @author Gerwin Klein
-     * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:48 $
-     * @author Jonathan Gilbert
-     * @version CSFlex 1.4
-     */
-    public enum Handles : uint
-    {
-        FILL = 0,
+    FILL = 0,
 
-        TOP = 1,
-        TOP_LEFT = TOP,
-        TOP_CENTER = 2,
-        TOP_RIGHT = 3,
+    TOP = 1,
+    TOP_LEFT = TOP,
+    TOP_CENTER = 2,
+    TOP_RIGHT = 3,
 
-        CENTER_LEFT = 4,
-        CENTER = 5,
-        CENTER_CENTER = CENTER,
-        CENTER_RIGHT = 6,
+    CENTER_LEFT = 4,
+    CENTER = 5,
+    CENTER_CENTER = CENTER,
+    CENTER_RIGHT = 6,
 
-        BOTTOM = 7,
-        BOTTOM_LEFT = BOTTOM,
-        BOTTOM_CENTER = 8,
-        BOTTOM_RIGHT = 9,
-    }
+    BOTTOM = 7,
+    BOTTOM_LEFT = BOTTOM,
+    BOTTOM_CENTER = 8,
+    BOTTOM_RIGHT = 9,
 }

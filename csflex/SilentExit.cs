@@ -21,17 +21,15 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace CSFlex
+namespace CSFlex;
+
+/**
+ * Signals a silent exit (no statistics printout).
+ * 
+ * @author Gerwin Klein
+ * @version $Revision: 2.2 $, $Date: 2004/04/12 10:07:48 $
+ */
+public class SilentExitException : Exception
 {
-
-    /**
-     * Signals a silent exit (no statistics printout).
-     * 
-     * @author Gerwin Klein
-     * @version $Revision: 2.2 $, $Date: 2004/04/12 10:07:48 $
-     */
-    public class SilentExit : Exception
-    {
-
-    }
+    public SilentExitException() { }
 }

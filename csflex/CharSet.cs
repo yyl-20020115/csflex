@@ -23,73 +23,72 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 using System.Text;
 
-namespace CSFlex
+namespace CSFlex;
+
+/**
+ * 
+ * @author Gerwin Klein 
+ * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:47 $ 
+ * @author Jonathan Gilbert
+ * @version CSFlex 1.4
+ */
+public sealed class CharSet
 {
-    /**
-     * 
-     * @author Gerwin Klein 
-     * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:47 $ 
-     * @author Jonathan Gilbert
-     * @version CSFlex 1.4
-     */
-    public sealed class CharSet
+    public const int BITS = 6;           // the number of bits to shift (2^6 = 64)
+    public const int MOD = (1 << BITS) - 1;  // modulus
+    private int numElements = 0;
+    private long[] bits;
+    public long[] Bits => bits;
+    public int NumElements => numElements;
+
+    public CharSet()
     {
-        public const int BITS = 6;           // the number of bits to shift (2^6 = 64)
-        public const int MOD = (1 << BITS) - 1;  // modulus
-        private int numElements = 0;
-        private long[] bits;
-        public long[] Bits => bits;
-        public int NumElements => numElements;
+        this.bits = new long[1];
+    }
+    public CharSet(int initialSize, int character)
+    {
+        this.bits = new long[(initialSize >> BITS) + 1];
+        this.Add(character);
+    }
 
-        public CharSet()
-        {
-            this.bits = new long[1];
-        }
-        public CharSet(int initialSize, int character)
-        {
-            this.bits = new long[(initialSize >> BITS) + 1];
-            this.Add(character);
-        }
+    public void Add(int character)
+    {
+        this.Resize(character);
+        if ((bits[character >> BITS] & (1L << (character & MOD))) == 0) numElements++;
+        this.bits[character >> BITS] |= (1L << (character & MOD));
+    }
 
-        public void Add(int character)
-        {
-            this.Resize(character);
-            if ((bits[character >> BITS] & (1L << (character & MOD))) == 0) numElements++;
-            this.bits[character >> BITS] |= (1L << (character & MOD));
-        }
+    private int NBitsToSize(int nbits) => ((nbits >> BITS) + 1);
 
-        private int NBitsToSize(int nbits) => ((nbits >> BITS) + 1);
+    private void Resize(int nbits)
+    {
+        var needed = NBitsToSize(nbits);
+        if (needed < bits.Length) return;
+        var newbits = new long[Math.Max(bits.Length * 2, needed)];
+        Array.Copy(bits, 0, newbits, 0, bits.Length);
+        this.bits = newbits;
+    }
 
-        private void Resize(int nbits)
+    public bool IsElement(int character)
+    {
+        int index = character >> BITS;
+        if (index >= bits.Length) return false;
+        return (bits[index] & (1L << (character & MOD))) != 0;
+    }
+    public CharSetEnumerator GetCharacters() => new(this);
+    public bool ContainsElements => numElements > 0;
+    public int Size => this.numElements;
+    public override string ToString()
+    {
+        var e = GetCharacters();
+        var result = new StringBuilder("{");
+        if (e.HasMoreElements) result.Append(e.NextElement());
+        while (e.HasMoreElements)
         {
-            var needed = NBitsToSize(nbits);
-            if (needed < bits.Length) return;
-            var newbits = new long[Math.Max(bits.Length * 2, needed)];
-            Array.Copy(bits, 0, newbits, 0, bits.Length);
-            this.bits = newbits;
+            var i = e.NextElement();
+            result.Append(", ").Append(i);
         }
-
-        public bool IsElement(int character)
-        {
-            int index = character >> BITS;
-            if (index >= bits.Length) return false;
-            return (bits[index] & (1L << (character & MOD))) != 0;
-        }
-        public CharSetEnumerator GetCharacters() => new (this);
-        public bool ContainsElements => numElements > 0;
-        public int Size => this.numElements;
-        public override string ToString()
-        {
-            var e = GetCharacters();
-            var result = new StringBuilder("{");
-            if (e.HasMoreElements) result.Append(e.NextElement());
-            while (e.HasMoreElements)
-            {
-                var i = e.NextElement();
-                result.Append(", ").Append(i);
-            }
-            result.Append('}');
-            return result.ToString();
-        }
+        result.Append('}');
+        return result.ToString();
     }
 }

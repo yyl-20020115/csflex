@@ -21,27 +21,26 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace CSFlex
+namespace CSFlex;
+
+/**
+ * This Exception is used in class CharClasses.
+ *
+ * @author Gerwin Klein
+ * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:47 $
+ * @author Jonathan Gilbert
+ * @version CSFlex 1.4
+ */
+public class CharClassException : RuntimeException
 {
     /**
-     * This Exception is used in class CharClasses.
-     *
-     * @author Gerwin Klein
-     * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:47 $
-     * @author Jonathan Gilbert
-     * @version CSFlex 1.4
+     * Creates a new CharClassException without message
      */
-    public class CharClassException : RuntimeException
-    {
-        /**
-         * Creates a new CharClassException without message
-         */
-        public CharClassException() { }
-        /**
-         * Creates a new CharClassException with the specified message
-         *
-         * @param message   the error description presented to the user.
-         */
-        public CharClassException(string message) : base(message) { }
-    }
+    public CharClassException() { }
+    /**
+     * Creates a new CharClassException with the specified message
+     *
+     * @param message   the error description presented to the user.
+     */
+    public CharClassException(string message) : base(message) { }
 }

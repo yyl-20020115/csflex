@@ -21,83 +21,82 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace CSFlex
+namespace CSFlex;
+
+/**
+ * A simple table to store EOF actions for each lexical state.
+ *
+ * @author Gerwin Klein
+ * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:47 $
+ * @author Jonathan Gilbert
+ * @version CSFlex 1.4
+ */
+public class EOFActions
 {
-    /**
-     * A simple table to store EOF actions for each lexical state.
-     *
-     * @author Gerwin Klein
-     * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:47 $
-     * @author Jonathan Gilbert
-     * @version CSFlex 1.4
-     */
-    public class EOFActions
+
+    /** maps lexical states to actions */
+    private PrettyHashtable<int, Action> /* Integer -> Action */ actions = new();
+    private Action? defaultAction = null;
+    private int numLexStates = 0;
+
+    public void SetNumLexStates(int num)
+    {
+        numLexStates = num;
+    }
+
+    public void Add(List<int> stateList, Action action)
     {
 
-        /** maps lexical states to actions */
-        private PrettyHashtable<int,Action> /* Integer -> Action */ actions = new ();
-        private Action? defaultAction = null;
-        private int numLexStates = 0;
-
-        public void SetNumLexStates(int num)
+        if (stateList != null && stateList.Count > 0)
         {
-            numLexStates = num;
+            var states = stateList.GetEnumerator();
+
+            while (states.MoveNext())
+                Add((int)states.Current, action);
         }
-
-        public void Add(List<int> stateList, Action action)
+        else
         {
+            defaultAction = action.GetHigherPriority(defaultAction!);
 
-            if (stateList != null && stateList.Count > 0)
+            for (int i = 0; i < numLexStates; i++)
             {
-                var states = stateList.GetEnumerator();
-
-                while (states.MoveNext())
-                    Add((int)states.Current, action);
-            }
-            else
-            {
-                defaultAction = action.GetHigherPriority(defaultAction!);
-
-                for (int i = 0; i < numLexStates; i++)
+                int state = i;
+                if (actions[state] != null)
                 {
-                    int state = i;
-                    if (actions[state] != null)
-                    {
-                        Action oldAction = (Action)actions[state];
-                        actions[state] = oldAction.GetHigherPriority(action);
-                    }
+                    Action oldAction = (Action)actions[state];
+                    actions[state] = oldAction.GetHigherPriority(action);
                 }
             }
         }
-
-        public void Add(int state, Action action)
-        {
-            if (actions[state] == null)
-                actions[state] = action;
-            else
-            {
-                var oldAction = actions[state];
-                actions[state] = oldAction.GetHigherPriority(action);
-            }
-        }
-
-        public bool IsEOFAction(Action a)
-        {
-            if (a == defaultAction) return true;
-
-            return actions.ContainsValue(a);
-            /*
-                IEnumerator e = actions.GetEnumerator();
-                while ( e.MoveNext() ) 
-                  if (a == e.Current) return true;
-
-                return false; /* */
-        }
-
-        public Action GetAction(int state) => actions[state];
-
-        public Action? Default => defaultAction;
-
-        public int NumActions => actions.Count;
     }
+
+    public void Add(int state, Action action)
+    {
+        if (actions[state] == null)
+            actions[state] = action;
+        else
+        {
+            var oldAction = actions[state];
+            actions[state] = oldAction.GetHigherPriority(action);
+        }
+    }
+
+    public bool IsEOFAction(Action a)
+    {
+        if (a == defaultAction) return true;
+
+        return actions.ContainsValue(a);
+        /*
+            IEnumerator e = actions.GetEnumerator();
+            while ( e.MoveNext() ) 
+              if (a == e.Current) return true;
+
+            return false; /* */
+    }
+
+    public Action GetAction(int state) => actions[state];
+
+    public Action? Default => defaultAction;
+
+    public int NumActions => actions.Count;
 }

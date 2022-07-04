@@ -21,118 +21,111 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+namespace CSFlex.GUI;
 
-using CSFlex;
-
-using System;
-using System.Threading;
-
-namespace CSFlex.GUI
+/**
+ * Low priority thread for code generation (low priority so
+ * that gui has time for screen updates)
+ *
+ * @author Gerwin Klein
+ * @version JFlex 1.4, $Revision: 2.5 $, $Date: 2004/04/12 10:07:48 $
+ * @author Jonathan Gilbert
+ * @version CSFlex 1.4
+ */
+public class GeneratorThread
 {
+
+    /** there must be at most one instance of this Thread running */
+    protected volatile bool Running = false;
+
+    /** input file setting from GUI */
+    protected string InputFile;
+
+    /** output directory */
+    protected string OutputDir;
+
+    /** main UI component, likes to be notified when generator finishes */
+    protected MainFrame Parent;
+
     /**
-     * Low priority thread for code generation (low priority so
-     * that gui has time for screen updates)
-     *
-     * @author Gerwin Klein
-     * @version JFlex 1.4, $Revision: 2.5 $, $Date: 2004/04/12 10:07:48 $
-     * @author Jonathan Gilbert
-     * @version CSFlex 1.4
+     * Create a new GeneratorThread, but do not run it yet.
+     * 
+     * @param parent      the frame, main UI component
+     * @param inputFile   input file from UI settings
+     * @param messages    where generator messages should appear
+     * @param outputDir   output directory from UI settings
      */
-    public class GeneratorThread
+    public GeneratorThread(MainFrame Parent, string InputFile, string OutputDir)
     {
+        this.Parent = Parent;
+        this.InputFile = InputFile;
+        this.OutputDir = OutputDir;
+    }
 
-        /** there must be at most one instance of this Thread running */
-        protected volatile bool Running = false;
 
-        /** input file setting from GUI */
-        protected string InputFile;
+    /**
+     * Run the generator thread. Only one instance of it can run at any time.
+     */
+    protected Thread Thread;
 
-        /** output directory */
-        protected string OutputDir;
-
-        /** main UI component, likes to be notified when generator finishes */
-        protected MainFrame Parent;
-
-        /**
-         * Create a new GeneratorThread, but do not run it yet.
-         * 
-         * @param parent      the frame, main UI component
-         * @param inputFile   input file from UI settings
-         * @param messages    where generator messages should appear
-         * @param outputDir   output directory from UI settings
-         */
-        public GeneratorThread(MainFrame Parent, string InputFile,string OutputDir)
+    public void Start()
+    {
+        lock (this)
         {
-            this.Parent = Parent;
-            this.InputFile = InputFile;
-            this.OutputDir = OutputDir;
-        }
-
-
-        /**
-         * Run the generator thread. Only one instance of it can run at any time.
-         */
-        protected Thread Thread;
-
-        public void Start()
-        {
-            lock (this)
+            if (Running)
             {
-                if (Running)
-                {
-                    OutputWriter.Error(ErrorMessages.ALREADY_RUNNING);
-                    Parent.GenerationFinished(false);
-                }
-                else
-                {
-                    Running = true;
-
-                    Thread = new (new ThreadStart(Run));
-
-                    //thread.Priority = ThreadPriority.BelowNormal;
-                    Thread.IsBackground = true;
-                    Thread.Start();
-                }
-            }
-        }
-
-        public void Run()
-        {
-            try
-            {
-                if (OutputDir != "")
-                    Options.SetDir(OutputDir);
-
-                MainClass.Generate(new File(InputFile));
-                OutputWriter.Statistics();
-                Parent.GenerationFinished(true);
-            }
-            catch (GeneratorException)
-            {
-                OutputWriter.Statistics();
+                OutputWriter.Error(ErrorMessages.ALREADY_RUNNING);
                 Parent.GenerationFinished(false);
             }
-            catch (ThreadInterruptedException) { }
-            catch (ThreadAbortException) { }
-            finally
+            else
             {
-                lock (this)
-                {
-                    Running = false;
-                    Thread = null;
-                }
+                Running = true;
+
+                Thread = new(new ThreadStart(Run));
+
+                //thread.Priority = ThreadPriority.BelowNormal;
+                Thread.IsBackground = true;
+                Thread.Start();
             }
         }
+    }
 
-        public void Stop()
+    public void Run()
+    {
+        try
+        {
+            if (OutputDir != "")
+                Options.SetDir(OutputDir);
+
+            MainClass.Generate(new File(InputFile));
+            OutputWriter.Statistics();
+            Parent.GenerationFinished(true);
+        }
+        catch (GeneratorException)
+        {
+            OutputWriter.Statistics();
+            Parent.GenerationFinished(false);
+        }
+        catch (ThreadInterruptedException) { }
+        catch (ThreadAbortException) { }
+        finally
         {
             lock (this)
             {
-                if (this.Running)
-                {
-                    Thread?.Interrupt();
-                    Thread?.Abort();
-                }
+                Running = false;
+                Thread = null;
+            }
+        }
+    }
+
+    public void Stop()
+    {
+        lock (this)
+        {
+            if (this.Running)
+            {
+                Thread?.Interrupt();
+                Thread?.Abort();
             }
         }
     }

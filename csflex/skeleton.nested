@@ -182,7 +182,7 @@
 
 
   /** the stack of open (nested) input streams to read from */
-  private System.Collections.Stack zzStreams = new System.Collections.Stack();
+  private System.Collections.Generic.Stack<ZzFlexStreamInfo> zzStreams = new ();
 
   /**
    * inner class used to store info for nested

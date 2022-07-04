@@ -21,36 +21,33 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-using System.Windows.Forms;
+namespace CSFlex.GUI;
 
-namespace CSFlex.GUI
+/**
+ * Constraints for layout elements of GridLayout
+ *
+ * @author Gerwin Klein
+ * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:48 $
+ * @author Jonathan Gilbert
+ * @version CSFlex 1.4
+ */
+public class GridPanelConstraint
 {
-    /**
-     * Constraints for layout elements of GridLayout
-     *
-     * @author Gerwin Klein
-     * @version JFlex 1.4, $Revision: 2.1 $, $Date: 2004/04/12 10:07:48 $
-     * @author Jonathan Gilbert
-     * @version CSFlex 1.4
-     */
-    public class GridPanelConstraint
-    {
-        public int X;
-        public int Y;
-        public int Width;
-        public int Height;
-        public Handles Handle;
-        public Control Component;
+    public int X;
+    public int Y;
+    public int Width;
+    public int Height;
+    public Handles Handle;
+    public Control Component;
 
-        public GridPanelConstraint(int X, int Y, int Width, int Height,
-          Handles Handle, Control Component)
-        {
-            this.X = X;
-            this.Y = Y;
-            this.Width = Width;
-            this.Height = Height;
-            this.Handle = Handle;
-            this.Component = Component;
-        }
+    public GridPanelConstraint(int X, int Y, int Width, int Height,
+      Handles Handle, Control Component)
+    {
+        this.X = X;
+        this.Y = Y;
+        this.Width = Width;
+        this.Height = Height;
+        this.Handle = Handle;
+        this.Component = Component;
     }
 }
