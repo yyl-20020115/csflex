@@ -156,20 +156,20 @@ public class OptionsDialog : Form
         }
 
         // setup interaction
-        OkButton.Click += new EventHandler(OkButton_Click);
-        DefaultsButton.Click += new EventHandler(DefaultsButton_Click);
-        SkelBrowse.Click += new EventHandler(SkelBrowse_Click);
-        TableGRadioButton.CheckedChanged += new EventHandler(TableG_CheckedChanged);
-        SwitchGRadioButton.CheckedChanged += new EventHandler(SwitchG_CheckedChanged);
-        PackGRadioButton.CheckedChanged += new EventHandler(PackG_CheckedChanged);
-        VerboseCheckBox.CheckedChanged += new EventHandler(Verbose_CheckedChanged);
-        DumpCheckBox.CheckedChanged += new EventHandler(Dump_CheckedChanged);
-        JLexCheckBox.CheckedChanged += new EventHandler(Jlex_CheckedChanged);
-        NoMinimizeCheckBox.CheckedChanged += new EventHandler(No_minimize_CheckedChanged);
-        NoBackupCheckBox.CheckedChanged += new EventHandler(No_backup_CheckedChanged);
-        DotCheckBox.CheckedChanged += new EventHandler(Dot_CheckedChanged);
-        CSharpCheckBox.CheckedChanged += new EventHandler(CSharp_CheckedChanged);
-        TimeCheckBox.CheckedChanged += new EventHandler(Time_CheckedChanged);
+        OkButton.Click += new EventHandler(OkButton_Click!);
+        DefaultsButton.Click += new EventHandler(DefaultsButton_Click!);
+        SkelBrowse.Click += new EventHandler(SkelBrowse_Click!);
+        TableGRadioButton.CheckedChanged += new EventHandler(TableG_CheckedChanged!);
+        SwitchGRadioButton.CheckedChanged += new EventHandler(SwitchG_CheckedChanged!);
+        PackGRadioButton.CheckedChanged += new EventHandler(PackG_CheckedChanged!);
+        VerboseCheckBox.CheckedChanged += new EventHandler(Verbose_CheckedChanged!);
+        DumpCheckBox.CheckedChanged += new EventHandler(Dump_CheckedChanged!);
+        JLexCheckBox.CheckedChanged += new EventHandler(Jlex_CheckedChanged!);
+        NoMinimizeCheckBox.CheckedChanged += new EventHandler(No_minimize_CheckedChanged!);
+        NoBackupCheckBox.CheckedChanged += new EventHandler(No_backup_CheckedChanged!);
+        DotCheckBox.CheckedChanged += new EventHandler(Dot_CheckedChanged!);
+        CSharpCheckBox.CheckedChanged += new EventHandler(CSharp_CheckedChanged!);
+        TimeCheckBox.CheckedChanged += new EventHandler(Time_CheckedChanged!);
 
         // setup layout
         var panel = new GridPanel(4, 7, 10, 10);

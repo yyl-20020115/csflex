@@ -136,12 +136,12 @@ public sealed class SemCheck
 
             case Symbols.STRING:
                 {
-                    string content = (string)((RegExp1)re).content;
+                    string content = ((RegExp1)re).content is string s?s:"";
                     return content.Length;
                 }
 
             case Symbols.MACROUSE:
-                return Length(macros.GetDefinition((string)((RegExp1)re).content));
+                return Length(macros.GetDefinition(((RegExp1)re).content is string s2?s2:""));
         }
 
         throw new Exception("Unkown expression type " + re.type + " in " + re);   //$NON-NLS-1$ //$NON-NLS-2$

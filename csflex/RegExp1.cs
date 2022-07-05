@@ -42,7 +42,7 @@ public class RegExp1 : RegExp
     /**
      * The child of this expression node in the syntax tree of a regular expression.
      */
-    internal object content;
+    internal object? content;
 
 
     /**
@@ -53,7 +53,7 @@ public class RegExp1 : RegExp
      *
      * @param content  the child of this expression
      */
-    public RegExp1(int type, object content)
+    public RegExp1(int type, object? content)
         : base(type)
     {
         this.content = content;

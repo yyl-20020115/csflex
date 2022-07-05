@@ -35,28 +35,28 @@ public class RegExps
 {
 
     /** the spec line in which a regexp is used */
-    private readonly PrettyArrayList<int> lines = new();
+    private readonly PrettyList<int> lines = new();
 
     /** the lexical states in wich the regexp is used */
-    private readonly PrettyArrayList<List<int>> states = new();
+    private readonly PrettyList<List<int>> states = new();
 
     /** the regexp */
-    private readonly PrettyArrayList<RegExp?> regExps = new();
+    private readonly PrettyList<RegExp?> regExps = new();
 
     /** the action of a regexp */
-    private readonly PrettyArrayList<Action> actions = new();
+    private readonly PrettyList<Action> actions = new();
 
     /** flag if it is a BOL regexp */
-    private readonly PrettyArrayList<bool> BOL = new();
+    private readonly PrettyList<bool> BOL = new();
 
     /** the lookahead expression */
-    private readonly PrettyArrayList<RegExp?> look = new();
+    private readonly PrettyList<RegExp?> look = new();
 
     public RegExps()
     {
     }
 
-    public int Insert(int line, List<int> stateList, RegExp regExp, Action action,
+    public int Insert(int line, IList<int> stateList, RegExp regExp, Action action,
                        bool isBOL, RegExp lookAhead)
     {
         if (Options.DEBUG)
@@ -66,7 +66,7 @@ public class RegExps
             OutputWriter.Debug("expression :" + OutputWriter.NewLine + regExp);  //$NON-NLS-1$
         }
 
-        states.Add(stateList);
+        states.Add(stateList is List<int> sl ? sl : stateList.ToList());
         regExps.Add(regExp);
         actions.Add(action);
         BOL.Add(isBOL);
@@ -94,12 +94,9 @@ public class RegExps
         return states.Count - 1;
     }
 
-    public void AddStates(int regNum, List<int> newStates)
+    public void AddStates(int regNum, IList<int> newStates)
     {
-        var s = newStates.GetEnumerator();
-
-        while (s.MoveNext())
-            (states[regNum]).Add(s.Current);
+        states[regNum].AddRange(newStates);
     }
 
     public int Num => states.Count;
@@ -136,17 +133,15 @@ public class RegExps
     public int NFASize(Macros macros)
     {
         int size = 0;
-        var e = regExps.GetEnumerator();
-        while (e.MoveNext())
+        foreach(var r in regExps)
         {
-            var r = e.Current;
-            if (r != null) size += r.Size(macros);
+            if(r!=null)
+            size += r.Size(macros);
         }
-        e = look.GetEnumerator();
-        while (e.MoveNext())
+        foreach(var e in look)
         {
-            var r = e.Current;
-            if (r != null) size += r.Size(macros);
+            if (e != null)
+                size += e.Size(macros);
         }
         return size;
     }

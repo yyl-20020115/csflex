@@ -86,7 +86,7 @@ public sealed class DFA
     /**
      * all actions that are used in this DFA
      */
-    private readonly PrettyHashtable<Action, Action> usedActions = new();
+    private readonly PrettyDictionary<Action, Action> usedActions = new();
     public int[][] Table => table;
     public bool[] IsFinal => isFinal;
     public bool[] IsPushback => isPushback;
@@ -280,13 +280,11 @@ log.WriteLine("setAction(int state = {0}, Action stateAction = {1})", state, sta
     public void CheckActions(LexScan scanner, LexParse? parser)
     {
         var eofActions = parser?.EOFActions;
-        var l = scanner.actions.GetEnumerator();
 
-        while (l.MoveNext())
+        foreach(var next in scanner.actions)
         {
-            var next = l.Current;
             if (!next.Equals(usedActions[next]) && !eofActions!.IsEOFAction(next))
-                OutputWriter.Warning(scanner.file!, ErrorMessages.NEVER_MATCH, ((Action)next).Priority - 1, -1);
+                OutputWriter.Warning(scanner.file!, ErrorMessages.NEVER_MATCH, (next).Priority - 1, -1);
         }
     }
 

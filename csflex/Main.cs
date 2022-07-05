@@ -162,7 +162,7 @@ public class MainClass
 
     public static List<File> ParseOptions(string[] argv)
     {
-        var files = new PrettyArrayList<File>();
+        var files = new PrettyList<File>();
 
         for (int i = 0; i < argv.Length; i++)
         {

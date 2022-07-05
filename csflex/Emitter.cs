@@ -74,7 +74,7 @@ public sealed class Emitter
     private bool[]? colKilled = null;
 
     /** maps actions to their switch label */
-    private readonly PrettyHashtable<Action, int> actionTable = new();
+    private readonly PrettyDictionary<Action, int> actionTable = new();
 
     private CharClassInterval[] intervals = Array.Empty<CharClassInterval>();
 
@@ -82,13 +82,13 @@ public sealed class Emitter
 
     public Emitter(File inputFile, LexParse parser, DFA dfa)
     {
-        var name = Options.EmitCSharp ? parser.scanner.ClassName + ".cs" : parser.scanner.ClassName + ".java";
+        var name = Options.EmitCSharp ? parser.scanner!.ClassName + ".cs" : parser.scanner!.ClassName + ".java";
         var outputFile = Normalize(name, inputFile)!;
         OutputWriter.Println("Writing code to \"" + outputFile + "\"");
 
         this.output = new StreamWriter(outputFile);
         this.parser = parser;
-        this.scanner = parser.scanner;
+        this.scanner = parser.scanner!;
         this.visibility = scanner.visibility;
         this.inputFile = inputFile;
         this.dfa = dfa;
@@ -1567,12 +1567,9 @@ public sealed class Emitter
         Println("      switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {");
 
         int i = actionTable.Count + 1;
-        var actions = actionTable.Keys.GetEnumerator();
-        while (actions.MoveNext())
+        foreach(var action in this.actionTable.Keys)
         {
-            Action action = actions.Current;
             int label = actionTable[action];
-
             Println("        case " + label + ": ");
 
             if (Options.EmitCSharp)
@@ -1640,7 +1637,7 @@ public sealed class Emitter
             //IEnumerator stateNames = scanner.states.Names;
 
             // record lex states already emitted:
-            var used = new PrettyHashtable<int, string>();
+            var used = new PrettyDictionary<int, string>();
 
             // pick a start value for break case labels. 
             // must be larger than any value of a lex state:

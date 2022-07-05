@@ -33,9 +33,9 @@ namespace CSFlex;
 public class LexicalStates
 {
     /** maps state name to state number */
-    protected readonly PrettyHashtable<string, int> states = new();
+    protected readonly PrettyDictionary<string, int> states = new();
     /** codes of inclusive states (subset of states) */
-    protected readonly PrettyArrayList<int> inclusive = new();
+    protected readonly PrettyList<int> inclusive = new();
     /** number of declared states */
     protected int numStates = 0;
     /**

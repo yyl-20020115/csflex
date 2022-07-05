@@ -71,7 +71,7 @@ public class CharClasses
 
         this.maxCharUsed = (char)maxCharCode;
 
-        this.classes = new PrettyArrayList<IntCharSet>
+        this.classes = new PrettyList<IntCharSet>
         {
             new (new Interval(MinChar, MaxChar))
         };
@@ -201,8 +201,9 @@ public class CharClasses
      *    
      * @param caseless  if true upper/lower/title case are considered equivalent  
      */
-    public void MakeClass(string str, bool caseless)
+    public void MakeClass(string? str, bool caseless)
     {
+        str ??= "";
         for (int i = 0; i < str.Length; i++) MakeClass(str[i], caseless);
     }
     /**
@@ -218,7 +219,7 @@ public class CharClasses
      *    
      * @param caseless  if true upper/lower/title case are considered equivalent  
      */
-    public void MakeClass(List<Interval> v, bool caseless)
+    public void MakeClass(IList<Interval>? v, bool caseless)
     {
         MakeClass(new IntCharSet(v), caseless);
     }
@@ -237,7 +238,7 @@ public class CharClasses
      * 
      * @param caseless  if true upper/lower/title case are considered equivalent  
      */
-    public void MakeClassNot(List<Interval> v, bool caseless)
+    public void MakeClassNot(IList<Interval>? v, bool caseless)
     {
         MakeClass(new IntCharSet(v), caseless);
     }

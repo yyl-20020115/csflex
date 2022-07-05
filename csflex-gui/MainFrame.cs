@@ -62,7 +62,7 @@ public sealed class MainFrame : Form
 
         BuildContent();
 
-        Closed += new EventHandler(MainFrame_Closed);
+        Closed += new EventHandler(MainFrame_Closed!);
 
         Show();
     }

@@ -57,6 +57,7 @@ public class GeneratorThread
      */
     public GeneratorThread(MainFrame Parent, string InputFile, string OutputDir)
     {
+        this.Thread = null;
         this.Parent = Parent;
         this.InputFile = InputFile;
         this.OutputDir = OutputDir;
@@ -66,7 +67,7 @@ public class GeneratorThread
     /**
      * Run the generator thread. Only one instance of it can run at any time.
      */
-    protected Thread Thread;
+    protected Thread? Thread;
 
     public void Start()
     {
@@ -124,8 +125,15 @@ public class GeneratorThread
         {
             if (this.Running)
             {
-                Thread?.Interrupt();
-                Thread?.Abort();
+                try
+                {
+                    Thread?.Interrupt();
+                }
+                catch
+                {
+
+                }
+                //Thread?.Abort();
             }
         }
     }

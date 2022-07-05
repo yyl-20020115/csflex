@@ -93,7 +93,7 @@ public class RegExp
 
             case Symbols.MACROUSE:
                 return (this is RegExp1 _unary)
-                    && macros.GetDefinition((string)_unary.content).IsCharClass(macros);
+                    && macros.GetDefinition(_unary.content is string s?s:"").IsCharClass(macros);
 
             default: return false;
         }

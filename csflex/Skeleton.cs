@@ -180,7 +180,7 @@ public class Skeleton
         IsCSharpSkeleton = false;
         notCSharpSkeletonWarned = false;
 
-        var lines = new PrettyArrayList<string>();
+        var lines = new PrettyList<string>();
         var section = new StringBuilder();
 
         string? ln;

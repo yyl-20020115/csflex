@@ -5,8 +5,7 @@
 namespace CSFlex;
 
 using CSFlex.Runtime;
-using System.Collections;
-
+using System.Collections.Generic;
 
 /** CUP v0.10l generated parser.
   * @version 23/09/2004 4:14:16 AM
@@ -19,38 +18,39 @@ public class LexParse : LRParser
     public LexParse(Scanner s) : base(s) { this.action_obj = new(this); }
 
     /** Production table. */
-    protected static readonly short[][] _production_table =
-      Unpack(new short[] {
-    0, 73, 0, 2, 2, 4, 0, 2, 6, 6, 0, 2, 6,
-    8, 0, 2, 6, 2, 0, 2, 3, 2, 0, 2, 3, 4,
-    0, 2, 3, 3, 0, 2, 4, 3, 0, 2, 4, 3, 0,
-    2, 4, 6, 0, 2, 4, 4, 0, 2, 18, 4, 0, 2,
-    18, 9, 0, 2, 18, 8, 0, 2, 18, 3, 0, 2, 5,
-    7, 0, 2, 5, 5, 0, 2, 5, 3, 0, 2, 12, 3,
-    0, 2, 12, 4, 0, 2, 12, 2, 0, 2, 12, 5, 0,
-    2, 20, 4, 0, 2, 20, 3, 0, 2, 15, 5, 0, 2,
-    15, 2, 0, 2, 14, 5, 0, 2, 14, 3, 0, 2, 14,
-    4, 0, 2, 19, 3, 0, 2, 19, 2, 0, 2, 7, 5,
-    0, 2, 7, 3, 0, 2, 7, 3, 0, 2, 8, 4, 0,
-    2, 8, 3, 0, 2, 9, 3, 0, 2, 9, 4, 0, 2,
-    9, 4, 0, 2, 10, 4, 0, 2, 10, 4, 0, 2, 10,
-    4, 0, 2, 10, 5, 0, 2, 10, 6, 0, 2, 10, 5,
-    0, 2, 10, 3, 0, 2, 10, 3, 0, 2, 10, 3, 0,
-    2, 10, 3, 0, 2, 10, 3, 0, 2, 10, 3, 0, 2,
-    11, 4, 0, 2, 11, 5, 0, 2, 11, 5, 0, 2, 11,
-    6, 0, 2, 11, 6, 0, 2, 11, 7, 0, 2, 16, 4,
-    0, 2, 16, 3, 0, 2, 16, 4, 0, 2, 16, 3, 0,
-    2, 16, 4, 0, 2, 16, 3, 0, 2, 16, 4, 0, 2,
-    16, 3, 0, 2, 13, 5, 0, 2, 13, 3, 0, 2, 17,
-    3, 0, 2, 17, 3, 0, 2, 17, 3, 0, 2, 17, 3,
-    0, 2, 17, 3, 0, 2, 17, 3,0 });
+    protected static readonly short[][] _production_table = Unpack(new short[]
+    {
+        0, 73, 0, 2, 2, 4, 0, 2, 6, 6, 0, 2, 6,
+        8, 0, 2, 6, 2, 0, 2, 3, 2, 0, 2, 3, 4,
+        0, 2, 3, 3, 0, 2, 4, 3, 0, 2, 4, 3, 0,
+        2, 4, 6, 0, 2, 4, 4, 0, 2, 18, 4, 0, 2,
+        18, 9, 0, 2, 18, 8, 0, 2, 18, 3, 0, 2, 5,
+        7, 0, 2, 5, 5, 0, 2, 5, 3, 0, 2, 12, 3,
+        0, 2, 12, 4, 0, 2, 12, 2, 0, 2, 12, 5, 0,
+        2, 20, 4, 0, 2, 20, 3, 0, 2, 15, 5, 0, 2,
+        15, 2, 0, 2, 14, 5, 0, 2, 14, 3, 0, 2, 14,
+        4, 0, 2, 19, 3, 0, 2, 19, 2, 0, 2, 7, 5,
+        0, 2, 7, 3, 0, 2, 7, 3, 0, 2, 8, 4, 0,
+        2, 8, 3, 0, 2, 9, 3, 0, 2, 9, 4, 0, 2,
+        9, 4, 0, 2, 10, 4, 0, 2, 10, 4, 0, 2, 10,
+        4, 0, 2, 10, 5, 0, 2, 10, 6, 0, 2, 10, 5,
+        0, 2, 10, 3, 0, 2, 10, 3, 0, 2, 10, 3, 0,
+        2, 10, 3, 0, 2, 10, 3, 0, 2, 10, 3, 0, 2,
+        11, 4, 0, 2, 11, 5, 0, 2, 11, 5, 0, 2, 11,
+        6, 0, 2, 11, 6, 0, 2, 11, 7, 0, 2, 16, 4,
+        0, 2, 16, 3, 0, 2, 16, 4, 0, 2, 16, 3, 0,
+        2, 16, 4, 0, 2, 16, 3, 0, 2, 16, 4, 0, 2,
+        16, 3, 0, 2, 13, 5, 0, 2, 13, 3, 0, 2, 17,
+        3, 0, 2, 17, 3, 0, 2, 17, 3, 0, 2, 17, 3,
+        0, 2, 17, 3, 0, 2, 17, 3,0
+    });
 
     /** Access to production table. */
     public override short[][] ProductionTable => _production_table;
 
     /** Parse-action table. */
-    protected static readonly short[][] _action_table =
-      Unpack(new short[] {
+    protected static readonly short[][] _action_table = Unpack(new short[]
+    {
         0, 108, 0, 6, 2, -2, 32, 4, 1, 2, 0, 12, 3,
         8, 11, -3, 18, -3, 19, -3, 31, -3, 1, 2, 0, 4,
         2, 6, 1, 2, 0, 4, 2, 1, 1, 2, 0, 10, 11,
@@ -311,7 +311,8 @@ public class LexParse : LRParser
         37, 26, 42, 31, -9, 37, 43, 39, 24, 40, 31, 41, 40,
         42, 27, 43, 29, 44, 39, 1, 2, 0, 6, 20, 110, 37,
         47, 1, 2, 0, 10, 11, -8, 18, -8, 19, -8, 31, -8,
-        1, 2,0 });
+        1, 2,0
+    });
 
     /** Access to parse-action table. */
     public override short[][] ActionTable => _action_table;
@@ -319,60 +320,61 @@ public class LexParse : LRParser
     /** <code>reduce_goto</code> table. */
     protected static readonly short[][] _reduce_table =
       Unpack(new short[] {
-0, 108, 0, 4, 6, 4, 1, 1, 0, 4, 3, 6, 1,
-1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 4, 4, 12,
-1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1,
-1, 0, 2, 1, 1, 0, 8, 5, 15, 15, 17, 18, 16,
-1, 1, 0, 2, 1, 1, 0, 4, 14, 102, 1, 1, 0,
-2, 1, 1, 0, 2, 1, 1, 0, 6, 5, 92, 15, 17,
-1, 1, 0, 4, 19, 19, 1, 1, 0, 2, 1, 1, 0,
-14, 7, 35, 8, 27, 9, 33, 10, 32, 11, 25, 17, 31,
-1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 14, 7,
-88, 8, 27, 9, 33, 10, 32, 11, 25, 17, 31, 1, 1,
-0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0,
-2, 1, 1, 0, 10, 9, 49, 10, 32, 11, 25, 17, 31,
-1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 10, 9,
-87, 10, 32, 11, 25, 17, 31, 1, 1, 0, 2, 1, 1,
-0, 2, 1, 1, 0, 2, 1, 1, 0, 8, 13, 59, 16,
-63, 17, 64, 1, 1, 0, 4, 12, 44, 1, 1, 0, 2,
-1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 10, 9,
-43, 10, 32, 11, 25, 17, 31, 1, 1, 0, 2, 1, 1,
-0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0,
-4, 20, 52, 1, 1, 0, 14, 7, 50, 8, 27, 9, 33,
-10, 32, 11, 25, 17, 31, 1, 1, 0, 12, 8, 48, 9,
-33, 10, 32, 11, 25, 17, 31, 1, 1, 0, 2, 1, 1,
-0, 10, 9, 49, 10, 32, 11, 25, 17, 31, 1, 1, 0,
-2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2,
-1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1,
-1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1,
-0, 2, 1, 1, 0, 8, 13, 59, 16, 76, 17, 64, 1,
-1, 0, 8, 13, 59, 16, 72, 17, 64, 1, 1, 0, 2,
-1, 1, 0, 6, 13, 65, 17, 66, 1, 1, 0, 2, 1,
-1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1,
-0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0,
-8, 13, 59, 16, 74, 17, 64, 1, 1, 0, 6, 13, 65,
-17, 66, 1, 1, 0, 2, 1, 1, 0, 6, 13, 65, 17,
-66, 1, 1, 0, 2, 1, 1, 0, 6, 13, 65, 17, 66,
-1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1,
-1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1,
-0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0,
-2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2,
-1, 1, 0, 4, 14, 95, 1, 1, 0, 2, 1, 1, 0,
-2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2,
-1, 1, 0, 2, 1, 1, 0, 8, 5, 15, 15, 17, 18,
-98, 1, 1, 0, 6, 5, 92, 15, 17, 1, 1, 0, 2,
-1, 1, 0, 4, 14, 101, 1, 1, 0, 2, 1, 1, 0,
-2, 1, 1, 0, 2, 1, 1, 0, 8, 5, 15, 15, 17,
-18, 105, 1, 1, 0, 6, 5, 92, 15, 17, 1, 1, 0,
-2, 1, 1, 0, 14, 7, 108, 8, 27, 9, 33, 10, 32,
-11, 25, 17, 31, 1, 1, 0, 2, 1, 1, 0, 2, 1,
-1,0 });
+        0, 108, 0, 4, 6, 4, 1, 1, 0, 4, 3, 6, 1,
+        1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 4, 4, 12,
+        1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1,
+        1, 0, 2, 1, 1, 0, 8, 5, 15, 15, 17, 18, 16,
+        1, 1, 0, 2, 1, 1, 0, 4, 14, 102, 1, 1, 0,
+        2, 1, 1, 0, 2, 1, 1, 0, 6, 5, 92, 15, 17,
+        1, 1, 0, 4, 19, 19, 1, 1, 0, 2, 1, 1, 0,
+        14, 7, 35, 8, 27, 9, 33, 10, 32, 11, 25, 17, 31,
+        1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 14, 7,
+        88, 8, 27, 9, 33, 10, 32, 11, 25, 17, 31, 1, 1,
+        0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0,
+        2, 1, 1, 0, 10, 9, 49, 10, 32, 11, 25, 17, 31,
+        1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 10, 9,
+        87, 10, 32, 11, 25, 17, 31, 1, 1, 0, 2, 1, 1,
+        0, 2, 1, 1, 0, 2, 1, 1, 0, 8, 13, 59, 16,
+        63, 17, 64, 1, 1, 0, 4, 12, 44, 1, 1, 0, 2,
+        1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 10, 9,
+        43, 10, 32, 11, 25, 17, 31, 1, 1, 0, 2, 1, 1,
+        0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0,
+        4, 20, 52, 1, 1, 0, 14, 7, 50, 8, 27, 9, 33,
+        10, 32, 11, 25, 17, 31, 1, 1, 0, 12, 8, 48, 9,
+        33, 10, 32, 11, 25, 17, 31, 1, 1, 0, 2, 1, 1,
+        0, 10, 9, 49, 10, 32, 11, 25, 17, 31, 1, 1, 0,
+        2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2,
+        1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1,
+        1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1,
+        0, 2, 1, 1, 0, 8, 13, 59, 16, 76, 17, 64, 1,
+        1, 0, 8, 13, 59, 16, 72, 17, 64, 1, 1, 0, 2,
+        1, 1, 0, 6, 13, 65, 17, 66, 1, 1, 0, 2, 1,
+        1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1,
+        0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0,
+        8, 13, 59, 16, 74, 17, 64, 1, 1, 0, 6, 13, 65,
+        17, 66, 1, 1, 0, 2, 1, 1, 0, 6, 13, 65, 17,
+        66, 1, 1, 0, 2, 1, 1, 0, 6, 13, 65, 17, 66,
+        1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1,
+        1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1,
+        0, 2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0,
+        2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2,
+        1, 1, 0, 4, 14, 95, 1, 1, 0, 2, 1, 1, 0,
+        2, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 2,
+        1, 1, 0, 2, 1, 1, 0, 8, 5, 15, 15, 17, 18,
+        98, 1, 1, 0, 6, 5, 92, 15, 17, 1, 1, 0, 2,
+        1, 1, 0, 4, 14, 101, 1, 1, 0, 2, 1, 1, 0,
+        2, 1, 1, 0, 2, 1, 1, 0, 8, 5, 15, 15, 17,
+        18, 105, 1, 1, 0, 6, 5, 92, 15, 17, 1, 1, 0,
+        2, 1, 1, 0, 14, 7, 108, 8, 27, 9, 33, 10, 32,
+        11, 25, 17, 31, 1, 1, 0, 2, 1, 1, 0, 2, 1,
+        1,0
+      });
 
     /** Access to <code>reduce_goto</code> table. */
     public override short[][] ReduceTable => _reduce_table;
 
     /** Instance of action encapsulation class. */
-    protected CUP_LexParse_actions action_obj;
+    protected LexParseActions action_obj;
 
     /** Action encapsulation object initializer. */
     protected override void InitActions()
@@ -384,10 +386,10 @@ public class LexParse : LRParser
     public override Symbol DoAction(
       int act_num,
       LRParser parser,
-      CSFlex.JCStack<Symbol> stack,
+      JCStack<Symbol> stack,
       int top) =>
         /* call code in generated class */
-        action_obj.CUP_LexParse_do_action(act_num, parser, stack, top);
+        action_obj.LexParseDoAction(act_num, parser, stack, top);
 
     /** Indicates start state. */
     public override int StartState => 0;
@@ -405,7 +407,7 @@ public class LexParse : LRParser
     public override void UserInit() => action_obj.scanner = this.scanner;
 
 
-    public LexScan scanner;
+    public LexScan? scanner = null;
 
     public LexParse(LexScan scanner) : base(scanner)
     {
@@ -438,7 +440,7 @@ public class LexParse : LRParser
 }
 
 /** Cup generated class to encapsulate user supplied action code.*/
-public class CUP_LexParse_actions
+public class LexParseActions
 {
     internal LexScan scanner;
     internal CharClasses charClasses = new(127);
@@ -448,24 +450,24 @@ public class CUP_LexParse_actions
     internal Timer t = new();
     internal EOFActions eofActions = new();
 
-    private void fatalError(ErrorMessages message, int line, int col)
+    private void FatalError(ErrorMessages message, int line, int col)
     {
         SyntaxError(message, line, col);
         throw new GeneratorException();
     }
 
-    private void fatalError(ErrorMessages message)
+    private void FatalError(ErrorMessages message)
     {
-        fatalError(message, scanner.CurrentLine(), -1);
+        FatalError(message, scanner.CurrentLine(), -1);
         throw new GeneratorException();
     }
 
-    private void syntaxError(ErrorMessages message)
+    private void SyntaxError(ErrorMessages message)
     {
         OutputWriter.Error(scanner.file!, message, scanner.CurrentLine(), -1);
     }
 
-    private void syntaxError(ErrorMessages message, int line)
+    private void SyntaxError(ErrorMessages message, int line)
     {
         OutputWriter.Error(scanner.file!, message, line, -1);
     }
@@ -476,625 +478,621 @@ public class CUP_LexParse_actions
     }
 
     private static readonly char[] LetterRanges = new char[]
-      {
-  '$', '$',
-  'A', 'Z',
-  '_', '_',
-  'a', 'z',
-  (char)162, (char)165,
-  (char)170, (char)170,
-  (char)181, (char)181,
-  (char)186, (char)186,
-  (char)192, (char)214,
-  (char)216, (char)246,
-  (char)248, (char)543,
-  (char)546, (char)563,
-  (char)592, (char)685,
-  (char)688, (char)696,
-  (char)699, (char)705,
-  (char)720, (char)721,
-  (char)736, (char)740,
-  (char)750, (char)750,
-  (char)890, (char)890,
-  (char)902, (char)902,
-  (char)904, (char)906,
-  (char)908, (char)908,
-  (char)910, (char)929,
-  (char)931, (char)974,
-  (char)976, (char)983,
-  (char)986, (char)1011,
-  (char)1024, (char)1153,
-  (char)1164, (char)1220,
-  (char)1223, (char)1224,
-  (char)1227, (char)1228,
-  (char)1232, (char)1269,
-  (char)1272, (char)1273,
-  (char)1329, (char)1366,
-  (char)1369, (char)1369,
-  (char)1377, (char)1415,
-  (char)1488, (char)1514,
-  (char)1520, (char)1522,
-  (char)1569, (char)1594,
-  (char)1600, (char)1610,
-  (char)1649, (char)1747,
-  (char)1749, (char)1749,
-  (char)1765, (char)1766,
-  (char)1786, (char)1788,
-  (char)1808, (char)1808,
-  (char)1810, (char)1836,
-  (char)1920, (char)1957,
-  (char)2309, (char)2361,
-  (char)2365, (char)2365,
-  (char)2384, (char)2384,
-  (char)2392, (char)2401,
-  (char)2437, (char)2444,
-  (char)2447, (char)2448,
-  (char)2451, (char)2472,
-  (char)2474, (char)2480,
-  (char)2482, (char)2482,
-  (char)2486, (char)2489,
-  (char)2524, (char)2525,
-  (char)2527, (char)2529,
-  (char)2544, (char)2547,
-  (char)2565, (char)2570,
-  (char)2575, (char)2576,
-  (char)2579, (char)2600,
-  (char)2602, (char)2608,
-  (char)2610, (char)2611,
-  (char)2613, (char)2614,
-  (char)2616, (char)2617,
-  (char)2649, (char)2652,
-  (char)2654, (char)2654,
-  (char)2674, (char)2676,
-  (char)2693, (char)2699,
-  (char)2701, (char)2701,
-  (char)2703, (char)2705,
-  (char)2707, (char)2728,
-  (char)2730, (char)2736,
-  (char)2738, (char)2739,
-  (char)2741, (char)2745,
-  (char)2749, (char)2749,
-  (char)2768, (char)2768,
-  (char)2784, (char)2784,
-  (char)2821, (char)2828,
-  (char)2831, (char)2832,
-  (char)2835, (char)2856,
-  (char)2858, (char)2864,
-  (char)2866, (char)2867,
-  (char)2870, (char)2873,
-  (char)2877, (char)2877,
-  (char)2908, (char)2909,
-  (char)2911, (char)2913,
-  (char)2949, (char)2954,
-  (char)2958, (char)2960,
-  (char)2962, (char)2965,
-  (char)2969, (char)2970,
-  (char)2972, (char)2972,
-  (char)2974, (char)2975,
-  (char)2979, (char)2980,
-  (char)2984, (char)2986,
-  (char)2990, (char)2997,
-  (char)2999, (char)3001,
-  (char)3077, (char)3084,
-  (char)3086, (char)3088,
-  (char)3090, (char)3112,
-  (char)3114, (char)3123,
-  (char)3125, (char)3129,
-  (char)3168, (char)3169,
-  (char)3205, (char)3212,
-  (char)3214, (char)3216,
-  (char)3218, (char)3240,
-  (char)3242, (char)3251,
-  (char)3253, (char)3257,
-  (char)3294, (char)3294,
-  (char)3296, (char)3297,
-  (char)3333, (char)3340,
-  (char)3342, (char)3344,
-  (char)3346, (char)3368,
-  (char)3370, (char)3385,
-  (char)3424, (char)3425,
-  (char)3461, (char)3478,
-  (char)3482, (char)3505,
-  (char)3507, (char)3515,
-  (char)3517, (char)3517,
-  (char)3520, (char)3526,
-  (char)3585, (char)3632,
-  (char)3634, (char)3635,
-  (char)3647, (char)3654,
-  (char)3713, (char)3714,
-  (char)3716, (char)3716,
-  (char)3719, (char)3720,
-  (char)3722, (char)3722,
-  (char)3725, (char)3725,
-  (char)3732, (char)3735,
-  (char)3737, (char)3743,
-  (char)3745, (char)3747,
-  (char)3749, (char)3749,
-  (char)3751, (char)3751,
-  (char)3754, (char)3755,
-  (char)3757, (char)3760,
-  (char)3762, (char)3763,
-  (char)3773, (char)3773,
-  (char)3776, (char)3780,
-  (char)3782, (char)3782,
-  (char)3804, (char)3805,
-  (char)3840, (char)3840,
-  (char)3904, (char)3911,
-  (char)3913, (char)3946,
-  (char)3976, (char)3979,
-  (char)4096, (char)4129,
-  (char)4131, (char)4135,
-  (char)4137, (char)4138,
-  (char)4176, (char)4181,
-  (char)4256, (char)4293,
-  (char)4304, (char)4342,
-  (char)4352, (char)4441,
-  (char)4447, (char)4514,
-  (char)4520, (char)4601,
-  (char)4608, (char)4614,
-  (char)4616, (char)4678,
-  (char)4680, (char)4680,
-  (char)4682, (char)4685,
-  (char)4688, (char)4694,
-  (char)4696, (char)4696,
-  (char)4698, (char)4701,
-  (char)4704, (char)4742,
-  (char)4744, (char)4744,
-  (char)4746, (char)4749,
-  (char)4752, (char)4782,
-  (char)4784, (char)4784,
-  (char)4786, (char)4789,
-  (char)4792, (char)4798,
-  (char)4800, (char)4800,
-  (char)4802, (char)4805,
-  (char)4808, (char)4814,
-  (char)4816, (char)4822,
-  (char)4824, (char)4846,
-  (char)4848, (char)4878,
-  (char)4880, (char)4880,
-  (char)4882, (char)4885,
-  (char)4888, (char)4894,
-  (char)4896, (char)4934,
-  (char)4936, (char)4954,
-  (char)5024, (char)5108,
-  (char)5121, (char)5740,
-  (char)5743, (char)5750,
-  (char)5761, (char)5786,
-  (char)5792, (char)5866,
-  (char)6016, (char)6067,
-  (char)6176, (char)6263,
-  (char)6272, (char)6312,
-  (char)7680, (char)7835,
-  (char)7840, (char)7929,
-  (char)7936, (char)7957,
-  (char)7960, (char)7965,
-  (char)7968, (char)8005,
-  (char)8008, (char)8013,
-  (char)8016, (char)8023,
-  (char)8025, (char)8025,
-  (char)8027, (char)8027,
-  (char)8029, (char)8029,
-  (char)8031, (char)8061,
-  (char)8064, (char)8116,
-  (char)8118, (char)8124,
-  (char)8126, (char)8126,
-  (char)8130, (char)8132,
-  (char)8134, (char)8140,
-  (char)8144, (char)8147,
-  (char)8150, (char)8155,
-  (char)8160, (char)8172,
-  (char)8178, (char)8180,
-  (char)8182, (char)8188,
-  (char)8255, (char)8256,
-  (char)8319, (char)8319,
-  (char)8352, (char)8363,
-  (char)8450, (char)8450,
-  (char)8455, (char)8455,
-  (char)8458, (char)8467,
-  (char)8469, (char)8469,
-  (char)8473, (char)8477,
-  (char)8484, (char)8484,
-  (char)8486, (char)8486,
-  (char)8488, (char)8488,
-  (char)8490, (char)8493,
-  (char)8495, (char)8497,
-  (char)8499, (char)8505,
-  (char)12293, (char)12294,
-  (char)12337, (char)12341,
-  (char)12353, (char)12436,
-  (char)12445, (char)12446,
-  (char)12449, (char)12538,
-  (char)12540, (char)12542,
-  (char)12549, (char)12588,
-  (char)12593, (char)12686,
-  (char)12704, (char)12727,
-  (char)13312, (char)19893,
-  (char)19968, (char)40869,
-  (char)40960, (char)42124,
-  (char)44032, (char)55203,
-  (char)63744, (char)64045,
-  (char)64256, (char)64262,
-  (char)64275, (char)64279,
-  (char)64285, (char)64285,
-  (char)64287, (char)64296,
-  (char)64298, (char)64310,
-  (char)64312, (char)64316,
-  (char)64318, (char)64318,
-  (char)64320, (char)64321,
-  (char)64323, (char)64324,
-  (char)64326, (char)64433,
-  (char)64467, (char)64829,
-  (char)64848, (char)64911,
-  (char)64914, (char)64967,
-  (char)65008, (char)65019,
-  (char)65075, (char)65076,
-  (char)65101, (char)65103,
-  (char)65129, (char)65129,
-  (char)65136, (char)65138,
-  (char)65140, (char)65140,
-  (char)65142, (char)65276,
-  (char)65284, (char)65284,
-  (char)65313, (char)65338,
-  (char)65343, (char)65343,
-  (char)65345, (char)65370,
-  (char)65382, (char)65470,
-  (char)65474, (char)65479,
-  (char)65482, (char)65487,
-  (char)65490, (char)65495,
-  (char)65498, (char)65500,
-  (char)65504, (char)65505,
-  (char)65509, (char)65510,
-      };
-
+    {
+          '$', '$',
+          'A', 'Z',
+          '_', '_',
+          'a', 'z',
+          (char)162, (char)165,
+          (char)170, (char)170,
+          (char)181, (char)181,
+          (char)186, (char)186,
+          (char)192, (char)214,
+          (char)216, (char)246,
+          (char)248, (char)543,
+          (char)546, (char)563,
+          (char)592, (char)685,
+          (char)688, (char)696,
+          (char)699, (char)705,
+          (char)720, (char)721,
+          (char)736, (char)740,
+          (char)750, (char)750,
+          (char)890, (char)890,
+          (char)902, (char)902,
+          (char)904, (char)906,
+          (char)908, (char)908,
+          (char)910, (char)929,
+          (char)931, (char)974,
+          (char)976, (char)983,
+          (char)986, (char)1011,
+          (char)1024, (char)1153,
+          (char)1164, (char)1220,
+          (char)1223, (char)1224,
+          (char)1227, (char)1228,
+          (char)1232, (char)1269,
+          (char)1272, (char)1273,
+          (char)1329, (char)1366,
+          (char)1369, (char)1369,
+          (char)1377, (char)1415,
+          (char)1488, (char)1514,
+          (char)1520, (char)1522,
+          (char)1569, (char)1594,
+          (char)1600, (char)1610,
+          (char)1649, (char)1747,
+          (char)1749, (char)1749,
+          (char)1765, (char)1766,
+          (char)1786, (char)1788,
+          (char)1808, (char)1808,
+          (char)1810, (char)1836,
+          (char)1920, (char)1957,
+          (char)2309, (char)2361,
+          (char)2365, (char)2365,
+          (char)2384, (char)2384,
+          (char)2392, (char)2401,
+          (char)2437, (char)2444,
+          (char)2447, (char)2448,
+          (char)2451, (char)2472,
+          (char)2474, (char)2480,
+          (char)2482, (char)2482,
+          (char)2486, (char)2489,
+          (char)2524, (char)2525,
+          (char)2527, (char)2529,
+          (char)2544, (char)2547,
+          (char)2565, (char)2570,
+          (char)2575, (char)2576,
+          (char)2579, (char)2600,
+          (char)2602, (char)2608,
+          (char)2610, (char)2611,
+          (char)2613, (char)2614,
+          (char)2616, (char)2617,
+          (char)2649, (char)2652,
+          (char)2654, (char)2654,
+          (char)2674, (char)2676,
+          (char)2693, (char)2699,
+          (char)2701, (char)2701,
+          (char)2703, (char)2705,
+          (char)2707, (char)2728,
+          (char)2730, (char)2736,
+          (char)2738, (char)2739,
+          (char)2741, (char)2745,
+          (char)2749, (char)2749,
+          (char)2768, (char)2768,
+          (char)2784, (char)2784,
+          (char)2821, (char)2828,
+          (char)2831, (char)2832,
+          (char)2835, (char)2856,
+          (char)2858, (char)2864,
+          (char)2866, (char)2867,
+          (char)2870, (char)2873,
+          (char)2877, (char)2877,
+          (char)2908, (char)2909,
+          (char)2911, (char)2913,
+          (char)2949, (char)2954,
+          (char)2958, (char)2960,
+          (char)2962, (char)2965,
+          (char)2969, (char)2970,
+          (char)2972, (char)2972,
+          (char)2974, (char)2975,
+          (char)2979, (char)2980,
+          (char)2984, (char)2986,
+          (char)2990, (char)2997,
+          (char)2999, (char)3001,
+          (char)3077, (char)3084,
+          (char)3086, (char)3088,
+          (char)3090, (char)3112,
+          (char)3114, (char)3123,
+          (char)3125, (char)3129,
+          (char)3168, (char)3169,
+          (char)3205, (char)3212,
+          (char)3214, (char)3216,
+          (char)3218, (char)3240,
+          (char)3242, (char)3251,
+          (char)3253, (char)3257,
+          (char)3294, (char)3294,
+          (char)3296, (char)3297,
+          (char)3333, (char)3340,
+          (char)3342, (char)3344,
+          (char)3346, (char)3368,
+          (char)3370, (char)3385,
+          (char)3424, (char)3425,
+          (char)3461, (char)3478,
+          (char)3482, (char)3505,
+          (char)3507, (char)3515,
+          (char)3517, (char)3517,
+          (char)3520, (char)3526,
+          (char)3585, (char)3632,
+          (char)3634, (char)3635,
+          (char)3647, (char)3654,
+          (char)3713, (char)3714,
+          (char)3716, (char)3716,
+          (char)3719, (char)3720,
+          (char)3722, (char)3722,
+          (char)3725, (char)3725,
+          (char)3732, (char)3735,
+          (char)3737, (char)3743,
+          (char)3745, (char)3747,
+          (char)3749, (char)3749,
+          (char)3751, (char)3751,
+          (char)3754, (char)3755,
+          (char)3757, (char)3760,
+          (char)3762, (char)3763,
+          (char)3773, (char)3773,
+          (char)3776, (char)3780,
+          (char)3782, (char)3782,
+          (char)3804, (char)3805,
+          (char)3840, (char)3840,
+          (char)3904, (char)3911,
+          (char)3913, (char)3946,
+          (char)3976, (char)3979,
+          (char)4096, (char)4129,
+          (char)4131, (char)4135,
+          (char)4137, (char)4138,
+          (char)4176, (char)4181,
+          (char)4256, (char)4293,
+          (char)4304, (char)4342,
+          (char)4352, (char)4441,
+          (char)4447, (char)4514,
+          (char)4520, (char)4601,
+          (char)4608, (char)4614,
+          (char)4616, (char)4678,
+          (char)4680, (char)4680,
+          (char)4682, (char)4685,
+          (char)4688, (char)4694,
+          (char)4696, (char)4696,
+          (char)4698, (char)4701,
+          (char)4704, (char)4742,
+          (char)4744, (char)4744,
+          (char)4746, (char)4749,
+          (char)4752, (char)4782,
+          (char)4784, (char)4784,
+          (char)4786, (char)4789,
+          (char)4792, (char)4798,
+          (char)4800, (char)4800,
+          (char)4802, (char)4805,
+          (char)4808, (char)4814,
+          (char)4816, (char)4822,
+          (char)4824, (char)4846,
+          (char)4848, (char)4878,
+          (char)4880, (char)4880,
+          (char)4882, (char)4885,
+          (char)4888, (char)4894,
+          (char)4896, (char)4934,
+          (char)4936, (char)4954,
+          (char)5024, (char)5108,
+          (char)5121, (char)5740,
+          (char)5743, (char)5750,
+          (char)5761, (char)5786,
+          (char)5792, (char)5866,
+          (char)6016, (char)6067,
+          (char)6176, (char)6263,
+          (char)6272, (char)6312,
+          (char)7680, (char)7835,
+          (char)7840, (char)7929,
+          (char)7936, (char)7957,
+          (char)7960, (char)7965,
+          (char)7968, (char)8005,
+          (char)8008, (char)8013,
+          (char)8016, (char)8023,
+          (char)8025, (char)8025,
+          (char)8027, (char)8027,
+          (char)8029, (char)8029,
+          (char)8031, (char)8061,
+          (char)8064, (char)8116,
+          (char)8118, (char)8124,
+          (char)8126, (char)8126,
+          (char)8130, (char)8132,
+          (char)8134, (char)8140,
+          (char)8144, (char)8147,
+          (char)8150, (char)8155,
+          (char)8160, (char)8172,
+          (char)8178, (char)8180,
+          (char)8182, (char)8188,
+          (char)8255, (char)8256,
+          (char)8319, (char)8319,
+          (char)8352, (char)8363,
+          (char)8450, (char)8450,
+          (char)8455, (char)8455,
+          (char)8458, (char)8467,
+          (char)8469, (char)8469,
+          (char)8473, (char)8477,
+          (char)8484, (char)8484,
+          (char)8486, (char)8486,
+          (char)8488, (char)8488,
+          (char)8490, (char)8493,
+          (char)8495, (char)8497,
+          (char)8499, (char)8505,
+          (char)12293, (char)12294,
+          (char)12337, (char)12341,
+          (char)12353, (char)12436,
+          (char)12445, (char)12446,
+          (char)12449, (char)12538,
+          (char)12540, (char)12542,
+          (char)12549, (char)12588,
+          (char)12593, (char)12686,
+          (char)12704, (char)12727,
+          (char)13312, (char)19893,
+          (char)19968, (char)40869,
+          (char)40960, (char)42124,
+          (char)44032, (char)55203,
+          (char)63744, (char)64045,
+          (char)64256, (char)64262,
+          (char)64275, (char)64279,
+          (char)64285, (char)64285,
+          (char)64287, (char)64296,
+          (char)64298, (char)64310,
+          (char)64312, (char)64316,
+          (char)64318, (char)64318,
+          (char)64320, (char)64321,
+          (char)64323, (char)64324,
+          (char)64326, (char)64433,
+          (char)64467, (char)64829,
+          (char)64848, (char)64911,
+          (char)64914, (char)64967,
+          (char)65008, (char)65019,
+          (char)65075, (char)65076,
+          (char)65101, (char)65103,
+          (char)65129, (char)65129,
+          (char)65136, (char)65138,
+          (char)65140, (char)65140,
+          (char)65142, (char)65276,
+          (char)65284, (char)65284,
+          (char)65313, (char)65338,
+          (char)65343, (char)65343,
+          (char)65345, (char)65370,
+          (char)65382, (char)65470,
+          (char)65474, (char)65479,
+          (char)65482, (char)65487,
+          (char)65490, (char)65495,
+          (char)65498, (char)65500,
+          (char)65504, (char)65505,
+          (char)65509, (char)65510,
+    };
     private static readonly char[] LetterDigitRanges = new char[]
-      {
-  (char)0, (char)8,
-  (char)14, (char)27,
-  '$', '$',
-  '0', '9',
-  'A', 'Z',
-  '_', '_',
-  'a', 'z',
-  (char)127, (char)159,
-  (char)162, (char)165,
-  (char)170, (char)170,
-  (char)178, (char)179,
-  (char)181, (char)181,
-  (char)185, (char)186,
-  (char)192, (char)214,
-  (char)216, (char)246,
-  (char)248, (char)543,
-  (char)546, (char)563,
-  (char)592, (char)685,
-  (char)688, (char)696,
-  (char)699, (char)705,
-  (char)720, (char)721,
-  (char)736, (char)740,
-  (char)750, (char)750,
-  (char)768, (char)837,
-  (char)864, (char)865,
-  (char)890, (char)890,
-  (char)902, (char)902,
-  (char)904, (char)906,
-  (char)908, (char)908,
-  (char)910, (char)929,
-  (char)931, (char)974,
-  (char)976, (char)983,
-  (char)986, (char)1011,
-  (char)1024, (char)1153,
-  (char)1155, (char)1158,
-  (char)1164, (char)1220,
-  (char)1223, (char)1224,
-  (char)1227, (char)1228,
-  (char)1232, (char)1269,
-  (char)1272, (char)1273,
-  (char)1329, (char)1366,
-  (char)1369, (char)1369,
-  (char)1377, (char)1415,
-  (char)1425, (char)1465,
-  (char)1467, (char)1469,
-  (char)1471, (char)1471,
-  (char)1473, (char)1474,
-  (char)1476, (char)1476,
-  (char)1488, (char)1514,
-  (char)1520, (char)1522,
-  (char)1569, (char)1594,
-  (char)1600, (char)1618,
-  (char)1632, (char)1641,
-  (char)1648, (char)1747,
-  (char)1749, (char)1756,
-  (char)1759, (char)1768,
-  (char)1770, (char)1773,
-  (char)1776, (char)1788,
-  (char)1808, (char)1808,
-  (char)1810, (char)1836,
-  (char)1920, (char)1957,
-  (char)2305, (char)2307,
-  (char)2309, (char)2361,
-  (char)2364, (char)2381,
-  (char)2384, (char)2388,
-  (char)2392, (char)2403,
-  (char)2406, (char)2415,
-  (char)2433, (char)2435,
-  (char)2437, (char)2444,
-  (char)2447, (char)2448,
-  (char)2451, (char)2472,
-  (char)2474, (char)2480,
-  (char)2482, (char)2482,
-  (char)2486, (char)2489,
-  (char)2492, (char)2492,
-  (char)2494, (char)2500,
-  (char)2503, (char)2504,
-  (char)2507, (char)2509,
-  (char)2519, (char)2519,
-  (char)2524, (char)2525,
-  (char)2527, (char)2531,
-  (char)2534, (char)2551,
-  (char)2553, (char)2553,
-  (char)2562, (char)2562,
-  (char)2565, (char)2570,
-  (char)2575, (char)2576,
-  (char)2579, (char)2600,
-  (char)2602, (char)2608,
-  (char)2610, (char)2611,
-  (char)2613, (char)2614,
-  (char)2616, (char)2617,
-  (char)2620, (char)2620,
-  (char)2622, (char)2626,
-  (char)2631, (char)2632,
-  (char)2635, (char)2637,
-  (char)2649, (char)2652,
-  (char)2654, (char)2654,
-  (char)2662, (char)2676,
-  (char)2689, (char)2691,
-  (char)2693, (char)2699,
-  (char)2701, (char)2701,
-  (char)2703, (char)2705,
-  (char)2707, (char)2728,
-  (char)2730, (char)2736,
-  (char)2738, (char)2739,
-  (char)2741, (char)2745,
-  (char)2748, (char)2757,
-  (char)2759, (char)2761,
-  (char)2763, (char)2765,
-  (char)2768, (char)2768,
-  (char)2784, (char)2784,
-  (char)2790, (char)2799,
-  (char)2817, (char)2819,
-  (char)2821, (char)2828,
-  (char)2831, (char)2832,
-  (char)2835, (char)2856,
-  (char)2858, (char)2864,
-  (char)2866, (char)2867,
-  (char)2870, (char)2873,
-  (char)2876, (char)2883,
-  (char)2887, (char)2893,
-  (char)2902, (char)2903,
-  (char)2908, (char)2909,
-  (char)2911, (char)2913,
-  (char)2918, (char)2927,
-  (char)2946, (char)2947,
-  (char)2949, (char)2954,
-  (char)2958, (char)2960,
-  (char)2962, (char)2965,
-  (char)2969, (char)2970,
-  (char)2972, (char)2972,
-  (char)2974, (char)2975,
-  (char)2979, (char)2980,
-  (char)2984, (char)2986,
-  (char)2990, (char)2997,
-  (char)2999, (char)3001,
-  (char)3006, (char)3140,
-  (char)3142, (char)3144,
-  (char)3146, (char)3149,
-  (char)3157, (char)3158,
-  (char)3168, (char)3169,
-  (char)3174, (char)3183,
-  (char)3202, (char)3203,
-  (char)3205, (char)3212,
-  (char)3214, (char)3216,
-  (char)3218, (char)3240,
-  (char)3242, (char)3251,
-  (char)3253, (char)3257,
-  (char)3262, (char)3268,
-  (char)3270, (char)3272,
-  (char)3274, (char)3277,
-  (char)3285, (char)3286,
-  (char)3294, (char)3294,
-  (char)3296, (char)3297,
-  (char)3302, (char)3311,
-  (char)3330, (char)3331,
-  (char)3333, (char)3340,
-  (char)3342, (char)3344,
-  (char)3346, (char)3368,
-  (char)3370, (char)3385,
-  (char)3390, (char)3395,
-  (char)3398, (char)3400,
-  (char)3402, (char)3405,
-  (char)3415, (char)3415,
-  (char)3424, (char)3425,
-  (char)3430, (char)3439,
-  (char)3461, (char)3478,
-  (char)3482, (char)3505,
-  (char)3507, (char)3515,
-  (char)3517, (char)3517,
-  (char)3520, (char)3526,
-  (char)3585, (char)3642,
-  (char)3647, (char)3662,
-  (char)3664, (char)3673,
-  (char)3713, (char)3714,
-  (char)3716, (char)3716,
-  (char)3719, (char)3720,
-  (char)3722, (char)3722,
-  (char)3725, (char)3725,
-  (char)3732, (char)3735,
-  (char)3737, (char)3743,
-  (char)3745, (char)3747,
-  (char)3749, (char)3749,
-  (char)3751, (char)3751,
-  (char)3754, (char)3755,
-  (char)3757, (char)3769,
-  (char)3771, (char)3773,
-  (char)3776, (char)3780,
-  (char)3782, (char)3782,
-  (char)3784, (char)3789,
-  (char)3792, (char)3801,
-  (char)3804, (char)3805,
-  (char)3840, (char)3840,
-  (char)3864, (char)3865,
-  (char)3872, (char)3881,
-  (char)3893, (char)3893,
-  (char)3895, (char)3895,
-  (char)3897, (char)3897,
-  (char)3902, (char)3911,
-  (char)3913, (char)3946,
-  (char)3953, (char)3979,
-  (char)3984, (char)3989,
-  (char)3991, (char)3991,
-  (char)3993, (char)4013,
-  (char)4017, (char)4023,
-  (char)4025, (char)4025,
-  (char)4096, (char)4129,
-  (char)4131, (char)4135,
-  (char)4137, (char)4138,
-  (char)4176, (char)4181,
-  (char)4256, (char)4293,
-  (char)4304, (char)4342,
-  (char)4352, (char)4441,
-  (char)4447, (char)4514,
-  (char)4520, (char)4601,
-  (char)4608, (char)4614,
-  (char)4616, (char)4678,
-  (char)4680, (char)4680,
-  (char)4682, (char)4685,
-  (char)4688, (char)4694,
-  (char)4696, (char)4696,
-  (char)4698, (char)4701,
-  (char)4704, (char)4742,
-  (char)4744, (char)4744,
-  (char)4746, (char)4749,
-  (char)4752, (char)4782,
-  (char)4784, (char)4784,
-  (char)4786, (char)4789,
-  (char)4792, (char)4798,
-  (char)4800, (char)4800,
-  (char)4802, (char)4805,
-  (char)4808, (char)4814,
-  (char)4816, (char)4822,
-  (char)4824, (char)4846,
-  (char)4848, (char)4878,
-  (char)4880, (char)4880,
-  (char)4882, (char)4885,
-  (char)4888, (char)4894,
-  (char)4896, (char)4934,
-  (char)4936, (char)4954,
-  (char)5024, (char)5108,
-  (char)5121, (char)5740,
-  (char)5743, (char)5750,
-  (char)5761, (char)5786,
-  (char)5792, (char)5866,
-  (char)6016, (char)6067,
-  (char)6176, (char)6263,
-  (char)6272, (char)6312,
-  (char)7680, (char)7835,
-  (char)7840, (char)7929,
-  (char)7936, (char)7957,
-  (char)7960, (char)7965,
-  (char)7968, (char)8005,
-  (char)8008, (char)8013,
-  (char)8016, (char)8023,
-  (char)8025, (char)8025,
-  (char)8027, (char)8027,
-  (char)8029, (char)8029,
-  (char)8031, (char)8061,
-  (char)8064, (char)8116,
-  (char)8118, (char)8124,
-  (char)8126, (char)8126,
-  (char)8130, (char)8132,
-  (char)8134, (char)8140,
-  (char)8144, (char)8147,
-  (char)8150, (char)8155,
-  (char)8160, (char)8172,
-  (char)8178, (char)8180,
-  (char)8182, (char)8188,
-  (char)8204, (char)8207,
-  (char)8234, (char)8238,
-  (char)8255, (char)8256,
-  (char)8298, (char)8304,
-  (char)8308, (char)8313,
-  (char)8319, (char)8329,
-  (char)8352, (char)8363,
-  (char)8400, (char)8412,
-  (char)8417, (char)8417,
-  (char)8450, (char)8450,
-  (char)8455, (char)8455,
-  (char)8458, (char)8467,
-  (char)8469, (char)8469,
-  (char)8473, (char)8477,
-  (char)8484, (char)8484,
-  (char)8486, (char)8486,
-  (char)8488, (char)8488,
-  (char)8490, (char)8493,
-  (char)8495, (char)8497,
-  (char)8499, (char)8505,
-  (char)8543, (char)8578,
-  (char)9312, (char)9371,
-  (char)9450, (char)9450,
-  (char)10102, (char)10131,
-  (char)12293, (char)12295,
-  (char)12321, (char)12335,
-  (char)12337, (char)12341,
-  (char)12353, (char)12436,
-  (char)12441, (char)12442,
-  (char)12445, (char)12446,
-  (char)12449, (char)12538,
-  (char)12540, (char)12542,
-  (char)12549, (char)12588,
-  (char)12593, (char)12686,
-  (char)12704, (char)12727,
-  (char)12928, (char)12937,
-  (char)13312, (char)19893,
-  (char)19968, (char)40869,
-  (char)40960, (char)42124,
-  (char)44032, (char)55203,
-  (char)63744, (char)64045,
-  (char)64256, (char)64262,
-  (char)64275, (char)64279,
-  (char)64285, (char)64285,
-  (char)64287, (char)64296,
-  (char)64298, (char)64310,
-  (char)64312, (char)64316,
-  (char)64318, (char)64318,
-  (char)64320, (char)64321,
-  (char)64323, (char)64324,
-  (char)64326, (char)64433,
-  (char)64467, (char)64829,
-  (char)64848, (char)64911,
-  (char)64914, (char)64967,
-  (char)65008, (char)65019,
-  (char)65075, (char)65076,
-  (char)65101, (char)65103,
-  (char)65129, (char)65129,
-  (char)65136, (char)65138,
-  (char)65140, (char)65140,
-  (char)65142, (char)65276,
-  (char)65279, (char)65279,
-  (char)65284, (char)65284,
-  (char)65296, (char)65305,
-  (char)65313, (char)65338,
-  (char)65343, (char)65343,
-  (char)65345, (char)65370,
-  (char)65382, (char)65470,
-  (char)65474, (char)65479,
-  (char)65482, (char)65487,
-  (char)65490, (char)65495,
-  (char)65498, (char)65500,
-  (char)65504, (char)65505,
-  (char)65509, (char)65510
-
-      };
-
-
+    {
+        (char)0, (char)8,
+        (char)14, (char)27,
+        '$', '$',
+        '0', '9',
+        'A', 'Z',
+        '_', '_',
+        'a', 'z',
+        (char)127, (char)159,
+        (char)162, (char)165,
+        (char)170, (char)170,
+        (char)178, (char)179,
+        (char)181, (char)181,
+        (char)185, (char)186,
+        (char)192, (char)214,
+        (char)216, (char)246,
+        (char)248, (char)543,
+        (char)546, (char)563,
+        (char)592, (char)685,
+        (char)688, (char)696,
+        (char)699, (char)705,
+        (char)720, (char)721,
+        (char)736, (char)740,
+        (char)750, (char)750,
+        (char)768, (char)837,
+        (char)864, (char)865,
+        (char)890, (char)890,
+        (char)902, (char)902,
+        (char)904, (char)906,
+        (char)908, (char)908,
+        (char)910, (char)929,
+        (char)931, (char)974,
+        (char)976, (char)983,
+        (char)986, (char)1011,
+        (char)1024, (char)1153,
+        (char)1155, (char)1158,
+        (char)1164, (char)1220,
+        (char)1223, (char)1224,
+        (char)1227, (char)1228,
+        (char)1232, (char)1269,
+        (char)1272, (char)1273,
+        (char)1329, (char)1366,
+        (char)1369, (char)1369,
+        (char)1377, (char)1415,
+        (char)1425, (char)1465,
+        (char)1467, (char)1469,
+        (char)1471, (char)1471,
+        (char)1473, (char)1474,
+        (char)1476, (char)1476,
+        (char)1488, (char)1514,
+        (char)1520, (char)1522,
+        (char)1569, (char)1594,
+        (char)1600, (char)1618,
+        (char)1632, (char)1641,
+        (char)1648, (char)1747,
+        (char)1749, (char)1756,
+        (char)1759, (char)1768,
+        (char)1770, (char)1773,
+        (char)1776, (char)1788,
+        (char)1808, (char)1808,
+        (char)1810, (char)1836,
+        (char)1920, (char)1957,
+        (char)2305, (char)2307,
+        (char)2309, (char)2361,
+        (char)2364, (char)2381,
+        (char)2384, (char)2388,
+        (char)2392, (char)2403,
+        (char)2406, (char)2415,
+        (char)2433, (char)2435,
+        (char)2437, (char)2444,
+        (char)2447, (char)2448,
+        (char)2451, (char)2472,
+        (char)2474, (char)2480,
+        (char)2482, (char)2482,
+        (char)2486, (char)2489,
+        (char)2492, (char)2492,
+        (char)2494, (char)2500,
+        (char)2503, (char)2504,
+        (char)2507, (char)2509,
+        (char)2519, (char)2519,
+        (char)2524, (char)2525,
+        (char)2527, (char)2531,
+        (char)2534, (char)2551,
+        (char)2553, (char)2553,
+        (char)2562, (char)2562,
+        (char)2565, (char)2570,
+        (char)2575, (char)2576,
+        (char)2579, (char)2600,
+        (char)2602, (char)2608,
+        (char)2610, (char)2611,
+        (char)2613, (char)2614,
+        (char)2616, (char)2617,
+        (char)2620, (char)2620,
+        (char)2622, (char)2626,
+        (char)2631, (char)2632,
+        (char)2635, (char)2637,
+        (char)2649, (char)2652,
+        (char)2654, (char)2654,
+        (char)2662, (char)2676,
+        (char)2689, (char)2691,
+        (char)2693, (char)2699,
+        (char)2701, (char)2701,
+        (char)2703, (char)2705,
+        (char)2707, (char)2728,
+        (char)2730, (char)2736,
+        (char)2738, (char)2739,
+        (char)2741, (char)2745,
+        (char)2748, (char)2757,
+        (char)2759, (char)2761,
+        (char)2763, (char)2765,
+        (char)2768, (char)2768,
+        (char)2784, (char)2784,
+        (char)2790, (char)2799,
+        (char)2817, (char)2819,
+        (char)2821, (char)2828,
+        (char)2831, (char)2832,
+        (char)2835, (char)2856,
+        (char)2858, (char)2864,
+        (char)2866, (char)2867,
+        (char)2870, (char)2873,
+        (char)2876, (char)2883,
+        (char)2887, (char)2893,
+        (char)2902, (char)2903,
+        (char)2908, (char)2909,
+        (char)2911, (char)2913,
+        (char)2918, (char)2927,
+        (char)2946, (char)2947,
+        (char)2949, (char)2954,
+        (char)2958, (char)2960,
+        (char)2962, (char)2965,
+        (char)2969, (char)2970,
+        (char)2972, (char)2972,
+        (char)2974, (char)2975,
+        (char)2979, (char)2980,
+        (char)2984, (char)2986,
+        (char)2990, (char)2997,
+        (char)2999, (char)3001,
+        (char)3006, (char)3140,
+        (char)3142, (char)3144,
+        (char)3146, (char)3149,
+        (char)3157, (char)3158,
+        (char)3168, (char)3169,
+        (char)3174, (char)3183,
+        (char)3202, (char)3203,
+        (char)3205, (char)3212,
+        (char)3214, (char)3216,
+        (char)3218, (char)3240,
+        (char)3242, (char)3251,
+        (char)3253, (char)3257,
+        (char)3262, (char)3268,
+        (char)3270, (char)3272,
+        (char)3274, (char)3277,
+        (char)3285, (char)3286,
+        (char)3294, (char)3294,
+        (char)3296, (char)3297,
+        (char)3302, (char)3311,
+        (char)3330, (char)3331,
+        (char)3333, (char)3340,
+        (char)3342, (char)3344,
+        (char)3346, (char)3368,
+        (char)3370, (char)3385,
+        (char)3390, (char)3395,
+        (char)3398, (char)3400,
+        (char)3402, (char)3405,
+        (char)3415, (char)3415,
+        (char)3424, (char)3425,
+        (char)3430, (char)3439,
+        (char)3461, (char)3478,
+        (char)3482, (char)3505,
+        (char)3507, (char)3515,
+        (char)3517, (char)3517,
+        (char)3520, (char)3526,
+        (char)3585, (char)3642,
+        (char)3647, (char)3662,
+        (char)3664, (char)3673,
+        (char)3713, (char)3714,
+        (char)3716, (char)3716,
+        (char)3719, (char)3720,
+        (char)3722, (char)3722,
+        (char)3725, (char)3725,
+        (char)3732, (char)3735,
+        (char)3737, (char)3743,
+        (char)3745, (char)3747,
+        (char)3749, (char)3749,
+        (char)3751, (char)3751,
+        (char)3754, (char)3755,
+        (char)3757, (char)3769,
+        (char)3771, (char)3773,
+        (char)3776, (char)3780,
+        (char)3782, (char)3782,
+        (char)3784, (char)3789,
+        (char)3792, (char)3801,
+        (char)3804, (char)3805,
+        (char)3840, (char)3840,
+        (char)3864, (char)3865,
+        (char)3872, (char)3881,
+        (char)3893, (char)3893,
+        (char)3895, (char)3895,
+        (char)3897, (char)3897,
+        (char)3902, (char)3911,
+        (char)3913, (char)3946,
+        (char)3953, (char)3979,
+        (char)3984, (char)3989,
+        (char)3991, (char)3991,
+        (char)3993, (char)4013,
+        (char)4017, (char)4023,
+        (char)4025, (char)4025,
+        (char)4096, (char)4129,
+        (char)4131, (char)4135,
+        (char)4137, (char)4138,
+        (char)4176, (char)4181,
+        (char)4256, (char)4293,
+        (char)4304, (char)4342,
+        (char)4352, (char)4441,
+        (char)4447, (char)4514,
+        (char)4520, (char)4601,
+        (char)4608, (char)4614,
+        (char)4616, (char)4678,
+        (char)4680, (char)4680,
+        (char)4682, (char)4685,
+        (char)4688, (char)4694,
+        (char)4696, (char)4696,
+        (char)4698, (char)4701,
+        (char)4704, (char)4742,
+        (char)4744, (char)4744,
+        (char)4746, (char)4749,
+        (char)4752, (char)4782,
+        (char)4784, (char)4784,
+        (char)4786, (char)4789,
+        (char)4792, (char)4798,
+        (char)4800, (char)4800,
+        (char)4802, (char)4805,
+        (char)4808, (char)4814,
+        (char)4816, (char)4822,
+        (char)4824, (char)4846,
+        (char)4848, (char)4878,
+        (char)4880, (char)4880,
+        (char)4882, (char)4885,
+        (char)4888, (char)4894,
+        (char)4896, (char)4934,
+        (char)4936, (char)4954,
+        (char)5024, (char)5108,
+        (char)5121, (char)5740,
+        (char)5743, (char)5750,
+        (char)5761, (char)5786,
+        (char)5792, (char)5866,
+        (char)6016, (char)6067,
+        (char)6176, (char)6263,
+        (char)6272, (char)6312,
+        (char)7680, (char)7835,
+        (char)7840, (char)7929,
+        (char)7936, (char)7957,
+        (char)7960, (char)7965,
+        (char)7968, (char)8005,
+        (char)8008, (char)8013,
+        (char)8016, (char)8023,
+        (char)8025, (char)8025,
+        (char)8027, (char)8027,
+        (char)8029, (char)8029,
+        (char)8031, (char)8061,
+        (char)8064, (char)8116,
+        (char)8118, (char)8124,
+        (char)8126, (char)8126,
+        (char)8130, (char)8132,
+        (char)8134, (char)8140,
+        (char)8144, (char)8147,
+        (char)8150, (char)8155,
+        (char)8160, (char)8172,
+        (char)8178, (char)8180,
+        (char)8182, (char)8188,
+        (char)8204, (char)8207,
+        (char)8234, (char)8238,
+        (char)8255, (char)8256,
+        (char)8298, (char)8304,
+        (char)8308, (char)8313,
+        (char)8319, (char)8329,
+        (char)8352, (char)8363,
+        (char)8400, (char)8412,
+        (char)8417, (char)8417,
+        (char)8450, (char)8450,
+        (char)8455, (char)8455,
+        (char)8458, (char)8467,
+        (char)8469, (char)8469,
+        (char)8473, (char)8477,
+        (char)8484, (char)8484,
+        (char)8486, (char)8486,
+        (char)8488, (char)8488,
+        (char)8490, (char)8493,
+        (char)8495, (char)8497,
+        (char)8499, (char)8505,
+        (char)8543, (char)8578,
+        (char)9312, (char)9371,
+        (char)9450, (char)9450,
+        (char)10102, (char)10131,
+        (char)12293, (char)12295,
+        (char)12321, (char)12335,
+        (char)12337, (char)12341,
+        (char)12353, (char)12436,
+        (char)12441, (char)12442,
+        (char)12445, (char)12446,
+        (char)12449, (char)12538,
+        (char)12540, (char)12542,
+        (char)12549, (char)12588,
+        (char)12593, (char)12686,
+        (char)12704, (char)12727,
+        (char)12928, (char)12937,
+        (char)13312, (char)19893,
+        (char)19968, (char)40869,
+        (char)40960, (char)42124,
+        (char)44032, (char)55203,
+        (char)63744, (char)64045,
+        (char)64256, (char)64262,
+        (char)64275, (char)64279,
+        (char)64285, (char)64285,
+        (char)64287, (char)64296,
+        (char)64298, (char)64310,
+        (char)64312, (char)64316,
+        (char)64318, (char)64318,
+        (char)64320, (char)64321,
+        (char)64323, (char)64324,
+        (char)64326, (char)64433,
+        (char)64467, (char)64829,
+        (char)64848, (char)64911,
+        (char)64914, (char)64967,
+        (char)65008, (char)65019,
+        (char)65075, (char)65076,
+        (char)65101, (char)65103,
+        (char)65129, (char)65129,
+        (char)65136, (char)65138,
+        (char)65140, (char)65140,
+        (char)65142, (char)65276,
+        (char)65279, (char)65279,
+        (char)65284, (char)65284,
+        (char)65296, (char)65305,
+        (char)65313, (char)65338,
+        (char)65343, (char)65343,
+        (char)65345, (char)65370,
+        (char)65382, (char)65470,
+        (char)65474, (char)65479,
+        (char)65482, (char)65487,
+        (char)65490, (char)65495,
+        (char)65498, (char)65500,
+        (char)65504, (char)65505,
+        (char)65509, (char)65510
+    };
     private static bool[] LetterMap = Array.Empty<bool>();
     private static bool[] LetterDigitMap = Array.Empty<bool>();
 
@@ -1137,13 +1135,12 @@ public class CUP_LexParse_actions
             default: return false;
         }
     }
-
-    private PrettyArrayList<Interval> MakePreClass(int type)
+    private PrettyList<Interval> MakePreClass(int type)
     {
-        var result = new PrettyArrayList<Interval>();
+        var result = new PrettyList<Interval>();
 
-        char c = (char)0;
-        char start = (char)0;
+        char c = '\0';
+        char start = '\0';
         char last = charClasses.MaxCharCode;
 
         bool prev, current;
@@ -1175,9 +1172,9 @@ public class CUP_LexParse_actions
         return result;
     }
 
-    private RegExp? MakeRepeat(RegExp r, int n1, int n2, int line, int col)
+    private RegExp? MakeRepeat(RegExp? r, int n1, int n2, int line, int col)
     {
-
+        if (r == null) return r;
         if (n1 <= 0 && n2 <= 0)
         {
             SyntaxError(ErrorMessages.REPEAT_ZERO, line, col);
@@ -1216,7 +1213,7 @@ public class CUP_LexParse_actions
 
     private RegExp MakeNewLine()
     {
-        var list = new PrettyArrayList<Interval>();
+        var list = new PrettyList<Interval>();
         list.Add(new Interval('\n', '\r'));
         list.Add(new Interval('\u0085', '\u0085'));
         list.Add(new Interval('\u2028', '\u2029'));
@@ -1241,320 +1238,299 @@ public class CUP_LexParse_actions
     private readonly LexParse parser;
 
     /** Constructor */
-    internal CUP_LexParse_actions(LexParse parser)
+    internal LexParseActions(LexParse parser)
     {
         this.parser = parser;
         this.scanner = parser.scanner;
     }
 
     /** Method with the actual generated action code. */
-    public Symbol CUP_LexParse_do_action(
-      int CUP_LexParse_act_num,
-      CSFlex.Runtime.LRParser CUP_LexParse_parser,
-      CSFlex.JCStack<Symbol> CUP_LexParse_stack,
-      int CUP_LexParse_top)
+    public Symbol LexParseDoAction(
+      int ActionNumber,
+      LRParser Parser,
+      JCStack<Symbol> Stack,
+      int Top)
     {
         /* Symbol object for return from actions */
-        CSFlex.Runtime.Symbol CUP_LexParse_result;
+        Symbol ResultSymbol;
 
         /* select the action based on the action number */
-        switch (CUP_LexParse_act_num)
+        switch (ActionNumber)
         {
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 72: // preclass ::= LOWERCLASS 
                 {
-                    var RESULT = MakePreClass(Symbols.LOWERCLASS);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(15/*preclass*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(15/*preclass*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        MakePreClass(Symbols.LOWERCLASS));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 71: // preclass ::= UPPERCLASS 
                 {
-                    var RESULT = MakePreClass(Symbols.UPPERCLASS);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(15/*preclass*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(15/*preclass*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        MakePreClass(Symbols.UPPERCLASS));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 70: // preclass ::= DIGITCLASS 
                 {
-                    var RESULT = MakePreClass(Symbols.DIGITCLASS);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(15/*preclass*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        15/*preclass*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        MakePreClass(Symbols.DIGITCLASS));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 69: // preclass ::= LETTERCLASS 
                 {
-                    var RESULT = MakePreClass(Symbols.LETTERCLASS);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(15/*preclass*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        15/*preclass*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        MakePreClass(Symbols.LETTERCLASS));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 68: // preclass ::= JLETTERDIGITCLASS 
                 {
-                    var RESULT = MakePreClass(Symbols.JLETTERDIGITCLASS);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(15/*preclass*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        15/*preclass*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        MakePreClass(Symbols.JLETTERDIGITCLASS));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 67: // preclass ::= JLETTERCLASS 
                 {
-                    var RESULT = MakePreClass(Symbols.JLETTERCLASS);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(15/*preclass*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        15/*preclass*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        MakePreClass(Symbols.JLETTERCLASS));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 66: // classcontentelem ::= CHAR 
                 {
-                    int cleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int cright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    char c = (char)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
+                    char c = Stack.GetAt(Top - 0).Value is char x ? x : '\0';
 
-                    var RESULT = new Interval(c, c);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(11/*classcontentelem*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        11/*classcontentelem*/,
+                        Stack.GetAt(Top - 0).Left,
+                        Stack.GetAt(Top - 0).Right,
+                        new Interval(c, c));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 65: // classcontentelem ::= CHAR DASH CHAR 
                 {
-                    int c1left = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left;
-                    int c1right = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Right;
-                    char c1 = (char)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Value;
-                    int c2left = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int c2right = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    char c2 = (char)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
+                    char c1 = (Stack.GetAt(Top - 2)).Value is char x ? x : '\0';
+                    char c2 = (Stack.GetAt(Top - 0)).Value is char y ? y : '\0';
 
-                    var RESULT = new Interval(c1, c2);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(11/*classcontentelem*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        11/*classcontentelem*/,
+                        (Stack.GetAt(Top - 2)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new Interval(c1, c2));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 64: // classcontent ::= MACROUSE 
                 {
-                    ArrayList RESULT = null;
-                    int identleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int identright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    string ident = (((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value as string)!;
-
+                    int identleft = (Stack.GetAt(Top - 0)).Left;
+                    int identright = (Stack.GetAt(Top - 0)).Right;
+                    var ident = ((Stack.GetAt(Top - 0)).Value as string);
 
                     SyntaxError(ErrorMessages.CHARCLASS_MACRO, identleft, identright);
 
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(14/*classcontent*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        14/*classcontent*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        ident);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 63: // classcontent ::= classcontent MACROUSE 
                 {
-                    ArrayList RESULT = null;
-                    int listleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int listright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    ArrayList list = (ArrayList)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-                    int identleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int identright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    string ident = (string)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
+                    int identleft = (Stack.GetAt(Top - 0)).Left;
+                    int identright = (Stack.GetAt(Top - 0)).Right;
 
                     SyntaxError(ErrorMessages.CHARCLASS_MACRO, identleft, identright);
 
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(14/*classcontent*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        14/*classcontent*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        (Stack.GetAt(Top - 1)).Value);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 62: // classcontent ::= STRING 
                 {
-                    PrettyArrayList<Interval> RESULT = new PrettyArrayList<Interval>();
-                    int sleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int sright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    string s = (((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value as string)!;
+                    var list = new PrettyList<Interval>();
+                    var s = ((Stack.GetAt(Top - 0)).Value as string);
 
                     for (int i = 0; i < s.Length; i++)
-                        RESULT.Add(new Interval(s[i], s[i]));
+                        list.Add(new(s[i], s[i]));
 
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(14/*classcontent*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        14/*classcontent*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        list);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 61: // classcontent ::= classcontent STRING 
                 {
-                    List<Interval> RESULT = null;
-                    int listleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int listright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    List<Interval> list = (List<Interval>)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-                    int sleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int sright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    string s = (((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value as string)!;
+                    var list = (Stack.GetAt(Top - 1)).Value as IList<Interval>;
+                    var s = ((Stack.GetAt(Top - 0)).Value as string);
 
+                    if (s != null)
+                    {
+                        for (int i = 0; i < s.Length; i++)
+                            list?.Add(new(s[i], s[i]));
+                    }
 
-                    for (int i = 0; i < s.Length; i++)
-                        list.Add(new Interval(s[i], s[i]));
-                    RESULT = list;
-
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(14/*classcontent*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        14/*classcontent*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        list);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 60: // classcontent ::= preclass 
                 {
-                    ArrayList RESULT = null;
-                    int listleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int listright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    ArrayList list = (ArrayList)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-                    RESULT = list;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(14/*classcontent*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        14/*classcontent*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        (Stack.GetAt(Top - 0)).Value);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 59: // classcontent ::= classcontent preclass 
                 {
-                    ArrayList RESULT = null;
-                    int listleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int listright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    ArrayList list = (ArrayList)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-                    int plistleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int plistright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    ArrayList plist = (ArrayList)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-
-                    for (IEnumerator e = plist.GetEnumerator(); e.MoveNext();)
-                        list.Add(e.Current);
-                    RESULT = list;
-
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(14/*classcontent*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var list = (Stack.GetAt(Top - 1)).Value as IList<Interval>;
+                    var plist = (Stack.GetAt(Top - 0)).Value as IList<Interval>;
+                    if (list != null && plist != null)
+                        foreach (var o in plist)
+                            list.Add(o);
+                    ResultSymbol = new(
+                        14/*classcontent*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        list);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 58: // classcontent ::= classcontentelem 
                 {
-                    PrettyArrayList<Interval> RESULT = null;
-                    int elemleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int elemright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    Interval elem = (((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value as Interval)!;
+                    var elem = (Stack.GetAt(Top - 0)).Value as Interval;
+                    var list = new PrettyList<Interval>();
+                    if (elem != null)
+                        list.Add(elem);
 
-                    var list = new PrettyArrayList<Interval>();
-                    list.Add(elem);
-                    RESULT = list;
-
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(14/*classcontent*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        14/*classcontent*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        list);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 57: // classcontent ::= classcontent classcontentelem 
                 {
-                    ArrayList RESULT = null;
-                    int listleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int listright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    ArrayList list = (ArrayList)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-                    int elemleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int elemright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    Interval elem = (Interval)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
+                    var list = Stack.GetAt(Top - 1).Value as IList<Interval>;
+                    var elem = Stack.GetAt(Top - 0).Value as Interval;
+                    if (list != null && elem != null)
+                        list.Add(elem);
 
-
-                    list.Add(elem);
-                    RESULT = list;
-
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(14/*classcontent*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        14/*classcontent*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        list);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 56: // charclass ::= OPENCLASS HAT DASH classcontent CLOSECLASS 
                 {
-                    RegExp RESULT = null;
-                    int listleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int listright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    var list = (List<Interval>)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-                    int closeleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int closeright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    Object close = (Object)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-
+                    var list = Stack.GetAt(Top - 1).Value as IList<Interval>;
+                    int closeleft = (Stack.GetAt(Top - 0)).Left;
+                    int closeright = (Stack.GetAt(Top - 0)).Right;
                     try
                     {
-                        list.Add(new Interval('-', '-'));
+                        list?.Add(new('-', '-'));
                         charClasses.MakeClassNot(list, Options.JLex && scanner.caseless);
                     }
                     catch (CharClassException)
                     {
                         SyntaxError(ErrorMessages.CHARSET_2_SMALL, closeleft, closeright);
                     }
-                    RESULT = new RegExp1(Symbols.CCLASSNOT, list);
 
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(9/*charclass*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        9/*charclass*/,
+                        (Stack.GetAt(Top - 4)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp1(Symbols.CCLASSNOT, list));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 55: // charclass ::= OPENCLASS DASH classcontent CLOSECLASS 
                 {
-                    RegExp RESULT = null;
-                    int listleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int listright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    var list = (List<Interval>)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-                    int closeleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int closeright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    object close = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-
+                    var list = Stack.GetAt(Top - 1).Value as IList<Interval>;
+                    int closeleft = (Stack.GetAt(Top - 0)).Left;
+                    int closeright = (Stack.GetAt(Top - 0)).Right;
                     try
                     {
-                        list.Add(new Interval('-', '-'));
+                        list?.Add(new('-', '-'));
                         charClasses.MakeClass(list, Options.JLex && scanner.caseless);
                     }
                     catch (CharClassException)
                     {
                         SyntaxError(ErrorMessages.CHARSET_2_SMALL, closeleft, closeright);
                     }
-                    RESULT = new RegExp1(Symbols.CCLASS, list);
 
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(9/*charclass*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        9/*charclass*/,
+                        (Stack.GetAt(Top - 3)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp1(Symbols.CCLASS, list));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 54: // charclass ::= OPENCLASS HAT classcontent CLOSECLASS 
                 {
-                    RegExp RESULT = null;
-                    int listleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int listright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    var list = (List<Interval>)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-                    int closeleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int closeright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    object close = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-
+                    var list = (Stack.GetAt(Top - 1)).Value as IList<Interval>;
+                    int closeleft = (Stack.GetAt(Top - 0)).Left;
+                    int closeright = (Stack.GetAt(Top - 0)).Right;
                     try
                     {
                         charClasses.MakeClassNot(list, Options.JLex && scanner.caseless);
@@ -1563,23 +1539,21 @@ public class CUP_LexParse_actions
                     {
                         SyntaxError(ErrorMessages.CHARSET_2_SMALL, closeleft, closeright);
                     }
-                    RESULT = new RegExp1(Symbols.CCLASSNOT, list);
 
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(9/*charclass*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        9/*charclass*/,
+                        (Stack.GetAt(Top - 3)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp1(Symbols.CCLASSNOT, list));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 53: // charclass ::= OPENCLASS HAT CLOSECLASS 
                 {
-                    RegExp RESULT = null;
-                    int closeleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int closeright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    object close = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-
-                    var list = new PrettyArrayList<Interval>();
+                    int closeleft = (Stack.GetAt(Top - 0)).Left;
+                    int closeright = (Stack.GetAt(Top - 0)).Right;
+                    var list = new PrettyList<Interval>();
                     list.Add(new Interval((char)0, CharClasses.MaxChar));
                     try
                     {
@@ -1589,25 +1563,21 @@ public class CUP_LexParse_actions
                     {
                         SyntaxError(ErrorMessages.CHARSET_2_SMALL, closeleft, closeright);
                     }
-                    RESULT = new RegExp1(Symbols.CCLASS, list);
 
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(9/*charclass*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        9/*charclass*/,
+                        (Stack.GetAt(Top - 2)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp1(Symbols.CCLASS, list));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 52: // charclass ::= OPENCLASS classcontent CLOSECLASS 
                 {
-                    RegExp RESULT = null;
-                    int listleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int listright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    var list = (List<Interval>)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-                    int closeleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int closeright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    object close = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-
+                    var list = (Stack.GetAt(Top - 1)).Value as IList<Interval>;
+                    int closeleft = (Stack.GetAt(Top - 0)).Left;
+                    int closeright = (Stack.GetAt(Top - 0)).Right;
                     try
                     {
                         charClasses.MakeClass(list, Options.JLex && scanner.caseless);
@@ -1616,46 +1586,44 @@ public class CUP_LexParse_actions
                     {
                         SyntaxError(ErrorMessages.CHARSET_2_SMALL, closeleft, closeright);
                     }
-                    RESULT = new RegExp1(Symbols.CCLASS, list);
 
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(9/*charclass*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        9/*charclass*/,
+                        (Stack.GetAt(Top - 2)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp1(Symbols.CCLASS, list));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 51: // charclass ::= OPENCLASS CLOSECLASS 
                 {
-                    RegExp RESULT = null;
-
-
-                    RESULT = new RegExp1(Symbols.CCLASS, null);
-
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(9/*charclass*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        9/*charclass*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                         new RegExp1(Symbols.CCLASS, null));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 50: // regexp ::= CHAR 
                 {
-                    RegExp RESULT = null;
-                    int cleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int cright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    char c = (char)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-
+                    int cleft = (Stack.GetAt(Top - 0)).Left;
+                    int cright = (Stack.GetAt(Top - 0)).Right;
+                    var c = (Stack.GetAt(Top - 0)).Value is char x ? x : '\0';
+                    RegExp? r = null;
                     try
                     {
                         if (scanner.caseless)
                         {
                             charClasses.MakeClass(c, true);
-                            RESULT = new RegExp1(Symbols.CHAR_I, c);
+                            r = new RegExp1(Symbols.CHAR_I, c);
                         }
                         else
                         {
                             charClasses.MakeClass(c, false);
-                            RESULT = new RegExp1(Symbols.CHAR, c);
+                            r = new RegExp1(Symbols.CHAR, c);
                         }
                     }
                     catch (CharClassException)
@@ -1663,48 +1631,47 @@ public class CUP_LexParse_actions
                         SyntaxError(ErrorMessages.CS2SMALL_CHAR, cleft, cright);
                     }
 
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(8/*regexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        8/*regexp*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        r);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 49: // regexp ::= POINT 
                 {
-                    RegExp RESULT = null;
-
-
-                    var any = new PrettyArrayList<Interval>();
-                    any.Add(new Interval('\n', '\n'));
+                    var any = new PrettyList<Interval>() { new Interval('\n', '\n') };
                     // assumption: there is no upper case for \n
                     charClasses.MakeClass('\n', false);
-                    RESULT = new RegExp1(Symbols.CCLASSNOT, any);
-
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(8/*regexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        8/*regexp*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp1(Symbols.CCLASSNOT, any));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 48: // regexp ::= STRING 
                 {
-                    RegExp RESULT = null;
-                    int strleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int strright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    string str = (string)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
+                    RegExp? r = null;
+                    int strleft = (Stack.GetAt(Top - 0)).Left;
+                    int strright = (Stack.GetAt(Top - 0)).Right;
+                    var str = (Stack.GetAt(Top - 0)).Value as string;
 
                     try
                     {
                         if (scanner.caseless)
                         {
                             charClasses.MakeClass(str, true);
-                            RESULT = new RegExp1(Symbols.STRING_I, str);
+                            r = new RegExp1(Symbols.STRING_I, str);
                         }
                         else
                         {
                             charClasses.MakeClass(str, false);
-                            RESULT = new RegExp1(Symbols.STRING, str);
+                            r = new RegExp1(Symbols.STRING, str);
                         }
                     }
                     catch (CharClassException)
@@ -1712,21 +1679,19 @@ public class CUP_LexParse_actions
                         SyntaxError(ErrorMessages.CS2SMALL_STRING, strleft, strright);
                     }
 
-
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(8/*regexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        8/*regexp*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        r);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 47: // regexp ::= preclass 
                 {
-                    RegExp RESULT = null;
-                    int listleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int listright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    var list = (List<Interval>)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-
+                    int listleft = (Stack.GetAt(Top - 0)).Left;
+                    var list = (Stack.GetAt(Top - 0)).Value as IList<Interval>;
                     try
                     {
                         // assumption [correct?]: preclasses are already closed under case
@@ -1734,311 +1699,274 @@ public class CUP_LexParse_actions
                     }
                     catch (CharClassException)
                     {
-                        syntaxError(ErrorMessages.CHARSET_2_SMALL, listleft);
+                        SyntaxError(ErrorMessages.CHARSET_2_SMALL, listleft);
                     }
-                    RESULT = new RegExp1(Symbols.CCLASS, list);
 
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(8/*regexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(8/*regexp*/, (
+                        Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp1(Symbols.CCLASS, list));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 46: // regexp ::= charclass 
                 {
-                    RegExp RESULT = null;
-                    int cleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int cright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    RegExp c = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-                    RESULT = c;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(8/*regexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var c = (Stack.GetAt(Top - 0)).Value as RegExp;
+                    ResultSymbol = new(
+                        8/*regexp*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        c);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 45: // regexp ::= MACROUSE 
                 {
-                    RegExp RESULT = null;
-                    int identleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int identright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    string ident = (string)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-
+                    int identleft = (Stack.GetAt(Top - 0)).Left;
+                    int identright = (Stack.GetAt(Top - 0)).Right;
+                    var ident = (Stack.GetAt(Top - 0)).Value as string;
                     if (!scanner.macroDefinition)
                     {
-                        if (!macros.MarkUsed(ident))
+                        if (!macros.MarkUsed(ident ?? ""))
                             throw new ScannerException(scanner.file!, ErrorMessages.MACRO_UNDECL,
                                                        identleft, identright);
                     }
-                    RESULT = new RegExp1(Symbols.MACROUSE, ident);
-
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(8/*regexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        8/*regexp*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp1(Symbols.MACROUSE, ident));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 44: // regexp ::= OPENBRACKET series CLOSEBRACKET 
                 {
-                    RegExp RESULT = null;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    RegExp r = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-
-                    RESULT = r;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(8/*regexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var r = (Stack.GetAt(Top - 1)).Value as RegExp;
+                    ResultSymbol = new(
+                        8/*regexp*/,
+                        (Stack.GetAt(Top - 2)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        r);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 43: // regexp ::= regexp REPEAT REPEAT RBRACE 
                 {
-                    RegExp RESULT = null;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).Right;
-                    RegExp r = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).Value;
-                    int n1left = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left;
-                    int n1right = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Right;
-                    int n1 = (int)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Value;
-                    int n2left = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int n2right = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    int n2 = (int)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
+                    var r = (Stack.GetAt(Top - 3)).Value as RegExp;
+                    int n1left = (Stack.GetAt(Top - 2)).Left;
+                    int n1 = (Stack.GetAt(Top - 2)).Value is int nx ? nx : 0;
+                    int n2right = (Stack.GetAt(Top - 1)).Right;
+                    int n2 = (Stack.GetAt(Top - 1)).Value is int ny ? ny : 0;
 
-                    RESULT = MakeRepeat(r, n1, n2, n1left, n2right);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(8/*regexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        8/*regexp*/,
+                        (Stack.GetAt(Top - 3)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                         MakeRepeat(r, n1, n2, n1left, n2right));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 42: // regexp ::= regexp REPEAT RBRACE 
                 {
-                    RegExp RESULT = null;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Right;
-                    RegExp r = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Value;
-                    int nleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int nright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    int n = (int)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-                    int bleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int bright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    Object b = (Object)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
+                    var r = (Stack.GetAt(Top - 2)).Value as RegExp;
+                    int n = (Stack.GetAt(Top - 1)).Value is int i ? i : 0;
+                    int bleft = (Stack.GetAt(Top - 0)).Left;
+                    int bright = (Stack.GetAt(Top - 0)).Right;
 
-                    RESULT = MakeRepeat(r, n, n, bleft, bright);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(8/*regexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        8/*regexp*/,
+                        (Stack.GetAt(Top - 2)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        MakeRepeat(r, n, n, bleft, bright));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 41: // regexp ::= regexp QUESTION 
                 {
-                    RegExp RESULT = null;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    RegExp r = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-
-                    RESULT = new RegExp1(Symbols.QUESTION, r);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(8/*regexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var r = (Stack.GetAt(Top - 1)).Value as RegExp;
+                    ResultSymbol = new(
+                        8/*regexp*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp1(Symbols.QUESTION, r));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 40: // regexp ::= regexp PLUS 
                 {
-                    RegExp RESULT = null;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    RegExp r = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-
-                    RESULT = new RegExp1(Symbols.PLUS, r);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(8/*regexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var r = (Stack.GetAt(Top - 1)).Value as RegExp;
+                    ResultSymbol = new(
+                        8/*regexp*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp1(Symbols.PLUS, r));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 39: // regexp ::= regexp STAR 
                 {
-                    RegExp RESULT = null;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    RegExp r = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-
-                    RESULT = new RegExp1(Symbols.STAR, r);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(8/*regexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var r = (Stack.GetAt(Top - 1)).Value as RegExp;
+                    ResultSymbol = new(
+                        8/*regexp*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp1(Symbols.STAR, r));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 38: // nregexp ::= TILDE nregexp 
                 {
-                    RegExp RESULT = null;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    RegExp r = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-                    RESULT = new RegExp1(Symbols.TILDE, r);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(7/*nregexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var r = (Stack.GetAt(Top - 0)).Value as RegExp;
+                    ResultSymbol = new(
+                        7/*nregexp*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                         new RegExp1(Symbols.TILDE, r));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 37: // nregexp ::= BANG nregexp 
                 {
-                    RegExp RESULT = null;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    RegExp r = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-                    RESULT = new RegExp1(Symbols.BANG, r);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(7/*nregexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var r = (Stack.GetAt(Top - 0)).Value as RegExp;
+                    ResultSymbol = new(
+                        7/*nregexp*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp1(Symbols.BANG, r));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 36: // nregexp ::= regexp 
                 {
-                    RegExp RESULT = null;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    RegExp r = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-                    RESULT = r;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(7/*nregexp*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var r = (Stack.GetAt(Top - 0)).Value as RegExp;
+                    ResultSymbol = new(
+                        7/*nregexp*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        r);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 35: // concs ::= nregexp 
                 {
-                    RegExp RESULT = null;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    RegExp r = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-                    RESULT = r;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(6/*concs*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    RegExp? r = (Stack.GetAt(Top - 0)).Value as RegExp;
+                    ResultSymbol = new(
+                        6/*concs*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        r);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 34: // concs ::= concs nregexp 
                 {
-                    RegExp RESULT = null;
-                    int r1left = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int r1right = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    RegExp r1 = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-                    int r2left = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int r2right = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    RegExp r2 = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-                    RESULT = new RegExp2(Symbols.CONCAT, r1, r2);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(6/*concs*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var r1 = (Stack.GetAt(Top - 1)).Value as RegExp;
+                    var r2 = (Stack.GetAt(Top - 0)).Value as RegExp;
+                    ResultSymbol = new(
+                        6/*concs*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp2(Symbols.CONCAT, r1, r2));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 33: // series ::= BAR 
                 {
-                    RegExp RESULT = null;
-                    int bleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int bright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    Object b = (Object)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
+                    int bleft = (Stack.GetAt(Top - 0)).Left;
+                    int bright = (Stack.GetAt(Top - 0)).Right;
                     SyntaxError(ErrorMessages.REGEXP_EXPECTED, bleft, bright);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(5/*series*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        5/*series*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        null);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 32: // series ::= concs 
                 {
-                    RegExp RESULT = null;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    RegExp r = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-                    RESULT = r;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(5/*series*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var r = (Stack.GetAt(Top - 0)).Value as RegExp;
+                    ResultSymbol = new(
+                        5/*series*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        r);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 31: // series ::= series BAR concs 
                 {
-                    RegExp RESULT = null;
-                    int r1left = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left;
-                    int r1right = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Right;
-                    RegExp r1 = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Value;
-                    int r2left = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int r2right = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    RegExp r2 = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-                    RESULT = new RegExp2(Symbols.BAR, r1, r2);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(5/*series*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var r1 = (Stack.GetAt(Top - 2)).Value as RegExp;
+                    var r2 = (Stack.GetAt(Top - 0)).Value as RegExp;
+                    ResultSymbol = new(
+                        5/*series*/,
+                        (Stack.GetAt(Top - 2)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp2(Symbols.BAR, r1, r2));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 30: // hatOPT ::= 
                 {
-
-                    bool RESULT = (false);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(17/*hatOPT*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        17/*hatOPT*/,
+                        (Stack.GetAt(Top - 0)).Right,
+                        (Stack.GetAt(Top - 0)).Right,
+                        false);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 29: // hatOPT ::= HAT 
                 {
-                    bool RESULT = true;
-
                     // assumption: there is no upper case for \n
                     charClasses.MakeClass('\n', false);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(17/*hatOPT*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        17/*hatOPT*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        true);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 28: // states ::= IDENT COMMA 
                 {
-                    ArrayList RESULT = null;
-                    int cleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int cright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    Object c = (Object)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
+                    int cleft = (Stack.GetAt(Top - 0)).Left;
+                    int cright = (Stack.GetAt(Top - 0)).Right;
                     SyntaxError(ErrorMessages.REGEXP_EXPECTED, cleft, cright + 1);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(12/*states*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        12/*states*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        null);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 27: // states ::= IDENT 
                 {
-                    List<int> RESULT = null;
-                    int idleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int idright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    string id = (string)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-
-                    var list = new PrettyArrayList<int>();
+                    int idleft = (Stack.GetAt(Top - 0)).Left;
+                    int idright = (Stack.GetAt(Top - 0)).Right;
+                    var id = (Stack.GetAt(Top - 0)).Value as string;
+                    var list = new PrettyList<int>();
                     if (scanner.states.GetNumber(id) is int stateNumber)
                         list.Add(stateNumber);
                     else
@@ -2046,23 +1974,22 @@ public class CUP_LexParse_actions
                         throw new ScannerException(scanner.file!, ErrorMessages.LEXSTATE_UNDECL,
                                                    idleft, idright);
                     }
-                    RESULT = list;
 
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(12/*states*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        12/*states*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        list);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 26: // states ::= IDENT COMMA states 
                 {
-                    List<int> RESULT = null;
-                    int idleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left;
-                    int idright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Right;
-                    var id = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Value as string;
-                    int listleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int listright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    var list = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value as List<int>;
+                    int idleft = (Stack.GetAt(Top - 2)).Left;
+                    int idright = (Stack.GetAt(Top - 2)).Right;
+                    var id = (Stack.GetAt(Top - 2)).Value as string;
+                    var list = (Stack.GetAt(Top - 0)).Value as List<int>;
 
                     if (scanner.states.GetNumber(id) is int stateNumber)
                         list?.Add(stateNumber);
@@ -2071,465 +1998,411 @@ public class CUP_LexParse_actions
                         throw new ScannerException(scanner.file!, ErrorMessages.LEXSTATE_UNDECL,
                                                    idleft, idright);
                     }
-                    RESULT = list;
 
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(12/*states*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        12/*states*/,
+                        (Stack.GetAt(Top - 2)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        list);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 25: // statesOPT ::= 
                 {
                     //ArrayList RESULT = null;
-
-                    var RESULT = new PrettyArrayList<int>();
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(13/*statesOPT*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        13/*statesOPT*/,
+                        (Stack.GetAt(Top - 0)).Right,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new PrettyList<int>());
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 24: // statesOPT ::= LESSTHAN states MORETHAN 
                 {
-                    ArrayList RESULT = null;
-                    int listleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int listright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    ArrayList list = (ArrayList)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-
-                    RESULT = list;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(13/*statesOPT*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var list = (Stack.GetAt(Top - 1)).Value;
+                    ResultSymbol = new(
+                        13/*statesOPT*/,
+                        (Stack.GetAt(Top - 2)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        list);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 23: // actions ::= NOACTION 
                 {
-                    Action RESULT = null;
-
-                    RESULT = null;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(18/*actions*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        18/*actions*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        null);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 22: // actions ::= REGEXPEND ACTION 
                 {
-                    Action RESULT = null;
-                    int aleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int aright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    Action a = (Action)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-                    RESULT = a;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(18/*actions*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var a = (Stack.GetAt(Top - 0)).Value as Action;
+                    ResultSymbol = new(
+                        18/*actions*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        a);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 21: // lookaheadOPT ::= LOOKAHEAD series DOLLAR 
                 {
-                    RegExp RESULT = null;
-                    int sleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int sright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    RegExp s = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-
-                    RESULT = new RegExp2(Symbols.CONCAT, s, MakeNewLine());
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(10/*lookaheadOPT*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var s = (Stack.GetAt(Top - 1)).Value as RegExp;
+                    ResultSymbol = new(
+                        10/*lookaheadOPT*/,
+                        (Stack.GetAt(Top - 2)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new RegExp2(Symbols.CONCAT, s, MakeNewLine()));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 20: // lookaheadOPT ::= 
                 {
-                    RegExp RESULT = null;
-
-                    RESULT = null;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(10/*lookaheadOPT*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        10/*lookaheadOPT*/,
+                        (Stack.GetAt(Top - 0)).Right,
+                        (Stack.GetAt(Top - 0)).Right,
+                        null);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 19: // lookaheadOPT ::= LOOKAHEAD series 
                 {
-                    RegExp RESULT = null;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    RegExp r = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-                    RESULT = r;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(10/*lookaheadOPT*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var r = (Stack.GetAt(Top - 0)).Value as RegExp;
+                    ResultSymbol = new(
+                        10/*lookaheadOPT*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        r);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 18: // lookaheadOPT ::= DOLLAR 
                 {
-                    RegExp RESULT = null;
-
-                    RESULT = MakeNewLine();
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(10/*lookaheadOPT*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        10/*lookaheadOPT*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        MakeNewLine());
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 17: // rule ::= error 
                 {
-                    int RESULT = 0;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(3/*rule*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        3/*rule*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        0);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 16: // rule ::= statesOPT EOFRULE ACTION 
                 {
-                    int RESULT = 0;
-                    int sleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left;
-                    int sright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Right;
-                    var s = (List<int>)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Value;
-                    int aleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int aright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    Action a = (Action)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
+                    var s = (Stack.GetAt(Top - 2)).Value as IList<int>;
+                    var a = (Stack.GetAt(Top - 0)).Value as Action;
 
-                    RESULT = (regExps.Insert(s, a));
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(3/*rule*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        3/*rule*/,
+                        (Stack.GetAt(Top - 2)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        regExps.Insert(s.ToList(), a));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 15: // rule ::= statesOPT hatOPT series lookaheadOPT actions 
                 {
-                    int RESULT = 0;
-                    int sleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).Left;
-                    int sright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).Right;
-                    var s = (List<int>)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).Value;
-                    int bolleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).Left;
-                    int bolright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).Right;
-                    bool bol = (bool)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).Value;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Right;
-                    RegExp r = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 2)).Value;
-                    int lleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int lright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    RegExp l = (RegExp)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-                    int aleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int aright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    Action a = (Action)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
+                    var s = (Stack.GetAt(Top - 4)).Value as IList<int>;
+                    var bol = (Stack.GetAt(Top - 3)).Value is bool b ? b : false;
+                    var rleft = (Stack.GetAt(Top - 2)).Left;
+                    var r = (Stack.GetAt(Top - 2)).Value as RegExp;
+                    var l = (Stack.GetAt(Top - 1)).Value as RegExp;
+                    var a = (Stack.GetAt(Top - 0)).Value as Action;
 
-                    RESULT = (regExps.Insert(rleft, s, r, a, bol, l));
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(3/*rule*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        3/*rule*/,
+                        (Stack.GetAt(Top - 4)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        (regExps.Insert(rleft, s, r, a, bol, l)));
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 14: // rules ::= rule 
                 {
-                    PrettyArrayList<int> RESULT = null;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    int r = (int)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-                    RESULT = new PrettyArrayList<int>(); RESULT.Add(r);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(16/*rules*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var r = (Stack.GetAt(Top - 0)).Value is int s ? s : 0;
+                    ResultSymbol = new(
+                        16/*rules*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        new PrettyList<int>() { r });
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 13: // rules ::= LESSTHAN states MORETHAN LBRACE rules RBRACE 
                 {
-                    ArrayList RESULT = null;
-                    int statesleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).Left;
-                    int statesright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).Right;
-                    var states = (List<int>)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).Value;
-                    int rlistleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int rlistright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    ArrayList rlist = (ArrayList)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-
-
-                    var rs = rlist.GetEnumerator();
-                    while (rs.MoveNext())
+                    var states = (Stack.GetAt(Top - 4)).Value as IList<int>;
+                    var rlist = (Stack.GetAt(Top - 1)).Value as IList<int>;
+                    if (rlist != null && states != null)
                     {
-                        int elem = (int)rs.Current;
-                        regExps.AddStates(elem, states);
+                        foreach (var it in rlist)
+                        {
+                            regExps.AddStates(it, states);
+                        }
                     }
-                    RESULT = rlist;
 
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(16/*rules*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 5)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        16/*rules*/,
+                        (Stack.GetAt(Top - 5)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        rlist);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 12: // rules ::= rules LESSTHAN states MORETHAN LBRACE rules RBRACE 
                 {
-                    ArrayList RESULT = null;
-                    int rlist1left = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 6)).Left;
-                    int rlist1right = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 6)).Right;
-                    ArrayList rlist1 = (ArrayList)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 6)).Value;
-                    int statesleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).Left;
-                    int statesright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).Right;
-                    List<int> states = (List<int>)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 4)).Value;
-                    int rlist2left = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int rlist2right = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    ArrayList rlist2 = (ArrayList)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-
-
-                    IEnumerator rs = rlist2.GetEnumerator();
-                    while (rs.MoveNext())
+                    var rlist1 = (Stack.GetAt(Top - 6)).Value as IList<int>;
+                    var states = (Stack.GetAt(Top - 4)).Value as IList<int>;
+                    var rlist2 = (Stack.GetAt(Top - 1)).Value as IList<int>;
+                    if (rlist1 != null && rlist2 != null && states != null)
                     {
-                        int elem = (int)rs.Current;
-                        regExps.AddStates(elem, states);
-                        rlist1.Add(elem);
+                        foreach (var e in rlist2)
+                        {
+                            regExps.AddStates(e, states);
+                            rlist1.Add(e);
+                        }
                     }
-                    RESULT = rlist1;
 
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(16/*rules*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 6)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        16/*rules*/,
+                        (Stack.GetAt(Top - 6)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        rlist1);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 11: // rules ::= rules rule 
                 {
-                    List<int> RESULT = null;
-                    int rlistleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int rlistright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    List<int> rlist = (((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value as List<int>)!;
-                    int rleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int rright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    int r = (int)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
-                    rlist.Add(r); RESULT = rlist;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(16/*rules*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var rlist = (Stack.GetAt(Top - 1)).Value as IList<int>;
+                    int r = (Stack.GetAt(Top - 0)).Value is int t ? t : 0;
+                    rlist?.Add(r);
+                    ResultSymbol = new(
+                        16/*rules*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        rlist);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 10: // macro ::= IDENT EQUALS 
                 {
-                    Object RESULT = null;
-                    int eleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left;
-                    int eright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right;
-                    Object e = (Object)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Value;
-
+                    int eleft = (Stack.GetAt(Top - 0)).Left;
+                    int eright = (Stack.GetAt(Top - 0)).Right;
                     SyntaxError(ErrorMessages.REGEXP_EXPECTED, eleft, eright);
 
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(2/*macro*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        2/*macro*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        null);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 9: // macro ::= IDENT EQUALS series REGEXPEND 
                 {
-                    Object? RESULT = null;
-                    int nameleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).Left;
-                    int nameright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).Right;
-                    string name = (((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).Value as string)!;
-                    int definitionleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int definitionright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    RegExp definition = (((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value as RegExp)!;
-
+                    var name = ((Stack.GetAt(Top - 3)).Value as string);
+                    var definition = ((Stack.GetAt(Top - 1)).Value as RegExp);
                     macros.Insert(name, definition);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(2/*macro*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        2/*macro*/,
+                        (Stack.GetAt(Top - 3)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        null);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 8: // macro ::= UNICODE 
                 {
-                    Object? RESULT = null;
-
                     charClasses.SetMaxCharCode(0xFFFF);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(2/*macro*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        2/*macro*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        null);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 7: // macro ::= FULL 
                 {
-                    Object? RESULT = null;
-
                     charClasses.SetMaxCharCode(255);
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(2/*macro*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        2/*macro*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        null);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 6: // macros ::= error 
                 {
-                    Object? RESULT = null;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(1/*macros*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        1/*macros*/,
+                        (Stack.GetAt(Top - 0)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        null);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 5: // macros ::= macros macro 
                 {
-                    Object? RESULT = null;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(1/*macros*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        1/*macros*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        null);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 4: // macros ::= 
                 {
-                    Object? RESULT = null;
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(1/*macros*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        1/*macros*/,
+                        (Stack.GetAt(Top - 0)).Right,
+                        (Stack.GetAt(Top - 0)).Right,
+                        null);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 3: // specification ::= 
                 {
-                    NFA? RESULT = null;
-
-
-                    fatalError(ErrorMessages.NO_LEX_SPEC);
-
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(4/*specification*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    FatalError(ErrorMessages.NO_LEX_SPEC);
+                    ResultSymbol = new(
+                        4/*specification*/,
+                        (Stack.GetAt(Top - 0)).Right,
+                        (Stack.GetAt(Top - 0)).Right,
+                        null);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 2: // specification ::= USERCODE macros DELIMITER rules DELIMITER EPILOGUE 
                 {
-                    NFA? RESULT = null;
-
-
                     scanner.t.Stop();
-
                     OutputWriter.CheckErrors();
-
                     OutputWriter.Time(ErrorMessages.PARSING_TOOK, t);
-
                     macros.Expand();
-                    IEnumerator unused = macros.GetUnusedNames();
-                    while (unused.MoveNext())
+                    foreach (var name in macros.GetUnusedNames())
                     {
-                        OutputWriter.Warning("Macro \"" + unused.Current + "\" has been declared but never used.");
+                        OutputWriter.Warning("Macro \"" + name + "\" has been declared but never used.");
                     }
 
                     SemCheck.Check(regExps, macros, charClasses.MaxCharCode, scanner.file!);
-
                     regExps.CheckActions();
-
                     if (Options.Dump) charClasses.Dump();
-
                     OutputWriter.Print("Constructing NFA : ");
-
                     t.Start();
                     int num = regExps.Num;
-
-                    RESULT = new NFA(charClasses.NumClasses,
+                    var n = new NFA(charClasses.NumClasses,
                                      scanner, regExps, macros, charClasses);
-
                     eofActions.SetNumLexStates(scanner.states.CountOfDeclaredStates);
-
                     for (int i = 0; i < num; i++)
                     {
                         if (regExps.IsEOF(i))
                             eofActions.Add(regExps.GetStates(i), regExps.GetAction(i));
                         else
-                            RESULT.AddRegExp(i);
+                            n.AddRegExp(i);
                     }
-
-                    if (scanner.IsStandalone) RESULT.AddStandaloneRule();
+                    if (scanner.IsStandalone) n.AddStandaloneRule();
                     t.Stop();
-
                     OutputWriter.Time("");
                     OutputWriter.Time(ErrorMessages.NFA_TOOK, t);
-
-
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(4/*specification*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 5)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        4/*specification*/,
+                        (Stack.GetAt(Top - 5)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        n);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 1: // specification ::= USERCODE macros DELIMITER rules 
                 {
-                    NFA? RESULT = null;
-
                     scanner.t.Stop();
-
                     OutputWriter.CheckErrors();
-
                     OutputWriter.Time(ErrorMessages.PARSING_TOOK, t);
-
                     macros.Expand();
-                    IEnumerator unused = macros.GetUnusedNames();
-                    while (unused.MoveNext())
+                    var unused = macros.GetUnusedNames();
+                    foreach (var name in unused)
                     {
-                        OutputWriter.Warning("Macro \"" + unused.Current + "\" has been declared but never used.");
+                        OutputWriter.Warning("Macro \"" + name + "\" has been declared but never used.");
                     }
-
                     SemCheck.Check(regExps, macros, charClasses.MaxCharCode, scanner.file!);
-
                     regExps.CheckActions();
-
                     if (Options.Dump) charClasses.Dump();
-
                     OutputWriter.Print("Constructing NFA : ");
-
                     t.Start();
                     int num = regExps.Num;
-
-                    RESULT = new NFA(charClasses.NumClasses,
+                    var n = new NFA(charClasses.NumClasses,
                                      scanner, regExps, macros, charClasses);
-
                     eofActions.SetNumLexStates(scanner.states.CountOfDeclaredStates);
-
                     for (int i = 0; i < num; i++)
                     {
                         if (regExps.IsEOF(i))
                             eofActions.Add(regExps.GetStates(i), regExps.GetAction(i));
                         else
-                            RESULT.AddRegExp(i);
+                            n.AddRegExp(i);
                     }
-
-                    if (scanner.IsStandalone) RESULT.AddStandaloneRule();
+                    if (scanner.IsStandalone) n.AddStandaloneRule();
                     t.Stop();
-
                     OutputWriter.Time("");
                     OutputWriter.Time(ErrorMessages.NFA_TOOK, t);
-
-
-
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(4/*specification*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 3)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    ResultSymbol = new(
+                        4/*specification*/,
+                        (Stack.GetAt(Top - 3)).Left,
+                        (Stack.GetAt(Top - 0)).Right,
+                        n);
                 }
-                return CUP_LexParse_result;
+                return ResultSymbol;
 
             /*. . . . . . . . . . . . . . . . . . . .*/
             case 0: // $START ::= specification EOF 
                 {
-                    Object RESULT = null;
-                    int start_valleft = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left;
-                    int start_valright = ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Right;
-                    NFA start_val = (NFA)((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Value;
-                    RESULT = start_val;
-                    CUP_LexParse_result = new CSFlex.Runtime.Symbol(0/*$START*/, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 1)).Left, ((CSFlex.Runtime.Symbol)CUP_LexParse_stack.GetAt(CUP_LexParse_top - 0)).Right, RESULT);
+                    var start_val = (Stack.GetAt(Top - 1)).Value;
+                    ResultSymbol = new(
+                        0/*$START*/,
+                        (Stack.GetAt(Top - 1)).Left,
+                        (Stack.GetAt(Top - 0)).Right, start_val);
                 }
                 /* ACCEPT */
-                CUP_LexParse_parser.DoneParsing();
-                return CUP_LexParse_result;
+                Parser.DoneParsing();
+                return ResultSymbol;
 
             /* . . . . . .*/
             default:

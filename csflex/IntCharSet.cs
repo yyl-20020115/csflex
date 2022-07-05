@@ -51,14 +51,16 @@ public sealed class IntCharSet
         intervals.Add(intervall);
     }
 
-    public IntCharSet(List<Interval> chars)
+    public IntCharSet(IList<Interval>? chars)
     {
+        chars ??=new List<Interval>();
+
         int size = chars.Count;
 
-        this.intervals = new PrettyArrayList<Interval>(size);
+        this.intervals = new PrettyList<Interval>(size);
 
         for (int i = 0; i < size; i++)
-            Add((Interval)chars[i]);
+            Add(chars[i]);
     }
 
     /**

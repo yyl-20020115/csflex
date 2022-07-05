@@ -35,7 +35,7 @@ public class EOFActions
 {
 
     /** maps lexical states to actions */
-    private PrettyHashtable<int, Action> /* Integer -> Action */ actions = new();
+    private PrettyDictionary<int, Action> /* Integer -> Action */ actions = new();
     private Action? defaultAction = null;
     private int numLexStates = 0;
 
@@ -49,10 +49,10 @@ public class EOFActions
 
         if (stateList != null && stateList.Count > 0)
         {
-            var states = stateList.GetEnumerator();
-
-            while (states.MoveNext())
-                Add((int)states.Current, action);
+            foreach(var state in stateList)
+            {
+                this.Add(state, action);
+            }
         }
         else
         {
@@ -86,12 +86,6 @@ public class EOFActions
         if (a == defaultAction) return true;
 
         return actions.ContainsValue(a);
-        /*
-            IEnumerator e = actions.GetEnumerator();
-            while ( e.MoveNext() ) 
-              if (a == e.Current) return true;
-
-            return false; /* */
     }
 
     public Action GetAction(int state) => actions[state];

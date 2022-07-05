@@ -70,8 +70,9 @@ log.WriteLine("Macros()");
      * @return <code>true</code>, iff the macro name has not been
      *         stored before.
      */
-    public bool Insert(string name, RegExp definition)
+    public bool Insert(string? name, RegExp? definition)
     {
+        if (name == null || definition == null) return false;
 #if DEBUG_TRACE
 log.WriteLine("insert(string name = \"{0}\", RegExp definition = {1})", name, definition);
 #endif // DEBUG_TRACE
@@ -126,24 +127,21 @@ log.WriteLine("isUsed(string name = \"{0}\")", name);
      *
      * @return the enumeration of macro names that have not been used.
      */
-    public IEnumerator<string> GetUnusedNames()
+    public PrettyList<string> GetUnusedNames()
     {
 #if DEBUG_TRACE
 log.WriteLine("unused()");
 #endif // DEBUG_TRACE
 
-        var unUsed = new PrettyArrayList<string>();
-
-        var names = used.Keys.GetEnumerator();
-        while (names.MoveNext())
+        var unUsed = new PrettyList<string>();
+        foreach(var up in used)
         {
-            string name = (string)names.Current;
-            bool isUsed = (bool)used[name];
-            if (!isUsed)
-                unUsed.Add(name);
+            if (!up.Value)
+            {
+                unUsed.Add(up.Key);
+            }
         }
-
-        return unUsed.GetEnumerator();
+        return unUsed;
     }
 
 
@@ -187,7 +185,6 @@ log.WriteLine("expand()");
         // counts as a change to the collection
         // for debugging: sort the list
         var keys = new List<string>(macros.Keys);
-        //names = keys.GetEnumerator();
 
         foreach(var name in keys)
         {
@@ -213,8 +210,9 @@ log.WriteLine("expand()");
      * @throws MacroException when an error (such as a cyclic definition)
      *                              occurs during expansion
      */
-    private RegExp ExpandMacro(string name, RegExp definition)
+    private RegExp? ExpandMacro(string name, RegExp? definition)
     {
+        if (definition == null) return definition;
 #if DEBUG_TRACE
 log.WriteLine("expandMacro(string name = \"{0}\", RegExp definition = {1})", name, definition);
 #endif // DEBUG_TRACE
@@ -237,11 +235,11 @@ log.WriteLine("expandMacro(string name = \"{0}\", RegExp definition = {1})", nam
             case Symbols.BANG:
             case Symbols.TILDE:
                 var unary = (RegExp1)definition;
-                unary.content = ExpandMacro(name, (RegExp)unary.content);
+                unary.content = ExpandMacro(name, unary.content as RegExp);
                 return definition;
 
             case Symbols.MACROUSE:
-                var usename = (string)((RegExp1)definition).content;
+                var usename = ((RegExp1)definition).content is string s?s:"";
 
                 if (name.Equals(usename))
                     throw new MacroException(ErrorMessages.Get(ErrorMessages.MACRO_CYCLE, name));

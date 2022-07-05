@@ -46,7 +46,7 @@ public class GridPanel : Control
     public GridPanel(int cols, int rows)
       : this(cols, rows, 0, 0)
     {
-        Resize += new EventHandler(GridPanel_Resize);
+        Resize += new EventHandler(GridPanel_Resize!);
     }
 
     public GridPanel(int cols, int rows, int hgap, int vgap)

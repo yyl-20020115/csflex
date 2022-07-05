@@ -218,19 +218,19 @@ public class IntUtil
     }
 }
 
-public class PrettyArrayList<T> : List<T>
+public class PrettyList<T> : List<T>
 {
-    public PrettyArrayList(ICollection<T> c)
+    public PrettyList(ICollection<T> c)
       : base(c)
     {
     }
 
-    public PrettyArrayList(int capacity)
+    public PrettyList(int capacity)
       : base(capacity)
     {
     }
 
-    public PrettyArrayList()
+    public PrettyList()
     {
     }
 
@@ -253,19 +253,19 @@ public class PrettyArrayList<T> : List<T>
     }
 }
 
-public class PrettyHashtable<T,V> : Dictionary<T,V> where T :notnull
+public class PrettyDictionary<T,V> : Dictionary<T,V> where T :notnull
 {
-    public PrettyHashtable(IDictionary<T,V> d)
+    public PrettyDictionary(IDictionary<T,V> d)
       : base(d)
     {
     }
 
-    public PrettyHashtable(int capacity)
+    public PrettyDictionary(int capacity)
       : base(capacity)
     {
     }
 
-    public PrettyHashtable()
+    public PrettyDictionary()
     {
     }
 

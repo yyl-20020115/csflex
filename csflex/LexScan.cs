@@ -38,7 +38,7 @@ namespace CSFlex;
  * @version CSFlex 1.4, $Revision: 2.6 $, $Date: 2004/04/12 10:07:47 $
  */
 
-public sealed class LexScan : Symbols, CSFlex.Runtime.Scanner
+public sealed class LexScan : Symbols, Scanner
 {
 
     /** This character denotes the end of file */
@@ -1622,7 +1622,7 @@ public sealed class LexScan : Symbols, CSFlex.Runtime.Scanner
 
     internal LexicalStates states = new LexicalStates();
 
-    internal List<Action> actions = new PrettyArrayList<Action>();
+    internal List<Action> actions = new PrettyList<Action>();
 
     private int nextState;
 
@@ -1640,15 +1640,9 @@ public sealed class LexScan : Symbols, CSFlex.Runtime.Scanner
         this.file = file;
     }
 
-    private Symbol Symbol(int type, Object value)
-    {
-        return new Symbol(type, yyline, yycolumn, value);
-    }
+    private Symbol Symbol(int type, Object value) => new(type, yyline, yycolumn, value);
 
-    private Symbol Symbol(int type)
-    {
-        return new Symbol(type, yyline, yycolumn);
-    }
+    private Symbol Symbol(int type) => new(type, yyline, yycolumn);
 
     // updates line and column count to the beginning of the first
     // non whitespace character in yytext, but leaves yyline+yycolumn 
@@ -3399,7 +3393,7 @@ public sealed class LexScan : Symbols, CSFlex.Runtime.Scanner
      */
     public Symbol DebugNextToken()
     {
-        CSFlex.Runtime.Symbol s = NextToken();
+        Symbol s = NextToken();
         Console.WriteLine("line:{0} col:{1} --{2}--{3}--",
             yyline + 1, yycolumn + 1, YYText(), GetTokenName(s.Sym));
         return s;

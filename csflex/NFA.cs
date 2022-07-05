@@ -406,8 +406,8 @@ public sealed class NFA
     public DFA GetDFA()
     {
 
-        var dfaStates = new PrettyHashtable<StateSet, int>(numStates);
-        var dfaVector = new PrettyArrayList<StateSet>(numStates);
+        var dfaStates = new PrettyDictionary<StateSet, int>(numStates);
+        var dfaVector = new PrettyList<StateSet>(numStates);
 
         var dfa = new DFA(2 * numLexStates, numInput);
 
@@ -701,8 +701,8 @@ public sealed class NFA
         // fixme: only need epsilon closure of states reachable from nfa.start
         EpsilonFill();
 
-        var dfaStates = new PrettyHashtable<StateSet, int>(numStates);
-        var dfaVector = new PrettyArrayList<StateSet>(numStates);
+        var dfaStates = new PrettyDictionary<StateSet, int>(numStates);
+        var dfaVector = new PrettyList<StateSet>(numStates);
 
         int numDFAStates = 0;
         int currentDFAState = 0;
